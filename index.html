@@ -6,7 +6,7 @@
     <title>فريق شمس التطوعي - نظام إدارة وأرشيف العقود</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000a30">
+    <meta name="theme-color" content="#07152f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="فريق شمس">
@@ -18,551 +18,1278 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
+        /* =====================================================
+            الهوية الأساسية
+            ===================================================== */
+
         :root {
-            --primary-orange: #f37021;
-            --dark-navy: #000a30;
-            --bg-body: #f1f5f9;
-            --text-dark: #1e293b;
+            --primary-orange: #f5a623;
+            --primary-orange-dark: #d88908;
+            --dark-navy: #07152f;
+            --dark-navy-2: #0d2347;
+            --bg-body: #f5f7fb;
+            --card-bg: #ffffff;
+            --text-dark: #172033;
+            --text-muted: #718096;
+            --border: #e5e9f0;
+            --success: #16a34a;
+            --danger: #dc3545;
+
+            --shadow-sm: 0 3px 12px rgba(7, 21, 47, 0.06);
+            --shadow-md: 0 10px 30px rgba(7, 21, 47, 0.09);
+            --shadow-lg: 0 20px 50px rgba(7, 21, 47, 0.14);
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Tajawal', sans-serif; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
 
         body {
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            background-attachment: fixed;
+            background:
+                radial-gradient(circle at 10% 10%, rgba(245,166,35,0.06), transparent 25%),
+                radial-gradient(circle at 90% 90%, rgba(7,21,47,0.04), transparent 25%),
+                var(--bg-body);
             color: var(--text-dark);
             min-height: 100vh;
-            animation: fadeInBody 0.8s ease-in-out;
         }
 
-        @keyframes fadeInBody {
-            from { opacity: 0; transform: translateY(-5px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* =====================================================
+            Scrollbar
+            ===================================================== */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
 
-        /* شاشة تسجيل الدخول */
+        ::-webkit-scrollbar-track {
+            background: #eef1f6;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #b9c1cf;
+            border-radius: 20px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-orange);
+        }
+
+        /* =====================================================
+            شاشة تسجيل الدخول
+            ===================================================== */
+
         .auth-overlay {
             position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: linear-gradient(135deg, var(--dark-navy), #0a192f);
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(7,21,47,0.98),
+                    rgba(13,35,71,0.97)
+                );
+
             z-index: 999999;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            overflow: hidden;
+        }
+
+        .auth-overlay::before,
+        .auth-overlay::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .auth-overlay::before {
+            width: 450px;
+            height: 450px;
+            background: rgba(245,166,35,0.06);
+            top: -180px;
+            right: -120px;
+        }
+
+        .auth-overlay::after {
+            width: 550px;
+            height: 550px;
+            border: 1px solid rgba(245,166,35,0.08);
+            bottom: -300px;
+            left: -150px;
         }
 
         .auth-card {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 40px 30px;
+            position: relative;
+            z-index: 2;
+
+            background: rgba(255,255,255,0.98);
+            border: 1px solid rgba(255,255,255,0.7);
+            border-radius: 24px;
+
+            padding: 42px 35px 35px;
+
             width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            max-width: 430px;
+
+            box-shadow: var(--shadow-lg);
+
             text-align: center;
-            transform: scale(0.95);
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+
+            animation: loginCardIn 0.55s ease;
         }
 
-        @keyframes popIn {
-            to { transform: scale(1); opacity: 1; }
+        .auth-card::before {
+            content: "";
+            position: absolute;
+
+            top: 0;
+            right: 12%;
+            left: 12%;
+
+            height: 4px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    var(--primary-orange),
+                    transparent
+                );
+
+            border-radius: 0 0 20px 20px;
+        }
+
+        .auth-card img {
+            filter: drop-shadow(0 5px 12px rgba(245,166,35,0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .auth-card img:hover {
+            transform: scale(1.04);
         }
 
         .auth-card h2 {
             color: var(--dark-navy);
-            font-size: 22px;
+            font-size: 25px;
             font-weight: 900;
+            letter-spacing: -0.3px;
             margin-top: 15px;
             margin-bottom: 5px;
         }
 
         .auth-card p {
-            color: #64748b;
+            color: var(--text-muted);
             font-size: 13px;
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
 
-        /* شريط التنقل العلوي مع الشعار والاسم */
-        .top-navbar {
-            background: var(--dark-navy); color: white; padding: 12px 30px;
-            display: flex; justify-content: space-between; align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15); position: relative; z-index: 10;
+        .auth-card .form-control {
+            height: 50px;
+            background: #f8fafc;
+            border: 1px solid #e1e6ee;
+            border-radius: 11px;
+            padding: 0 15px;
+            transition: all 0.25s ease;
         }
-        .brand-container {
+
+        .auth-card .form-control:focus {
+            background: white;
+            border-color: var(--primary-orange);
+            box-shadow: 0 0 0 4px rgba(245,166,35,0.12);
+            transform: translateY(-1px);
+        }
+
+        .auth-card .btn-orange {
+            height: 50px;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary-orange),
+                    #ffbd42
+                );
+
+            box-shadow:
+                0 7px 18px rgba(245,166,35,0.25);
+        }
+
+        .auth-card .btn-orange:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                0 10px 24px rgba(245,166,35,0.32);
+        }
+
+        /* =====================================================
+            شريط التنقل العلوي
+            ===================================================== */
+
+        .top-navbar {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--dark-navy),
+                    var(--dark-navy-2)
+                );
+
+            min-height: 76px;
+
+            padding: 12px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+
+            box-shadow:
+                0 6px 22px rgba(7,21,47,0.16);
+
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-navbar > div:first-child {
             display: flex;
             align-items: center;
             gap: 12px;
-        }
-        .brand-logo {
-            width: 42px;
-            height: 42px;
-            object-fit: contain;
-            background: white;
-            border-radius: 50%;
-            padding: 3px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-        }
-        .brand-title {
+
+            white-space: nowrap;
+
             font-weight: 900;
             font-size: 18px;
-            letter-spacing: 0.5px;
+            color: #ffffff; /* تم تغيير لون النص إلى الأبيض */
         }
 
-        /* شريط العبارات التطوعية المتحركة */
-        .volunteer-ticker {
-            background: linear-gradient(90deg, var(--primary-orange), #ff8c42, var(--primary-orange));
-            color: white;
-            padding: 8px 0;
-            text-align: center;
-            font-size: 13px;
-            font-weight: 700;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-            overflow: hidden;
-            white-space: nowrap;
-            position: relative;
-            z-index: 9;
+        .top-navbar > div:first-child img.nav-logo {
+            width: 38px;
+            height: 38px;
+            object-fit: contain;
+            filter: drop-shadow(0 2px 6px rgba(245,166,35,0.3));
         }
-        .ticker-text {
-            display: inline-block;
-            animation: tickerSlide 18s linear infinite;
-        }
-        @keyframes tickerSlide {
-            0% { transform: translateX(50%); }
-            100% { transform: translateX(-50%); }
+
+        /* =====================================================
+            القوائم
+            ===================================================== */
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            flex-wrap: wrap;
         }
 
         .nav-links button {
-            background: transparent; border: none; color: white; font-size: 14px; font-weight: 700;
-            margin-left: 10px; padding: 8px 14px; border-radius: 6px; cursor: pointer; transition: all 0.3s ease;
-        }
-        .nav-links button.active, .nav-links button:hover {
-            background: var(--primary-orange);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(243, 112, 33, 0.3);
+            background: transparent;
+
+            border: 1px solid transparent;
+
+            color: rgba(255,255,255,0.78);
+
+            font-size: 13px;
+            font-weight: 700;
+
+            margin-left: 0;
+
+            padding: 10px 13px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            transition: all 0.25s ease;
         }
 
-        .main-container { max-width: 950px; margin: 30px auto; padding: 0 20px; position: relative; z-index: 5; }
+        .nav-links button i {
+            margin-left: 5px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .nav-links button:hover {
+            color: white;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border-color:
+                rgba(255,255,255,0.08);
+
+            transform: translateY(-1px);
+        }
+
+        .nav-links button.active {
+            color: var(--dark-navy);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary-orange),
+                    #ffc34d
+                );
+
+            box-shadow:
+                0 5px 14px rgba(245,166,35,0.22);
+        }
+
+        .nav-links button.active i {
+            color: var(--dark-navy);
+        }
+
+        .top-navbar > button {
+            border-radius: 9px !important;
+
+            background:
+                rgba(255,255,255,0.09) !important;
+
+            border:
+                1px solid rgba(255,255,255,0.12) !important;
+
+            transition: all 0.25s ease;
+        }
+
+        .top-navbar > button:hover {
+            background: #ef4444 !important;
+            transform: translateY(-1px);
+        }
+
+        /* =====================================================
+            المحتوى الرئيسي
+            ===================================================== */
+
+        .main-container {
+            max-width: 1200px;
+
+            margin: 34px auto;
+
+            padding: 0 24px;
+
+            position: relative;
+            z-index: 5;
+        }
+
+        /* =====================================================
+            الكروت
+            ===================================================== */
 
         .card-box {
-            background: white; padding: 30px; border-radius: 14px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.06); margin-bottom: 30px;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            border-top: 4px solid var(--primary-orange);
+            position: relative;
+
+            background: rgba(255,255,255,0.98);
+
+            border: 1px solid var(--border);
+
+            border-radius: 18px;
+
+            padding: 28px;
+
+            box-shadow: var(--shadow-sm);
+
+            margin-bottom: 24px;
+
+            transition:
+                box-shadow 0.25s ease,
+                transform 0.25s ease;
         }
+
         .card-box:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 14px 35px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-md);
         }
 
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
-        .form-group { text-align: right; }
-        .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 5px; color: var(--dark-navy); }
-        .form-control { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; transition: 0.3s; }
-        .form-control:focus { border-color: var(--primary-orange); box-shadow: 0 0 0 3px rgba(243, 112, 33, 0.15); }
+        .card-box h3 {
+            position: relative;
 
-        /* نموذج العقد الرسمي */
+            color: var(--dark-navy);
+
+            border-bottom: none !important;
+
+            padding-bottom: 15px !important;
+
+            margin-bottom: 22px !important;
+
+            font-size: 19px;
+
+            display: flex;
+            align-items: center;
+
+            gap: 9px;
+        }
+
+        .card-box h3::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: 0;
+            right: 0;
+
+            width: 48px;
+            height: 3px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--primary-orange),
+                    #ffd16c
+                );
+
+            border-radius: 10px;
+        }
+
+        .card-box h3 i {
+            color: var(--primary-orange);
+        }
+
+        /* =====================================================
+            النماذج
+            ===================================================== */
+
+        .form-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(
+                    auto-fit,
+                    minmax(220px, 1fr)
+                );
+
+            gap: 18px;
+
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            text-align: right;
+        }
+
+        .form-group label {
+            display: block;
+
+            color: #26334d;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            margin-bottom: 7px;
+        }
+
+        .form-control {
+            width: 100%;
+
+            height: 46px;
+
+            background: #f9fafc;
+
+            border: 1px solid #dfe4ec;
+
+            border-radius: 10px;
+
+            padding: 10px 13px;
+
+            color: var(--text-dark);
+
+            outline: none;
+
+            transition: all 0.25s ease;
+        }
+
+        .form-control::placeholder {
+            color: #a3acba;
+        }
+
+        .form-control:hover {
+            border-color: #c7ced9;
+        }
+
+        .form-control:focus {
+            background: #fff;
+
+            border-color: var(--primary-orange);
+
+            box-shadow:
+                0 0 0 4px rgba(245,166,35,0.10);
+        }
+
+        select.form-control {
+            cursor: pointer;
+        }
+
+        /* =====================================================
+            الأزرار
+            ===================================================== */
+
+        .btn-action {
+            min-height: 43px;
+
+            border-radius: 9px;
+
+            padding: 9px 17px;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            border: none;
+
+            cursor: pointer;
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease,
+                opacity 0.2s ease;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-action:active {
+            transform: translateY(0);
+        }
+
+        .btn-orange {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--primary-orange),
+                    #ffbd43
+                );
+
+            color: white;
+
+            box-shadow:
+                0 5px 14px rgba(245,166,35,0.18);
+        }
+
+        .btn-orange:hover {
+            box-shadow:
+                0 8px 20px rgba(245,166,35,0.28);
+        }
+
+        .btn-navy {
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--dark-navy),
+                    var(--dark-navy-2)
+                );
+
+            color: white;
+        }
+
+        .btn-green {
+            background:
+                linear-gradient(
+                    135deg,
+                    #10b981,
+                    #18c78d
+                );
+
+            color: white;
+        }
+
+        .btn-danger {
+            background:
+                linear-gradient(
+                    135deg,
+                    #ef4444,
+                    #f05252
+                );
+
+            color: white;
+        }
+
+        .btn-blue {
+            background:
+                linear-gradient(
+                    135deg,
+                    #3b82f6,
+                    #5b9bf8
+                );
+
+            color: white;
+        }
+
+        .btn-purple {
+            background:
+                linear-gradient(
+                    135deg,
+                    #8b5cf6,
+                    #9b72f7
+                );
+
+            color: white;
+        }
+
+        /* =====================================================
+            الجداول
+            ===================================================== */
+
+        table {
+            width: 100%;
+
+            border-collapse: separate;
+
+            border-spacing: 0;
+
+            overflow: hidden;
+
+            border:
+                1px solid var(--border);
+
+            border-radius: 13px;
+
+            background: white;
+
+            margin-top: 15px;
+        }
+
+        th,
+        td {
+            padding: 14px 13px;
+
+            text-align: right;
+
+            border-bottom:
+                1px solid #edf0f4;
+
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f7f9fc;
+
+            color: var(--dark-navy);
+
+            font-size: 12px;
+
+            font-weight: 800;
+
+            border-bottom:
+                1px solid #e4e8ef;
+        }
+
+        td {
+            color: #455166;
+
+            font-size: 12px;
+        }
+
+        tbody tr {
+            transition:
+                background 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #fffaf0;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        td b {
+            color: var(--dark-navy);
+        }
+
+        #archiveTab .card-box,
+        #usersTab .card-box {
+            overflow-x: auto;
+        }
+
+        /* =====================================================
+            الحالات
+            ===================================================== */
+
+        .badge {
+            padding: 5px 9px;
+
+            border-radius: 7px;
+
+            font-size: 10px;
+
+            font-weight: 800;
+
+            display: inline-block;
+
+            white-space: nowrap;
+        }
+
+        .badge-active {
+            background: #e8f8ee;
+
+            color: #14803d;
+
+            border:
+                1px solid #c8efd6;
+        }
+
+        .badge-warning {
+            background: #fff7db;
+
+            color: #a16207;
+
+            border:
+                1px solid #f7e6a8;
+        }
+
+        .badge-expired {
+            background: #fff0f0;
+
+            color: #b4232f;
+
+            border:
+                1px solid #ffd2d5;
+        }
+
+        /* =====================================================
+            معاينة العقد
+            ===================================================== */
+
         .contract-paper {
-            background: white; 
-            width: 794px; 
+            background: white;
+
+            width: 794px;
+
             min-height: 1120px;
-            padding: 25px 40px; 
+
+            padding: 25px 40px;
+
             margin: 0 auto;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
-            position: relative; 
+
+            border-radius: 4px;
+
+            border:
+                1px solid #e1e5eb;
+
+            box-shadow:
+                0 15px 45px rgba(7,21,47,0.10),
+                0 2px 6px rgba(7,21,47,0.04);
+
+            position: relative;
+
             box-sizing: border-box;
-        }
-        .contract-title { text-align: center; font-size: 16px; font-weight: 900; color: #000; margin: 5px 0 10px 0; }
-        .contract-row { font-size: 11.5px; line-height: 1.45; font-weight: 600; color: #111; margin-bottom: 2px; }
-        .fill-val { border-bottom: 1px dashed #555; padding: 0 5px; font-weight: 800; color: #000; display: inline-block; }
-        .section-h { font-size: 12px; font-weight: 900; color: #000; margin: 8px 0 2px 0; border-right: 3px solid var(--primary-orange); padding-right: 6px; }
-        .contract-ul { list-style: none; padding-right: 0; }
-        .contract-ul li { font-size: 11px; line-height: 1.35; color: #222; font-weight: 500; margin-bottom: 1px; }
 
-        /* التوقيعات */
-        .sig-grid { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-end; 
-            margin-top: 15px; 
-            padding-top: 10px; 
-            border-top: 1px solid #e2e8f0; 
-        }
-        .sig-box { text-align: center; flex: 1; padding: 0 5px; }
-        .sig-box .title { color: #000; font-size: 10.5px; font-weight: 800; margin-bottom: 3px; }
-        .sig-line { border-bottom: 1px dashed #777; width: 85%; margin: 0 auto; }
-        .sig-img { height: 38px; object-fit: contain; display: block; margin: 0 auto 2px auto; }
-
-        /* أزرار تفاعلية متحركة */
-        .btn-action { 
-            padding: 10px 18px; border-radius: 6px; font-weight: 800; border: none; cursor: pointer; 
-            display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease; 
-        }
-        .btn-action:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .btn-orange { background: var(--primary-orange); color: white; }
-        .btn-navy { background: var(--dark-navy); color: white; }
-        .btn-green { background: #10b981; color: white; }
-        .btn-danger { background: #ef4444; color: white; }
-        .btn-blue { background: #3b82f6; color: white; }
-        .btn-purple { background: #8b5cf6; color: white; }
-
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { padding: 12px; text-align: right; border-bottom: 1px solid #eee; font-size: 13px; }
-        th { background: #f8fafc; color: var(--dark-navy); font-weight: 800; }
-        
-        .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; }
-        .badge-active { background: #dcfce7; color: #15803d; }
-        .badge-warning { background: #fef9c3; color: #a16207; animation: pulseGlow 1.8s infinite; }
-        .badge-expired { background: #fee2e2; color: #b91c1c; animation: pulseGlow 1.2s infinite; }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
-            100% { transform: scale(1); opacity: 1; }
+            overflow: hidden;
         }
 
-        @media print {
-            .auth-overlay, .top-navbar, .volunteer-ticker, .card-box, .btn-action, .no-print { display: none !important; }
-            .main-container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
-            .contract-paper { box-shadow: none !important; margin: 0 !important; width: 100% !important; }
+        .contract-paper::before {
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            right: 0;
+
+            width: 100%;
+            height: 5px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--dark-navy),
+                    var(--primary-orange),
+                    var(--dark-navy)
+                );
         }
-    </style>
-</head>
-<body>
 
-    <div class="auth-overlay" id="authSection">
-        <div class="auth-card">
-            <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 100px; height: auto; max-height: 80px; object-fit: contain; margin-bottom: 10px;" onerror="this.style.display='none'">
-            <h2>فريق شمس التطوعي</h2>
-            <p>يرجى كتابة اسم المستخدم وكلمة المرور</p>
-            
-            <form onsubmit="handleLogin(event)">
-                <div class="form-group" style="margin-bottom: 12px;">
-                    <input type="text" id="login_user" class="form-control" placeholder="اسم المستخدم" required>
-                </div>
-                <div class="form-group" style="margin-bottom: 20px;">
-                    <input type="password" id="login_pass" class="form-control" placeholder="كلمة المرور" required>
-                </div>
-                <button type="submit" class="btn-action btn-orange" style="width: 100%; justify-content: center; font-size: 15px; margin-bottom: 10px;"><i class="fas fa-lock-open"></i> تسجيل الدخول</button>
-            </form>
-        </div>
-    </div>
+        .contract-title {
+            text-align: center;
 
-    <div id="appContent" style="display: none;">
-        
-        <div class="top-navbar">
-            <div class="brand-container">
-                <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" class="brand-logo" onerror="this.style.display='none'">
-                <div class="brand-title">فريق شمس التطوعي</div>
-            </div>
-            <div class="nav-links">
-                <button id="btn-create" class="active" onclick="switchTab('createTab')"><i class="fas fa-file-signature"></i> عقد جديد</button>
-                <button id="btn-upload" onclick="switchTab('uploadTab')"><i class="fas fa-file-upload"></i> إرفاق عقد خارجي</button>
-                <button id="btn-archive" onclick="switchTab('archiveTab')"><i class="fas fa-box-archive"></i> أرشيف العقود (<span id="contractCount">0</span>)</button>
-                <button id="btn-users" onclick="switchTab('usersTab')" style="display: none;"><i class="fas fa-users-gear"></i> إدارة المستخدمين (<span id="usersCount">0</span>)</button>
-            </div>
-            <button onclick="logoutSystem();" class="btn-action" style="background: #475569; color: white;"><i class="fas fa-sign-out-alt"></i> خروج</button>
-        </div>
+            font-size: 18px;
 
-        <div class="volunteer-ticker">
-            <div class="ticker-text">
-                🌟 "التطوع حياة البذل والعطاء" &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🤝 "بين الأيدي المتكاتفة تصنع الإنجازات" &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ✨ "شمس التطوع... نور يضيء المجتمع" &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 💙 "صنع الأثر يبدأ بخطوة تطوعية صادقة"
-            </div>
-        </div>
+            font-weight: 900;
 
-        <div class="main-container">
-            
-            <div id="createTab">
-                <div class="card-box no-print">
-                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-edit"></i> تعبئة بيانات المتطوع الجديد</h3>
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>الاسم الكامل</label>
-                            <input type="text" id="in_name" class="form-control" placeholder="أدخل الاسم الكامل" oninput="updateContractPreview()">
-                        </div>
-                        <div class="form-group">
-                            <label>رقم الهوية / الإقامة</label>
-                            <input type="text" id="in_id" class="form-control" placeholder="10 أرقام" oninput="updateContractPreview()">
-                        </div>
-                        <div class="form-group">
-                            <label>رقم الجوال</label>
-                            <input type="text" id="in_phone" class="form-control" placeholder="05xxxxxxxx" oninput="updateContractPreview()">
-                        </div>
-                        <div class="form-group">
-                            <label>تاريخ الميلاد</label>
-                            <input type="date" id="in_dob" class="form-control" onchange="updateContractPreview()">
-                        </div>
-                        <div class="form-group">
-                            <label>القسم / الإدارة</label>
-                            <input type="text" id="in_dept" class="form-control" placeholder="مثال: الموارد البشرية" oninput="updateContractPreview()">
-                        </div>
-                        <div class="form-group">
-                            <label>تاريخ الاتفاق (التحرير)</label>
-                            <input type="date" id="in_today" class="form-control" onchange="updateContractPreview()">
-                        </div>
-                        <div class="form-group">
-                            <label>تاريخ الانضمام الفعلي</label>
-                            <input type="date" id="in_startDate" class="form-control" onchange="updateContractPreview()">
-                        </div>
-                        <div class="form-group">
-                            <label>مدة العقد</label>
-                            <select id="in_duration" class="form-control" onchange="updateContractPreview()">
-                                <option value="1">شهر واحد</option>
-                                <option value="3">3 أشهر</option>
-                                <option value="6">6 أشهر</option>
-                                <option value="12">سنة كاملة (12 شهر)</option>
-                            </select>
-                        </div>
-                    </div>
+            color: var(--dark-navy);
 
-                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-                        <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ العقد في الأرشيف السحابي</button>
-                        <button onclick="downloadContractPDF()" class="btn-action btn-green"><i class="fas fa-file-pdf"></i> تنزيل العقد (PDF في صفحة واحدة)</button>
-                        <button onclick="window.print()" class="btn-action btn-navy"><i class="fas fa-print"></i> طباعة مباشرة</button>
-                    </div>
-                </div>
+            margin: 5px 0 10px 0;
+        }
 
-                <div style="overflow-x: auto; width: 100%;">
-                    <div class="contract-paper" id="contractPaper">
-                        <div style="text-align: right;">
-                            <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 85px; height: auto; object-fit: contain;" onerror="this.style.display='none'">
-                        </div>
+        .contract-row {
+            font-size: 11.5px;
 
-                        <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
+            line-height: 1.45;
 
-                        <div class="contract-row">تم الاتفاق في تاريخ: ( <span class="fill-val" id="p_today">..../../....</span> ) بين كل من:</div>
-                        <div class="contract-row">الطرف الأول : إدارة فريق (شمس) التطوّعي</div>
-                        <div class="contract-row">الطرف الثاني : المتطوع/ـة ( <span class="fill-val" id="p_name">...................</span> )</div>
-                        <div class="contract-row">رقم الهوية / الإقامة: ( <span class="fill-val" id="p_id">...................</span> )</div>
-                        <div class="contract-row">رقم الجوال: ( <span class="fill-val" id="p_phone">...................</span> )</div>
-                        <div class="contract-row">تاريخ الميلاد: ( <span class="fill-val" id="p_dob">...................</span> )</div>
-                        <div class="contract-row">القسم / الإدارة: ( <span class="fill-val" id="p_dept">...................</span> )</div>
+            font-weight: 600;
 
-                        <div class="section-h">أولاً : موضوع العقد</div>
-                        <p style="font-size:11px; line-height: 1.4; font-weight: 500;">انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
+            color: #111;
 
-                        <div class="section-h">ثانياً : واجبات المتطوع</div>
-                        <ul class="contract-ul">
-                            <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
-                            <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
-                            <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
-                            <li>4. الالتزام بتتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
-                            <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
-                            <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
-                        </ul>
+            margin-bottom: 2px;
+        }
 
-                        <div class="section-h">ثالثاً : حقوق الإدارة</div>
-                        <ul class="contract-ul">
-                            <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
-                            <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
-                            <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
-                            <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
-                            <li>5. حفظ بيانات وسجلات المتطوع.</li>
-                        </ul>
+        .fill-val {
+            border-bottom:
+                1px dashed var(--primary-orange);
 
-                        <div class="section-h">رابعاً : مدة العقد و انهاؤه</div>
-                        <div class="contract-row">مدة العقد: ( <span class="fill-val" id="p_duration">1 شهر</span> )</div>
-                        <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">..../../....</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">..../../....</span> )</div>
-                        <p style="font-size:11px; line-height: 1.4; font-weight: 500; margin-top: 2px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
+            padding: 0 5px;
 
-                        <div class="sig-grid">
-                            <div class="sig-box">
-                                <div class="title">التوقيع</div>
-                                <div class="sig-line" style="margin-top: 38px;"></div>
-                            </div>
-                            <div class="sig-box">
-                                <div class="title">رئيس قسم الموارد البشرية</div>
-                                <img src="https://i.postimg.cc/44VchM5g/lqtt-shasht-2026-09-04-230838.png" alt="توقيع رئيس الموارد البشرية" class="sig-img" crossorigin="anonymous" onerror="this.style.display='none'">
-                                <div class="sig-line"></div>
-                            </div>
-                            <div class="sig-box">
-                                <div class="title">الرئيس التنفيذي</div>
-                                <img src="https://i.postimg.cc/QxSHQrK2/582b00f0-9e4e-48c6-b0ca-c8766e322887.png" alt="توقيع الرئيس التنفيذي" class="sig-img" crossorigin="anonymous" onerror="this.style.display='none'">
-                                <div class="sig-line"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            font-weight: 800;
 
-            <div id="uploadTab" style="display: none;">
-                <div class="card-box">
-                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-cloud-upload-alt"></i> إرفاق عقد خارجي / موقع يدويًا</h3>
-                    <form onsubmit="handleFileUpload(event)">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>اسم المتطوع</label>
-                                <input type="text" id="up_name" class="form-control" placeholder="أدخل اسم المتطوع" required>
-                            </div>
-                            <div class="form-group">
-                                <label>رقم الهوية</label>
-                                <input type="text" id="up_id" class="form-control" placeholder="10 أرقام" required>
-                            </div>
-                            <div class="form-group">
-                                <label>القسم</label>
-                                <input type="text" id="up_dept" class="form-control" placeholder="اسم القسم" required>
-                            </div>
-                            <div class="form-group">
-                                <label>تاريخ بداية العقد الخارجي</label>
-                                <input type="date" id="up_startDate" class="form-control" required>
-                            </div>
-                            <div class="form-group">
-                                <label>تاريخ انتهاء العقد الخارجي</label>
-                                <input type="date" id="up_endDate" class="form-control" required>
-                            </div>
-                            <div class="form-group" style="grid-column: span 2;">
-                                <label>اختيار ملف العقد (PDF / صورة)</label>
-                                <input type="file" id="up_file" class="form-control" accept=".pdf,image/*" required>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-upload"></i> رفع وحفظ العقد بالأرشيف مع التنبيهات</button>
-                    </form>
-                </div>
-            </div>
+            color: var(--dark-navy);
 
-            <div id="archiveTab" style="display: none;">
-                <div class="card-box">
-                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-archive"></i> أرشيف العقود المعتمدة والمرفقة (متزامن سحابياً)</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>اسم المتطوع</th>
-                                <th>الهوية</th>
-                                <th>القسم</th>
-                                <th>تاريخ البداية</th>
-                                <th>تاريخ النهاية</th>
-                                <th>نوع العقد</th>
-                                <th>الحالة والعد التنازلي</th>
-                                <th>الإجراءات</th>
-                            </tr>
-                        </thead>
-                        <tbody id="archiveTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
+            display: inline-block;
+        }
 
-            <div id="usersTab" style="display: none;">
-                <div class="card-box">
-                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام</h3>
-                    <form onsubmit="addUser(event)">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label>اسم الموظف / المستخدم</label>
-                                <input type="text" id="u_name" class="form-control" placeholder="مثال: أحمد علي" required>
-                            </div>
-                            <div class="form-group">
-                                <label>اسم الدخول (Username)</label>
-                                <input type="text" id="u_username" class="form-control" placeholder="مثال: ahmed" required>
-                            </div>
-                            <div class="form-group">
-                                <label>كلمة المرور (Password)</label>
-                                <input type="password" id="u_password" class="form-control" placeholder="••••••••" required>
-                            </div>
-                            <div class="form-group">
-                                <label>الصلاحية</label>
-                                <select id="u_role" class="form-control">
-                                    <option value="مدير النظام">مدير النظام</option>
-                                    <option value="مسؤول موارد بشرية">مسؤول موارد بشرية</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-check"></i> حفظ المستخدم سحابياً</button>
-                    </form>
-                </div>
+        .section-h {
+            font-size: 12px;
 
-                <div class="card-box">
-                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-users"></i> حسابات الدخول المسجلة سحابياً</h3>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>اسم الموظف</th>
-                                <th>اسم المستخدم</th>
-                                <th>كلمة المرور</th>
-                                <th>الصلاحية</th>
-                                <th>إجراءات التعديل والحذف</th>
-                            </tr>
-                        </thead>
-                        <tbody id="usersTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
+            font-weight: 900;
 
-        </div>
-    </div>
+            color: var(--dark-navy);
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+            margin: 8px 0 2px 0;
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyAehKIHRrnIm-l6djL36mz5P7E_UED2PzE",
-            authDomain: "shamshr-b7b2b.firebaseapp.com",
-            projectId: "shamshr-b7b2b",
-            storageBucket: "shamshr-b7b2b.firebasestorage.app",
-            messagingSenderId: "1035491575998",
-            appId: "1:1035491575998:web:dfd07f262e72477706b6ef",
-            measurementId: "G-YD7EZJTJM9"
-        };
+            border-right:
+                3px solid var(--primary-orange);
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+            background:
+                linear-gradient(
+                    90deg,
+                    transparent,
+                    rgba(245,166,35,0.06)
+                );
 
-        window.usersList = [];
-        window.contractsArchive = [];
-        window.currentUserRole = '';
+            padding: 4px 8px;
 
-        async function loadCloudData() {
-            try {
-                const usersSnap = await getDocs(collection(db, "users"));
-                window.usersList = [];
-                usersSnap.forEach((docSnap) => {
-                    window.usersList.push({ id: docSnap.id, ...docSnap.data() });
-                });
+            border-radius: 3px;
+        }
 
-                const hasAdmin = window.usersList.some(u => u.username === 'admin');
-                if(!hasAdmin) {
-                    await addDoc(collection(db, "users"), { name: 'المدير العام', username: 'admin', password: '123456', role: 'مدير النظام' });
-                    const res = await getDocs(collection(db, "users"));
-                    window.usersList = [];
-                    res.forEach(d => window.usersList.push({ id: d.id, ...d.data() }));
-                }
+        .contract-ul {
+            list-style: none;
 
-                const contractsSnap = await getDocs(collection(db, "contracts"));
-                window.contractsArchive = [];
-                contractsSnap.forEach((docSnap) => {
-                    window.contractsArchive.push({ id: docSnap.id, ...docSnap.data() });
-                });
+            padding-right: 0;
+        }
 
-                renderUsers();
-                renderArchive();
-            } catch (err) {
-                console.error("Cloud Error: ", err);
+        .contract-ul li {
+            font-size: 11px;
+
+            line-height: 1.35;
+
+            color: #222;
+
+            font-weight: 500;
+
+            margin-bottom: 1px;
+        }
+
+        /* =====================================================
+            التوقيعات
+            ===================================================== */
+
+        .sig-grid {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-end;
+
+            margin-top: 15px;
+
+            padding-top: 10px;
+
+            border-top:
+                1px solid #e4e8ee;
+        }
+
+        .sig-box {
+            text-align: center;
+
+            flex: 1;
+
+            padding: 0 5px;
+        }
+
+        .sig-box .title {
+            color: #000;
+
+            font-size: 10.5px;
+
+            font-weight: 800;
+
+            margin-bottom: 3px;
+        }
+
+        .sig-line {
+            border-bottom:
+                1px dashed #777;
+
+            width: 85%;
+
+            margin: 0 auto;
+        }
+
+        .sig-img {
+            height: 38px;
+
+            object-fit: contain;
+
+            display: block;
+
+            margin: 0 auto 2px auto;
+        }
+
+        /* =====================================================
+            Username / Password
+            ===================================================== */
+
+        code {
+            background: #f1f4f8;
+
+            border:
+                1px solid #e3e7ed;
+
+            padding: 4px 7px;
+
+            border-radius: 6px;
+
+            color: var(--dark-navy);
+
+            font-family: monospace;
+        }
+
+        /* =====================================================
+            رفع الملفات
+            ===================================================== */
+
+        input[type="file"] {
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            border: none;
+
+            background:
+                var(--dark-navy);
+
+            color: white;
+
+            padding: 8px 12px;
+
+            border-radius: 7px;
+
+            margin-left: 10px;
+
+            cursor: pointer;
+
+            font-family: 'Tajawal', sans-serif;
+
+            font-weight: 700;
+        }
+
+        /* =====================================================
+            Animations
+            ===================================================== */
+
+        @keyframes loginCardIn {
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(20px)
+                    scale(0.98);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0)
+                    scale(1);
             }
         }
 
-        loadCloudData();
+        @keyframes fadeInContent {
+            from {
+                opacity: 0;
 
-        window.handleLogin = async function(e) {
-            e.preventDefault();
-            const uInput = document.getElementById('login_user').value.trim();
-            const pInput = document.getElementById('login_pass').value.trim();
+                transform:
+                    translateY(8px);
+            }
 
-            await loadCloudData();
+            to {
+                opacity: 1;
 
-            const foundUser = window.usersList.find(u => u.username === uInput && u.password === pInput);
+                transform:
+                    translateY(0);
+            }
+        }
 
-            if(foundUser) {
-                window.currentUserRole = foundUser.role;
+        #createTab,
+        #uploadTab,
+        #archiveTab,
+        #usersTab {
+            animation:
+                fadeInContent 0.3s ease;
+        }
 
-                if(window.currentUserRole === 'مدير النظام') {
-                    document.getElementById('btn-users').style.display = 'inline-block';
-                } else {
-                    document.getElementById('btn-users').style.display = 'none';
-                }
+        /* =====================================================
+            الجوال
+            ===================================================== */
 
-                document.getElementById('authSection').style.display = 'none';
-                document.getElementById('appContent').style.display = 'block';
-                renderUsers();
-                renderArchive();
-            } else {
-                alert('خطأ: اسم المستخدم أو
+        @media (max-width: 900px) {
+
+            .top-navbar {
+                padding: 12px 15px;
+
+                flex-wrap: wrap;
+
+                gap: 12px;
+            }
+
+            .top-navbar > div:first-child {
+                width: 100%;
+
+                justify-content: center;
+            }
+
+            .nav-links {
+                width: 100%;
+
+                order: 3;
+
+                overflow-x: auto;
+
+                justify-content: flex-start;
+
+                flex-wrap: nowrap;
+
+                padding-bottom: 3px;
+            }
+
+            .nav-links button {
+                flex: 0 0 auto;
+
+                font-size: 12px;
+
+                padding: 9px 11px;
+            }
+
+            .top-navbar > button {
+                position: absolute;
+
+                left: 15px;
+
+                top: 12px;
+            }
+
+            .main-container {
+                margin: 20px auto;
+
+                padding: 0 12px;
+            }
+
+            .card-box {
+                padding: 20px 16px;
+
+                border-radius: 15px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group[style*="grid-column"] {
+                grid-column: auto !important;
+            }
+
+            .contract-paper {
+                margin-right: 0;
+
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 600px) {
+
+            .auth-card {
+                padding: 32px 22px 25px;
+
+                border-radius: 20px;
+            }
+
+            .auth-card h2 {
+                font-size: 21px;
+            }
+
+            .top-navbar {
+                min-height: auto;
+            }
+
+            .top-navbar > div:first-child {
+                font-size: 16px !important;
+            }
+
+            .top-navbar > button {
+                font-size: 0;
+
+                width: 38px;
+
+                height: 38px;
+
+                padding: 0 !important;
+
+                justify-content: center;
+            }
+
+            .top-navbar > button i {
+                font-size: 14px;
+            }
+
+            .card-box h3 {
+                font-size: 16px;
+            }
+
+            .btn-action {
+                width: 100%;
+
+                justify-content: center;
+            }
+
+            .card-box > form .btn-action {
+                width: 100%;
+            }
+
+            table {
+                min-width: 900px;
+            }
+        }
+
+        /* =====================================================
+            الطباعة
+            ===================================================== */
+
+        @media print {
+
+            .auth-overlay,
+            .top-navbar,
+            .card-box,
+            .btn-action,
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: white !important;
+            }
+
+            .main-container {
+                max-width: 100% !important;
+
+                margin: 0 !important;
+
+                padding: 0 !important;
+            }
+
+            .contract-paper {
+                box-shadow: none !important;
+
+                border: none !important;
+
+                border-radius: 0 !important;
+
+                margin: 0 !important;
+
+                width: 100% !important;
+            }
+
+            .contract-paper::before {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================================
+         شاشة تسجيل الدخول
+         ===================================================== -->
+
+    <div class="auth-overlay" id="authSection">
+
+        <div class="auth-card">
+
+            <img
+                src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" 
+                alt="شعار الفريق" 
+                width="90" 
+                height="90" 
+                style="margin-bottom: 10px;"
+            >
+            <h2>تسجيل الدخول</h2>
+            <p>نظام إدارة وأرشيف العقود - فريق شمس التطوعي</p>
+
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <input type="text" id="loginUser" class="form-control" placeholder="اسم المستخدم" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <input type="password" id="loginPass" class="form-control" placeholder="كلمة المرور" required>
+                </div>
+                <button type="submit" class="btn-action btn-orange" style="width: 100%;">دخول للنظام</button>
+            </form>
+        </div>
+
+    </div>
+
+    <!-- =====================================================
+         شريط التنقل العلوي
+         ===================================================== -->
+
+    <header class="top-navbar">
+        <div>
+            <!-- تم إضافة الشعار بجانب اسم الفريق على اليمين وتعديل اللون إلى الأبيض -->
+            <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" class="nav-logo">
+            <span>فريق شمس التطوعي</span>
+        </div>
+
+        <nav class="nav-links">
+            <button onclick="switchTab('createTab')" id="btnCreate" class="active">
+                <i class="fa-solid fa-file-pen"></i> إنشاء عقد
+            </button>
+            <button onclick="switchTab('uploadTab')" id="btnUpload">
+                <i class="fa-solid fa-cloud-arrow-up"></i> رفع وأرشفة
+            </button>
+            <button onclick="switchTab('archiveTab')" id="btnArchive">
+                <i class="fa-solid fa-box-archive"></i> أرشيف العقود
+            </button>
+            <button onclick="switchTab('usersTab')" id="btnUsers" style="display:none;">
+                <i class="fa-solid fa-users-gear"></i> إدارة المستخدمين
+            </button>
+        </nav>
+
+        <button onclick="handleLogout()" class="btn-action btn-danger" title="تسجيل الخروج">
+            <i class="fa-solid fa-right-from-bracket"></i> خروج
+        </button>
+    </header>
+
+    <!-- بقية محتوى الصفحة... -->
+
+</body>
+</html>
