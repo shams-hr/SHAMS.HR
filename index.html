@@ -177,11 +177,13 @@
     <div id="appContent" style="display: none;">
         
         <div class="top-navbar">
-            <div style="font-weight: 900; font-size: 18px;">فريق شمس التطوعي</div>
+            <!-- تم تعديل اللون هنا ليكون أبيض تماماً -->
+            <div style="font-weight: 900; font-size: 18px; color: #ffffff;">فريق شمس التطوعي</div>
             <div class="nav-links">
                 <button id="btn-create" class="active" onclick="switchTab('createTab')"><i class="fas fa-file-signature"></i> عقد جديد</button>
                 <button id="btn-upload" onclick="switchTab('uploadTab')"><i class="fas fa-file-upload"></i> إرفاق عقد خارجي</button>
                 <button id="btn-archive" onclick="switchTab('archiveTab')"><i class="fas fa-box-archive"></i> أرشيف العقود (<span id="contractCount">0</span>)</button>
+                <button id="btn-logs" onclick="switchTab('logsTab')" style="display: none;"><i class="fas fa-clipboard-list"></i> سجل النشاطات (<span id="logsCount">0</span>)</button>
                 <button id="btn-users" onclick="switchTab('usersTab')" style="display: none;"><i class="fas fa-users-gear"></i> إدارة المستخدمين (<span id="usersCount">0</span>)</button>
             </div>
             <button onclick="logoutSystem();" class="btn-action" style="background: #475569; color: white;"><i class="fas fa-sign-out-alt"></i> خروج</button>
@@ -362,7 +364,25 @@
                 </div>
             </div>
 
-            <!-- Tab 4: المستخدمين -->
+            <!-- Tab 4: سجل النشاطات (اللوقات الجديدة) -->
+            <div id="logsTab" style="display: none;">
+                <div class="card-box">
+                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-clipboard-list"></i> سجل النشاطات والعمليات السحابية (Logs)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>المستخدم / المسؤول</th>
+                                <th>العملية / الحدث</th>
+                                <th>التفاصيل</th>
+                                <th>التاريخ والوقت</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 5: المستخدمين -->
             <div id="usersTab" style="display: none;">
                 <div class="card-box">
                     <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام</h3>
@@ -412,7 +432,7 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK & Script -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
         import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
@@ -432,7 +452,55 @@
 
         window.usersList = [];
         window.contractsArchive = [];
+        window.systemLogs = [];
         window.currentUserRole = '';
+        window.currentUserName = '';
+
+        async function logActivity(action, details) {
+            try {
+                const logData = {
+                    user: window.currentUserName || 'مستخدم غير معروف',
+                    action: action,
+                    details: details,
+                    timestamp: new Date().toLocaleString('ar-SA')
+                };
+                await addDoc(collection(db, "logs"), logData);
+                await loadLogsData();
+            } catch(err) {
+                console.error("Log Error: ", err);
+            }
+        }
+
+        async function loadLogsData() {
+            try {
+                const logsSnap = await getDocs(collection(db, "logs"));
+                window.systemLogs = [];
+                logsSnap.forEach((docSnap) => {
+                    window.systemLogs.push({ id: docSnap.id, ...docSnap.data() });
+                });
+                renderLogs();
+            } catch (err) {
+                console.error("Logs Load Error: ", err);
+            }
+        }
+
+        function renderLogs() {
+            const tbody = document.getElementById('logsTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            document.getElementById('logsCount').innerText = window.systemLogs.length;
+
+            window.systemLogs.sort((a, b) => b.timestamp - a.timestamp).forEach(log => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>${log.user}</b></td>
+                        <td><span class="badge badge-active">${log.action}</span></td>
+                        <td>${log.details}</td>
+                        <td>${log.timestamp}</td>
+                    </tr>
+                `;
+            });
+        }
 
         async function loadCloudData() {
             try {
@@ -458,6 +526,7 @@
 
                 renderUsers();
                 renderArchive();
+                await loadLogsData();
             } catch (err) {
                 console.error("Cloud Error: ", err);
             }
@@ -476,17 +545,21 @@
 
             if(foundUser) {
                 window.currentUserRole = foundUser.role;
+                window.currentUserName = foundUser.name;
 
                 if(window.currentUserRole === 'مدير النظام') {
                     document.getElementById('btn-users').style.display = 'inline-block';
+                    document.getElementById('btn-logs').style.display = 'inline-block';
                 } else {
                     document.getElementById('btn-users').style.display = 'none';
+                    document.getElementById('btn-logs').style.display = 'none';
                 }
 
                 document.getElementById('authSection').style.display = 'none';
                 document.getElementById('appContent').style.display = 'block';
                 renderUsers();
                 renderArchive();
+                await logActivity('تسجيل دخول', `قام المستخدم ${foundUser.name} بتسجيل الدخول بنجاح.`);
             } else {
                 alert('خطأ: اسم المستخدم أو كلمة المرور غير صحيحة!');
             }
@@ -511,6 +584,7 @@
                 document.getElementById('u_username').value = '';
                 document.getElementById('u_password').value = '';
                 await loadCloudData();
+                await logActivity('إضافة مستخدم', `إضافة المستخدم الجديد: ${name} (${username})`);
             } catch(err) {
                 alert('حدث خطأ أثناء الحفظ بالسحابة');
             }
@@ -529,6 +603,7 @@
                 await updateDoc(userRef, { password: newPass.trim() });
                 alert('تم تحديث كلمة المرور سحابياً بنجاح!');
                 await loadCloudData();
+                await logActivity('تعديل كلمة مرور', `تحديث كلمة مرور المستخدم: ${username}`);
             } catch(err) {
                 alert('فشل تحديث كلمة المرور.');
             }
@@ -547,6 +622,7 @@
                 try {
                     await deleteDoc(doc(db, "users", docId));
                     await loadCloudData();
+                    await logActivity('حذف مستخدم', `حذف المستخدم: ${username}`);
                 } catch(err) {
                     alert('فشل الحذف');
                 }
@@ -580,6 +656,7 @@
                 await addDoc(collection(db, "contracts"), newContract);
                 alert('تم حفظ العقد بنجاح في الأرشيف السحابي!');
                 await loadCloudData();
+                await logActivity('حفظ عقد جديد', `حفظ عقد المتطوع: ${name} (هوية: ${id})`);
                 switchTab('archiveTab');
             } catch(err) {
                 alert('فشل حفظ العقد بالسحابة');
@@ -610,195 +687,99 @@
 
             try {
                 await addDoc(collection(db, "contracts"), newContract);
-                alert('تم إرفاق العقد الخارجي وحفظ تواريخه وحالته سحابياً بنجاح!');
+                alert('تم إرفاق العقد الخارجي وحفظه بنجاح!');
+                document.getElementById('up_name').value = '';
+                document.getElementById('up_id').value = '';
+                document.getElementById('up_dept').value = '';
+                document.getElementById('up_startDate').value = '';
+                document.getElementById('up_endDate').value = '';
+                fileInput.value = '';
                 await loadCloudData();
+                await logActivity('إرفاق عقد خارجي', `إرفاق عقد خارجي للمتطوع: ${name}`);
                 switchTab('archiveTab');
             } catch(err) {
-                alert('فشل الرفع');
+                alert('فشل رفع الملف بالسحابة');
             }
         };
 
-        // دالة تجديد العقد
-        window.renewContract = async function(docId, currentEndDate) {
-            let monthsToAdd = prompt('اختر مدة التجديد بالأشهر (مثال: 1 أو 3 أو 6 أو 12):', '3');
-            if(monthsToAdd === null) return;
-            let mNum = parseInt(monthsToAdd);
-            if(isNaN(mNum) || mNum <= 0) {
-                alert('يرجى إدخال رقم صحيح للأشهر!');
-                return;
-            }
-
-            let baseDate = new Date(currentEndDate);
-            let today = new Date();
-            today.setHours(0,0,0,0);
-            if(baseDate < today) {
-                baseDate = today; // إذا كان منتهياً، نبدأ التجديد من تاريخ اليوم
-            }
-
-            let newEnd = new Date(baseDate);
-            newEnd.setMonth(newEnd.getMonth() + mNum);
-            let newEndStr = newEnd.toISOString().split('T')[0];
-
-            try {
-                const contractRef = doc(db, "contracts", docId);
-                await updateDoc(contractRef, { endDate: newEndStr });
-                alert(`تم تجديد العقد بنجاح حتى تاريخ: ${newEndStr}`);
-                await loadCloudData();
-            } catch(err) {
-                alert('فشل عملية تجديد العقد.');
-            }
-        };
-
-        window.deleteContract = async function(docId) {
-            if(confirm('هل أنت متأكد من حذف هذا العقد من الأرشيف؟')) {
+        window.deleteContract = async function(docId, name) {
+            if(confirm(`هل أنت متأكد من حذف عقد المتطوع (${name}) من الأرشيف؟`)) {
                 try {
                     await deleteDoc(doc(db, "contracts", docId));
                     await loadCloudData();
+                    await logActivity('حذف عقد', `حذف عقد المتطوع: ${name} من الأرشيف`);
                 } catch(err) {
                     alert('فشل الحذف');
                 }
             }
         };
 
-    </script>
-
-    <script>
-        function logoutSystem() {
-            document.getElementById('login_user').value = '';
-            document.getElementById('login_pass').value = '';
-            document.getElementById('authSection').style.display = 'flex';
-            document.getElementById('appContent').style.display = 'none';
-        }
-
-        function switchTab(tabId) {
-            if(tabId === 'usersTab' && window.currentUserRole !== 'مدير النظام') {
-                alert('غير مسموح لك بالدخول إلى هذه الصفحة!');
-                return;
-            }
-
+        window.switchTab = function(tabId) {
             document.getElementById('createTab').style.display = 'none';
             document.getElementById('uploadTab').style.display = 'none';
             document.getElementById('archiveTab').style.display = 'none';
-            const usersTabEl = document.getElementById('usersTab');
-            if(usersTabEl) usersTabEl.style.display = 'none';
+            if(document.getElementById('logsTab')) document.getElementById('logsTab').style.display = 'none';
+            if(document.getElementById('usersTab')) document.getElementById('usersTab').style.display = 'none';
 
             document.getElementById('btn-create').classList.remove('active');
             document.getElementById('btn-upload').classList.remove('active');
             document.getElementById('btn-archive').classList.remove('active');
-            const btnUsersEl = document.getElementById('btn-users');
-            if(btnUsersEl) btnUsersEl.classList.remove('active');
+            if(document.getElementById('btn-logs')) document.getElementById('btn-logs').classList.remove('active');
+            if(document.getElementById('btn-users')) document.getElementById('btn-users').classList.remove('active');
 
             document.getElementById(tabId).style.display = 'block';
-            
+
             if(tabId === 'createTab') document.getElementById('btn-create').classList.add('active');
             if(tabId === 'uploadTab') document.getElementById('btn-upload').classList.add('active');
             if(tabId === 'archiveTab') document.getElementById('btn-archive').classList.add('active');
-            if(tabId === 'usersTab' && btnUsersEl) btnUsersEl.classList.add('active');
-        }
+            if(tabId === 'logsTab' && document.getElementById('btn-logs')) document.getElementById('btn-logs').classList.add('active');
+            if(tabId === 'usersTab' && document.getElementById('btn-users')) document.getElementById('btn-users').classList.add('active');
+        };
 
-        function updateContractPreview() {
+        window.updateContractPreview = function() {
             const name = document.getElementById('in_name').value || '...................';
             const id = document.getElementById('in_id').value || '...................';
             const phone = document.getElementById('in_phone').value || '...................';
             const dob = document.getElementById('in_dob').value || '...................';
             const dept = document.getElementById('in_dept').value || '...................';
-            const todayVal = document.getElementById('in_today').value;
-            const startDateVal = document.getElementById('in_startDate').value;
-            const durationVal = parseInt(document.getElementById('in_duration').value);
+            const today = document.getElementById('in_today').value || new Date().toISOString().split('T')[0];
+            const startDate = document.getElementById('in_startDate').value || today;
+            const duration = parseInt(document.getElementById('in_duration').value);
+
+            let endDt = new Date(startDate);
+            endDt.setMonth(endDt.getMonth() + duration);
 
             document.getElementById('p_name').innerText = name;
             document.getElementById('p_id').innerText = id;
             document.getElementById('p_phone').innerText = phone;
             document.getElementById('p_dob').innerText = dob;
             document.getElementById('p_dept').innerText = dept;
+            document.getElementById('p_today').innerText = today;
+            document.getElementById('p_startDate').innerText = startDate;
+            document.getElementById('p_endDate').innerText = endDt.toISOString().split('T')[0];
+            document.getElementById('p_duration').innerText = duration + ' شهر';
+        };
 
-            if(todayVal) {
-                document.getElementById('p_today').innerText = todayVal;
-            } else {
-                document.getElementById('p_today').innerText = '..../../....';
-            }
-
-            let startDate = startDateVal ? new Date(startDateVal) : null;
-            if(startDate) {
-                document.getElementById('p_startDate').innerText = startDate.toISOString().split('T')[0];
-                let endDate = new Date(startDate);
-                endDate.setMonth(endDate.getMonth() + durationVal);
-                document.getElementById('p_endDate').innerText = endDate.toISOString().split('T')[0];
-            } else {
-                document.getElementById('p_startDate').innerText = '..../../....';
-                document.getElementById('p_endDate').innerText = '..../../....';
-            }
-
-            document.getElementById('p_duration').innerText = durationVal + ' شهر';
-        }
-
-        function downloadContractPDF() {
-            const name = document.getElementById('in_name').value || 'عقد_متطوع';
-            const element = document.getElementById('contractPaper');
-            
-            const opt = {
-                margin:       [2, 2, 2, 2],
-                filename:     `عقد_${name}.pdf`,
-                image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true, allowTaint: true, letterRendering: true },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-
-            html2pdf().from(element).set(opt).save();
-        }
-
-        function renderUsers() {
-            const tbody = document.getElementById('usersTableBody');
-            document.getElementById('usersCount').innerText = window.usersList.length;
+        window.renderArchive = function() {
+            const tbody = document.getElementById('archiveTableBody');
             if(!tbody) return;
             tbody.innerHTML = '';
-
-            window.usersList.forEach(u => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td><b>${u.name}</b></td>
-                        <td><code>${u.username}</code></td>
-                        <td><code>${u.password}</code></td>
-                        <td><span class="badge badge-active">${u.role}</span></td>
-                        <td>
-                            <button onclick="changeUserPassword('${u.id}', '${u.username}')" class="btn-action btn-blue" style="padding: 4px 10px; font-size: 12px; margin-left: 5px;"><i class="fas fa-key"></i> تغيير كلمة المرور</button>
-                            <button onclick="deleteUser('${u.id}', '${u.username}')" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;"><i class="fas fa-trash"></i> حذف</button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        function renderArchive() {
-            const tbody = document.getElementById('archiveTableBody');
             document.getElementById('contractCount').innerText = window.contractsArchive.length;
-            tbody.innerHTML = '';
-
-            if(window.contractsArchive.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; color: #777; padding: 20px;">لا توجد عقود محفوظة في الأرشيف السحابي حالياً.</td></tr>`;
-                return;
-            }
 
             const today = new Date();
-            today.setHours(0, 0, 0, 0);
 
             window.contractsArchive.forEach(c => {
-                let statusBadge = '';
-                let endD = new Date(c.endDate);
-                endD.setHours(0, 0, 0, 0);
-                
-                let diffTime = endD - today;
-                let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                const end = new Date(c.endDate);
+                const diffTime = end - today;
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                if(isNaN(diffDays)) {
-                    statusBadge = `<span class="badge badge-active">نشط</span>`;
-                } else if(diffDays < 0) {
-                    let passedDays = Math.abs(diffDays);
-                    statusBadge = `<span class="badge badge-expired">منتهي منذ ${passedDays} يوم</span>`;
+                let badgeHtml = '';
+                if(diffDays < 0) {
+                    badgeHtml = `<span class="badge badge-expired">منتهي (${Math.abs(diffDays)} يوم)</span>`;
                 } else if(diffDays <= 7) {
-                    statusBadge = `<span class="badge badge-warning">ينتهي خلال ${diffDays} أيام</span>`;
+                    badgeHtml = `<span class="badge badge-warning">ينتهي خلال ${diffDays} يوم</span>`;
                 } else {
-                    statusBadge = `<span class="badge badge-active">ساري (متبقي ${diffDays} يوم)</span>`;
+                    badgeHtml = `<span class="badge badge-active">ساري (متبقي ${diffDays} يوم)</span>`;
                 }
 
                 tbody.innerHTML += `
@@ -806,18 +787,60 @@
                         <td><b>${c.name}</b></td>
                         <td>${c.nationalId}</td>
                         <td>${c.dept}</td>
-                        <td>${c.startDate || 'غير محدد'}</td>
-                        <td>${c.endDate || 'غير محدد'}</td>
-                        <td>${c.type}</td>
-                        <td>${statusBadge}</td>
+                        <td>${c.startDate}</td>
+                        <td>${c.endDate}</td>
+                        <td><small>${c.type}</small></td>
+                        <td>${badgeHtml}</td>
                         <td>
-                            <button onclick="renewContract('${c.id}', '${c.endDate}')" class="btn-action btn-purple" style="padding: 4px 10px; font-size: 12px; margin-left: 4px;" title="تجديد العقد"><i class="fas fa-sync-alt"></i> تجديد</button>
-                            <button onclick="deleteContract('${c.id}')" class="btn-action btn-danger" style="padding: 4px 10px; font-size: 12px;" title="حذف العقد"><i class="fas fa-trash"></i> حذف</button>
+                            <button onclick="deleteContract('${c.id}', '${c.name}')" class="btn-action btn-danger" style="padding: 5px 10px; font-size: 11px;"><i class="fas fa-trash"></i> حذف</button>
                         </td>
                     </tr>
                 `;
             });
-        }
+        };
+
+        window.renderUsers = function() {
+            const tbody = document.getElementById('usersTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            document.getElementById('usersCount').innerText = window.usersList.length;
+
+            window.usersList.forEach(u => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>${u.name}</b></td>
+                        <td>${u.username}</td>
+                        <td>••••••</td>
+                        <td><span class="badge badge-active">${u.role}</span></td>
+                        <td>
+                            <button onclick="changeUserPassword('${u.id}', '${u.username}')" class="btn-action btn-blue" style="padding: 5px 10px; font-size: 11px; margin-left: 5px;"><i class="fas fa-key"></i> تعديل كلمة المرور</button>
+                            <button onclick="deleteUser('${u.id}', '${u.username}')" class="btn-action btn-danger" style="padding: 5px 10px; font-size: 11px;"><i class="fas fa-trash"></i> حذف</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        };
+
+        window.downloadContractPDF = function() {
+            const element = document.getElementById('contractPaper');
+            const opt = {
+                margin:       5,
+                filename:     'عقد_فريق_شمس_التطوعي.pdf',
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().from(element).set(opt).save();
+        };
+
+        window.logoutSystem = function() {
+            document.getElementById('appContent').style.display = 'none';
+            document.getElementById('authSection').style.display = 'flex';
+            document.getElementById('login_user').value = '';
+            document.getElementById('login_pass').value = '';
+            window.currentUserRole = '';
+            window.currentUserName = '';
+        };
     </script>
 </body>
 </html>
