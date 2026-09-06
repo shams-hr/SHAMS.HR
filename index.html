@@ -14,14 +14,9 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
-        /* =====================================================
-            الهوية الأساسية
-            ===================================================== */
-
         :root {
             --primary-orange: #f5a623;
             --primary-orange-dark: #d88908;
@@ -34,7 +29,6 @@
             --border: #e5e9f0;
             --success: #16a34a;
             --danger: #dc3545;
-
             --shadow-sm: 0 3px 12px rgba(7, 21, 47, 0.06);
             --shadow-md: 0 10px 30px rgba(7, 21, 47, 0.09);
             --shadow-lg: 0 20px 50px rgba(7, 21, 47, 0.14);
@@ -47,1249 +41,539 @@
             font-family: 'Tajawal', sans-serif;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            background:
-                radial-gradient(circle at 10% 10%, rgba(245,166,35,0.06), transparent 25%),
-                radial-gradient(circle at 90% 90%, rgba(7,21,47,0.04), transparent 25%),
-                var(--bg-body);
+            background: var(--bg-body);
             color: var(--text-dark);
             min-height: 100vh;
         }
 
-        /* =====================================================
-            Scrollbar
-            ===================================================== */
-
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: #eef1f6;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: #b9c1cf;
-            border-radius: 20px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-orange);
-        }
-
-        /* =====================================================
-            شاشة تسجيل الدخول
-            ===================================================== */
-
+        /* شاشة تسجيل الدخول */
         .auth-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(7,21,47,0.98),
-                    rgba(13,35,71,0.97)
-                );
-
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: linear-gradient(135deg, rgba(7,21,47,0.98), rgba(13,35,71,0.97));
             z-index: 999999;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
-            overflow: hidden;
         }
-
-        .auth-overlay::before,
-        .auth-overlay::after {
-            content: "";
-            position: absolute;
-            border-radius: 50%;
-            pointer-events: none;
-        }
-
-        .auth-overlay::before {
-            width: 450px;
-            height: 450px;
-            background: rgba(245,166,35,0.06);
-            top: -180px;
-            right: -120px;
-        }
-
-        .auth-overlay::after {
-            width: 550px;
-            height: 550px;
-            border: 1px solid rgba(245,166,35,0.08);
-            bottom: -300px;
-            left: -150px;
-        }
-
         .auth-card {
-            position: relative;
-            z-index: 2;
-
-            background: rgba(255,255,255,0.98);
-            border: 1px solid rgba(255,255,255,0.7);
+            background: #ffffff;
             border-radius: 24px;
-
             padding: 42px 35px 35px;
-
             width: 100%;
             max-width: 430px;
-
             box-shadow: var(--shadow-lg);
-
             text-align: center;
-
-            animation: loginCardIn 0.55s ease;
         }
-
-        .auth-card::before {
-            content: "";
-            position: absolute;
-
-            top: 0;
-            right: 12%;
-            left: 12%;
-
-            height: 4px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    var(--primary-orange),
-                    transparent
-                );
-
-            border-radius: 0 0 20px 20px;
-        }
-
-        .auth-card img {
-            filter: drop-shadow(0 5px 12px rgba(245,166,35,0.2));
-            transition: transform 0.3s ease;
-        }
-
-        .auth-card img:hover {
-            transform: scale(1.04);
-        }
-
         .auth-card h2 {
             color: var(--dark-navy);
             font-size: 25px;
             font-weight: 900;
-            letter-spacing: -0.3px;
             margin-top: 15px;
             margin-bottom: 5px;
         }
-
         .auth-card p {
             color: var(--text-muted);
             font-size: 13px;
             margin-bottom: 28px;
         }
-
-        .auth-card .form-control {
+        .form-control {
+            width: 100%;
             height: 50px;
             background: #f8fafc;
             border: 1px solid #e1e6ee;
             border-radius: 11px;
             padding: 0 15px;
+            color: var(--text-dark);
+            outline: none;
             transition: all 0.25s ease;
         }
-
-        .auth-card .form-control:focus {
+        .form-control:focus {
             background: white;
             border-color: var(--primary-orange);
             box-shadow: 0 0 0 4px rgba(245,166,35,0.12);
-            transform: translateY(-1px);
         }
 
-        .auth-card .btn-orange {
-            height: 50px;
-
-            border-radius: 11px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary-orange),
-                    #ffbd42
-                );
-
-            box-shadow:
-                0 7px 18px rgba(245,166,35,0.25);
-        }
-
-        .auth-card .btn-orange:hover {
-            transform: translateY(-2px);
-
-            box-shadow:
-                0 10px 24px rgba(245,166,35,0.32);
-        }
-
-        /* =====================================================
-            شريط التنقل العلوي
-            ===================================================== */
-
+        /* شريط التنقل العلوي */
         .top-navbar {
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--dark-navy),
-                    var(--dark-navy-2)
-                );
-
+            background: linear-gradient(135deg, var(--dark-navy), var(--dark-navy-2));
             min-height: 76px;
-
             padding: 12px 30px;
-
             display: flex;
             justify-content: space-between;
             align-items: center;
-
             border-bottom: 1px solid rgba(255,255,255,0.08);
-
-            box-shadow:
-                0 6px 22px rgba(7,21,47,0.16);
-
+            box-shadow: 0 6px 22px rgba(7,21,47,0.16);
             position: sticky;
             top: 0;
             z-index: 1000;
         }
-
         .top-navbar > div:first-child {
             display: flex;
             align-items: center;
             gap: 12px;
-
-            white-space: nowrap;
-
             font-weight: 900;
             font-size: 18px;
-            color: #ffffff; /* تم تغيير لون النص إلى الأبيض */
+            color: #ffffff;
         }
-
-        .top-navbar > div:first-child img.nav-logo {
+        .top-navbar img.nav-logo {
             width: 38px;
             height: 38px;
             object-fit: contain;
-            filter: drop-shadow(0 2px 6px rgba(245,166,35,0.3));
         }
-
-        /* =====================================================
-            القوائم
-            ===================================================== */
-
         .nav-links {
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 4px;
             flex-wrap: wrap;
         }
-
         .nav-links button {
             background: transparent;
-
             border: 1px solid transparent;
-
             color: rgba(255,255,255,0.78);
-
             font-size: 13px;
             font-weight: 700;
-
-            margin-left: 0;
-
             padding: 10px 13px;
-
             border-radius: 9px;
-
             cursor: pointer;
-
             transition: all 0.25s ease;
         }
-
-        .nav-links button i {
-            margin-left: 5px;
-            color: rgba(255,255,255,0.6);
-        }
-
         .nav-links button:hover {
             color: white;
-
-            background:
-                rgba(255,255,255,0.08);
-
-            border-color:
-                rgba(255,255,255,0.08);
-
-            transform: translateY(-1px);
+            background: rgba(255,255,255,0.08);
         }
-
         .nav-links button.active {
             color: var(--dark-navy);
-
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary-orange),
-                    #ffc34d
-                );
-
-            box-shadow:
-                0 5px 14px rgba(245,166,35,0.22);
+            background: linear-gradient(135deg, var(--primary-orange), #ffc34d);
+            box-shadow: 0 5px 14px rgba(245,166,35,0.22);
         }
 
-        .nav-links button.active i {
-            color: var(--dark-navy);
-        }
-
-        .top-navbar > button {
-            border-radius: 9px !important;
-
-            background:
-                rgba(255,255,255,0.09) !important;
-
-            border:
-                1px solid rgba(255,255,255,0.12) !important;
-
-            transition: all 0.25s ease;
-        }
-
-        .top-navbar > button:hover {
-            background: #ef4444 !important;
-            transform: translateY(-1px);
-        }
-
-        /* =====================================================
-            المحتوى الرئيسي
-            ===================================================== */
-
+        /* المحتوى الرئيسي */
         .main-container {
             max-width: 1200px;
-
             margin: 34px auto;
-
             padding: 0 24px;
-
-            position: relative;
-            z-index: 5;
         }
-
-        /* =====================================================
-            الكروت
-            ===================================================== */
-
         .card-box {
-            position: relative;
-
-            background: rgba(255,255,255,0.98);
-
+            background: #ffffff;
             border: 1px solid var(--border);
-
             border-radius: 18px;
-
             padding: 28px;
-
             box-shadow: var(--shadow-sm);
-
             margin-bottom: 24px;
-
-            transition:
-                box-shadow 0.25s ease,
-                transform 0.25s ease;
         }
-
-        .card-box:hover {
-            box-shadow: var(--shadow-md);
-        }
-
         .card-box h3 {
-            position: relative;
-
             color: var(--dark-navy);
-
-            border-bottom: none !important;
-
-            padding-bottom: 15px !important;
-
-            margin-bottom: 22px !important;
-
             font-size: 19px;
-
+            margin-bottom: 22px;
             display: flex;
             align-items: center;
-
             gap: 9px;
+            border-bottom: 2px solid var(--primary-orange);
+            padding-bottom: 10px;
         }
-
-        .card-box h3::after {
-            content: "";
-
-            position: absolute;
-
-            bottom: 0;
-            right: 0;
-
-            width: 48px;
-            height: 3px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    var(--primary-orange),
-                    #ffd16c
-                );
-
-            border-radius: 10px;
-        }
-
-        .card-box h3 i {
-            color: var(--primary-orange);
-        }
-
-        /* =====================================================
-            النماذج
-            ===================================================== */
-
         .form-grid {
             display: grid;
-
-            grid-template-columns:
-                repeat(
-                    auto-fit,
-                    minmax(220px, 1fr)
-                );
-
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 18px;
-
             margin-bottom: 20px;
         }
-
-        .form-group {
-            text-align: right;
-        }
-
         .form-group label {
             display: block;
-
             color: #26334d;
-
             font-size: 12px;
-
             font-weight: 700;
-
             margin-bottom: 7px;
         }
-
-        .form-control {
-            width: 100%;
-
-            height: 46px;
-
-            background: #f9fafc;
-
-            border: 1px solid #dfe4ec;
-
-            border-radius: 10px;
-
-            padding: 10px 13px;
-
-            color: var(--text-dark);
-
-            outline: none;
-
-            transition: all 0.25s ease;
-        }
-
-        .form-control::placeholder {
-            color: #a3acba;
-        }
-
-        .form-control:hover {
-            border-color: #c7ced9;
-        }
-
-        .form-control:focus {
-            background: #fff;
-
-            border-color: var(--primary-orange);
-
-            box-shadow:
-                0 0 0 4px rgba(245,166,35,0.10);
-        }
-
-        select.form-control {
-            cursor: pointer;
-        }
-
-        /* =====================================================
-            الأزرار
-            ===================================================== */
-
         .btn-action {
             min-height: 43px;
-
             border-radius: 9px;
-
             padding: 9px 17px;
-
             font-size: 13px;
-
             font-weight: 800;
-
             border: none;
-
             cursor: pointer;
-
             display: inline-flex;
-
             align-items: center;
-
             justify-content: center;
-
             gap: 8px;
-
-            transition:
-                transform 0.2s ease,
-                box-shadow 0.2s ease,
-                opacity 0.2s ease;
+            transition: 0.2s;
         }
-
-        .btn-action:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn-action:active {
-            transform: translateY(0);
-        }
-
         .btn-orange {
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--primary-orange),
-                    #ffbd43
-                );
-
-            color: white;
-
-            box-shadow:
-                0 5px 14px rgba(245,166,35,0.18);
-        }
-
-        .btn-orange:hover {
-            box-shadow:
-                0 8px 20px rgba(245,166,35,0.28);
-        }
-
-        .btn-navy {
-            background:
-                linear-gradient(
-                    135deg,
-                    var(--dark-navy),
-                    var(--dark-navy-2)
-                );
-
+            background: linear-gradient(135deg, var(--primary-orange), #ffbd43);
             color: white;
         }
-
-        .btn-green {
-            background:
-                linear-gradient(
-                    135deg,
-                    #10b981,
-                    #18c78d
-                );
-
-            color: white;
-        }
-
         .btn-danger {
-            background:
-                linear-gradient(
-                    135deg,
-                    #ef4444,
-                    #f05252
-                );
-
+            background: #ef4444;
             color: white;
         }
-
-        .btn-blue {
-            background:
-                linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #5b9bf8
-                );
-
-            color: white;
-        }
-
-        .btn-purple {
-            background:
-                linear-gradient(
-                    135deg,
-                    #8b5cf6,
-                    #9b72f7
-                );
-
-            color: white;
-        }
-
-        /* =====================================================
-            الجداول
-            ===================================================== */
-
         table {
             width: 100%;
-
-            border-collapse: separate;
-
-            border-spacing: 0;
-
-            overflow: hidden;
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 13px;
-
-            background: white;
-
+            border-collapse: collapse;
             margin-top: 15px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid var(--border);
         }
-
-        th,
-        td {
-            padding: 14px 13px;
-
+        th, td {
+            padding: 12px 15px;
             text-align: right;
-
-            border-bottom:
-                1px solid #edf0f4;
-
-            white-space: nowrap;
+            border-bottom: 1px solid #edf0f4;
+            font-size: 13px;
         }
-
         th {
             background: #f7f9fc;
-
             color: var(--dark-navy);
-
-            font-size: 12px;
-
             font-weight: 800;
-
-            border-bottom:
-                1px solid #e4e8ef;
         }
-
-        td {
-            color: #455166;
-
-            font-size: 12px;
-        }
-
-        tbody tr {
-            transition:
-                background 0.2s ease;
-        }
-
-        tbody tr:hover {
-            background: #fffaf0;
-        }
-
-        tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        td b {
-            color: var(--dark-navy);
-        }
-
-        #archiveTab .card-box,
-        #usersTab .card-box {
-            overflow-x: auto;
-        }
-
-        /* =====================================================
-            الحالات
-            ===================================================== */
-
-        .badge {
-            padding: 5px 9px;
-
-            border-radius: 7px;
-
-            font-size: 10px;
-
-            font-weight: 800;
-
-            display: inline-block;
-
-            white-space: nowrap;
-        }
-
-        .badge-active {
-            background: #e8f8ee;
-
-            color: #14803d;
-
-            border:
-                1px solid #c8efd6;
-        }
-
-        .badge-warning {
-            background: #fff7db;
-
-            color: #a16207;
-
-            border:
-                1px solid #f7e6a8;
-        }
-
-        .badge-expired {
-            background: #fff0f0;
-
-            color: #b4232f;
-
-            border:
-                1px solid #ffd2d5;
-        }
-
-        /* =====================================================
-            معاينة العقد
-            ===================================================== */
-
         .contract-paper {
             background: white;
-
-            width: 794px;
-
-            min-height: 1120px;
-
-            padding: 25px 40px;
-
-            margin: 0 auto;
-
-            border-radius: 4px;
-
-            border:
-                1px solid #e1e5eb;
-
-            box-shadow:
-                0 15px 45px rgba(7,21,47,0.10),
-                0 2px 6px rgba(7,21,47,0.04);
-
-            position: relative;
-
-            box-sizing: border-box;
-
-            overflow: hidden;
-        }
-
-        .contract-paper::before {
-            content: "";
-
-            position: absolute;
-
-            top: 0;
-            right: 0;
-
             width: 100%;
-            height: 5px;
-
-            background:
-                linear-gradient(
-                    90deg,
-                    var(--dark-navy),
-                    var(--primary-orange),
-                    var(--dark-navy)
-                );
-        }
-
-        .contract-title {
-            text-align: center;
-
-            font-size: 18px;
-
-            font-weight: 900;
-
-            color: var(--dark-navy);
-
-            margin: 5px 0 10px 0;
-        }
-
-        .contract-row {
-            font-size: 11.5px;
-
-            line-height: 1.45;
-
-            font-weight: 600;
-
-            color: #111;
-
-            margin-bottom: 2px;
-        }
-
-        .fill-val {
-            border-bottom:
-                1px dashed var(--primary-orange);
-
-            padding: 0 5px;
-
-            font-weight: 800;
-
-            color: var(--dark-navy);
-
-            display: inline-block;
-        }
-
-        .section-h {
-            font-size: 12px;
-
-            font-weight: 900;
-
-            color: var(--dark-navy);
-
-            margin: 8px 0 2px 0;
-
-            border-right:
-                3px solid var(--primary-orange);
-
-            background:
-                linear-gradient(
-                    90deg,
-                    transparent,
-                    rgba(245,166,35,0.06)
-                );
-
-            padding: 4px 8px;
-
-            border-radius: 3px;
-        }
-
-        .contract-ul {
-            list-style: none;
-
-            padding-right: 0;
-        }
-
-        .contract-ul li {
-            font-size: 11px;
-
-            line-height: 1.35;
-
-            color: #222;
-
-            font-weight: 500;
-
-            margin-bottom: 1px;
-        }
-
-        /* =====================================================
-            التوقيعات
-            ===================================================== */
-
-        .sig-grid {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: flex-end;
-
-            margin-top: 15px;
-
-            padding-top: 10px;
-
-            border-top:
-                1px solid #e4e8ee;
-        }
-
-        .sig-box {
-            text-align: center;
-
-            flex: 1;
-
-            padding: 0 5px;
-        }
-
-        .sig-box .title {
-            color: #000;
-
-            font-size: 10.5px;
-
-            font-weight: 800;
-
-            margin-bottom: 3px;
-        }
-
-        .sig-line {
-            border-bottom:
-                1px dashed #777;
-
-            width: 85%;
-
+            max-width: 794px;
+            min-height: 1120px;
+            padding: 40px;
             margin: 0 auto;
-        }
-
-        .sig-img {
-            height: 38px;
-
-            object-fit: contain;
-
-            display: block;
-
-            margin: 0 auto 2px auto;
-        }
-
-        /* =====================================================
-            Username / Password
-            ===================================================== */
-
-        code {
-            background: #f1f4f8;
-
-            border:
-                1px solid #e3e7ed;
-
-            padding: 4px 7px;
-
-            border-radius: 6px;
-
-            color: var(--dark-navy);
-
-            font-family: monospace;
-        }
-
-        /* =====================================================
-            رفع الملفات
-            ===================================================== */
-
-        input[type="file"] {
-            cursor: pointer;
-        }
-
-        input[type="file"]::file-selector-button {
-            border: none;
-
-            background:
-                var(--dark-navy);
-
-            color: white;
-
-            padding: 8px 12px;
-
-            border-radius: 7px;
-
-            margin-left: 10px;
-
-            cursor: pointer;
-
-            font-family: 'Tajawal', sans-serif;
-
-            font-weight: 700;
-        }
-
-        /* =====================================================
-            Animations
-            ===================================================== */
-
-        @keyframes loginCardIn {
-            from {
-                opacity: 0;
-
-                transform:
-                    translateY(20px)
-                    scale(0.98);
-            }
-
-            to {
-                opacity: 1;
-
-                transform:
-                    translateY(0)
-                    scale(1);
-            }
-        }
-
-        @keyframes fadeInContent {
-            from {
-                opacity: 0;
-
-                transform:
-                    translateY(8px);
-            }
-
-            to {
-                opacity: 1;
-
-                transform:
-                    translateY(0);
-            }
-        }
-
-        #createTab,
-        #uploadTab,
-        #archiveTab,
-        #usersTab {
-            animation:
-                fadeInContent 0.3s ease;
-        }
-
-        /* =====================================================
-            الجوال
-            ===================================================== */
-
-        @media (max-width: 900px) {
-
-            .top-navbar {
-                padding: 12px 15px;
-
-                flex-wrap: wrap;
-
-                gap: 12px;
-            }
-
-            .top-navbar > div:first-child {
-                width: 100%;
-
-                justify-content: center;
-            }
-
-            .nav-links {
-                width: 100%;
-
-                order: 3;
-
-                overflow-x: auto;
-
-                justify-content: flex-start;
-
-                flex-wrap: nowrap;
-
-                padding-bottom: 3px;
-            }
-
-            .nav-links button {
-                flex: 0 0 auto;
-
-                font-size: 12px;
-
-                padding: 9px 11px;
-            }
-
-            .top-navbar > button {
-                position: absolute;
-
-                left: 15px;
-
-                top: 12px;
-            }
-
-            .main-container {
-                margin: 20px auto;
-
-                padding: 0 12px;
-            }
-
-            .card-box {
-                padding: 20px 16px;
-
-                border-radius: 15px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .form-group[style*="grid-column"] {
-                grid-column: auto !important;
-            }
-
-            .contract-paper {
-                margin-right: 0;
-
-                margin-left: 0;
-            }
-        }
-
-        @media (max-width: 600px) {
-
-            .auth-card {
-                padding: 32px 22px 25px;
-
-                border-radius: 20px;
-            }
-
-            .auth-card h2 {
-                font-size: 21px;
-            }
-
-            .top-navbar {
-                min-height: auto;
-            }
-
-            .top-navbar > div:first-child {
-                font-size: 16px !important;
-            }
-
-            .top-navbar > button {
-                font-size: 0;
-
-                width: 38px;
-
-                height: 38px;
-
-                padding: 0 !important;
-
-                justify-content: center;
-            }
-
-            .top-navbar > button i {
-                font-size: 14px;
-            }
-
-            .card-box h3 {
-                font-size: 16px;
-            }
-
-            .btn-action {
-                width: 100%;
-
-                justify-content: center;
-            }
-
-            .card-box > form .btn-action {
-                width: 100%;
-            }
-
-            table {
-                min-width: 900px;
-            }
-        }
-
-        /* =====================================================
-            الطباعة
-            ===================================================== */
-
-        @media print {
-
-            .auth-overlay,
-            .top-navbar,
-            .card-box,
-            .btn-action,
-            .no-print {
-                display: none !important;
-            }
-
-            body {
-                background: white !important;
-            }
-
-            .main-container {
-                max-width: 100% !important;
-
-                margin: 0 !important;
-
-                padding: 0 !important;
-            }
-
-            .contract-paper {
-                box-shadow: none !important;
-
-                border: none !important;
-
-                border-radius: 0 !important;
-
-                margin: 0 !important;
-
-                width: 100% !important;
-            }
-
-            .contract-paper::before {
-                display: none !important;
-            }
+            border: 1px solid #e1e5eb;
+            box-shadow: var(--shadow-md);
+            position: relative;
         }
     </style>
 </head>
-
 <body>
 
-    <!-- =====================================================
-         شاشة تسجيل الدخول
-         ===================================================== -->
-
+    <!-- شاشة تسجيل الدخول -->
     <div class="auth-overlay" id="authSection">
-
         <div class="auth-card">
-
-            <img
-                src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" 
-                alt="شعار الفريق" 
-                width="90" 
-                height="90" 
-                style="margin-bottom: 10px;"
-            >
+            <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار" width="80" style="margin-bottom: 10px;">
             <h2>تسجيل الدخول</h2>
             <p>نظام إدارة وأرشيف العقود - فريق شمس التطوعي</p>
-
             <form id="loginForm" onsubmit="handleLogin(event)">
-                <div class="form-group" style="margin-bottom: 15px;">
+                <div class="form-group" style="margin-bottom: 15px; text-align: right;">
                     <input type="text" id="loginUser" class="form-control" placeholder="اسم المستخدم" required>
                 </div>
-                <div class="form-group" style="margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 20px; text-align: right;">
                     <input type="password" id="loginPass" class="form-control" placeholder="كلمة المرور" required>
                 </div>
                 <button type="submit" class="btn-action btn-orange" style="width: 100%;">دخول للنظام</button>
             </form>
         </div>
-
     </div>
 
-    <!-- =====================================================
-         شريط التنقل العلوي
-         ===================================================== -->
-
-    <header class="top-navbar">
+    <!-- شريط التنقل العلوي -->
+    <header class="top-navbar" id="mainHeader" style="display: none;">
         <div>
-            <!-- تم إضافة الشعار بجانب اسم الفريق على اليمين وتعديل اللون إلى الأبيض -->
             <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" class="nav-logo">
             <span>فريق شمس التطوعي</span>
         </div>
-
         <nav class="nav-links">
-            <button onclick="switchTab('createTab')" id="btnCreate" class="active">
-                <i class="fa-solid fa-file-pen"></i> إنشاء عقد
-            </button>
-            <button onclick="switchTab('uploadTab')" id="btnUpload">
-                <i class="fa-solid fa-cloud-arrow-up"></i> رفع وأرشفة
-            </button>
-            <button onclick="switchTab('archiveTab')" id="btnArchive">
-                <i class="fa-solid fa-box-archive"></i> أرشيف العقود
-            </button>
-            <button onclick="switchTab('usersTab')" id="btnUsers" style="display:none;">
-                <i class="fa-solid fa-users-gear"></i> إدارة المستخدمين
-            </button>
+            <button onclick="switchTab('createTab')" id="btnCreate" class="active"><i class="fa-solid fa-file-pen"></i> إنشاء عقد</button>
+            <button onclick="switchTab('uploadTab')" id="btnUpload"><i class="fa-solid fa-cloud-arrow-up"></i> رفع وأرشفة</button>
+            <button onclick="switchTab('archiveTab')" id="btnArchive"><i class="fa-solid fa-box-archive"></i> أرشيف العقود</button>
+            <!-- قائمة اللوقات تظهر فقط لمدير النظام -->
+            <button onclick="switchTab('logsTab')" id="btnLogs" style="display:none;"><i class="fa-solid fa-shield-halved"></i> سجل النشاطات (اللوقات)</button>
+            <button onclick="switchTab('usersTab')" id="btnUsers" style="display:none;"><i class="fa-solid fa-users-gear"></i> إدارة المستخدمين</button>
         </nav>
-
-        <button onclick="handleLogout()" class="btn-action btn-danger" title="تسجيل الخروج">
-            <i class="fa-solid fa-right-from-bracket"></i> خروج
-        </button>
+        <button onclick="handleLogout()" class="btn-action btn-danger" title="تسجيل الخروج"><i class="fa-solid fa-right-from-bracket"></i> خروج</button>
     </header>
 
-    <!-- بقية محتوى الصفحة... -->
+    <!-- المحتوى الرئيسي -->
+    <main class="main-container" id="mainContent" style="display: none;">
+        
+        <!-- قسم إنشاء عقد -->
+        <section id="createTab">
+            <div class="card-box">
+                <h3><i class="fa-solid fa-file-pen"></i> إصدار عقد تطوعي جديد</h3>
+                <form onsubmit="generateContract(event)">
+                    <div class="form-grid">
+                        <div class="form-group"><label>اسم المتطوع / الطرف الثاني</label><input type="text" id="cName" class="form-control" required></div>
+                        <div class="form-group"><label>رقم الهوية الوطنية / الإقامة</label><input type="text" id="cId" class="form-control" required></div>
+                        <div class="form-group"><label>المسمى الوظيفي / التطوعي</label><input type="text" id="cRole" class="form-control" required></div>
+                        <div class="form-group"><label>تاريخ البدء</label><input type="date" id="cStart" class="form-control" required></div>
+                        <div class="form-group"><label>تاريخ الانتهاء</label><input type="date" id="cEnd" class="form-control" required></div>
+                    </div>
+                    <button type="submit" class="btn-action btn-orange"><i class="fa-solid fa-print"></i> معاينة وطباعة العقد</button>
+                </form>
+            </div>
+            <div id="contractPreviewArea" style="display:none; margin-top: 20px;">
+                <div class="contract-paper" id="printableContract">
+                    <h2 style="text-align:center; color: var(--dark-navy);">عقد انضمام تطوعي</h2>
+                    <p style="margin-top: 20px;">انه في يومنا هذا تم الاتفاق بين فريق شمس التطوعي والطرف الثاني:</p>
+                    <p><b>الاسم:</b> <span id="pName"></span></p>
+                    <p><b>رقم الهوية:</b> <span id="pId"></span></p>
+                    <p><b>المسمى:</b> <span id="pRole"></span></p>
+                    <p><b>الفترة:</b> من <span id="pStart"></span> إلى <span id="pEnd"></span></p>
+                </div>
+            </div>
+        </section>
 
+        <!-- قسم رفع وأرشفة -->
+        <section id="uploadTab" style="display:none;">
+            <div class="card-box">
+                <h3><i class="fa-solid fa-cloud-arrow-up"></i> أرشفة عقد خارجي (رفع ملف)</h3>
+                <form onsubmit="uploadContract(event)">
+                    <div class="form-grid">
+                        <div class="form-group"><label>عنوان العقد / اسم الطرف</label><input type="text" id="upTitle" class="form-control" required></div>
+                        <div class="form-group"><label>اختر ملف العقد (PDF أو صورة)</label><input type="file" id="upFile" class="form-control" required></div>
+                    </div>
+                    <button type="submit" class="btn-action btn-orange"><i class="fa-solid fa-upload"></i> رفع وحفظ للأرشيف</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- قسم أرشيف العقود -->
+        <section id="archiveTab" style="display:none;">
+            <div class="card-box">
+                <h3><i class="fa-solid fa-box-archive"></i> أرشيف العقود المحفوظة</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم العقد</th>
+                            <th>اسم الطرف / العنوان</th>
+                            <th>بواسطة (أنشأه)</th>
+                            <th>تاريخ الإضافة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="archiveTableBody">
+                        <!-- تضاف العقود هنا برمجياً -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- قسم سجل النشاطات واللوقات (خاص بمدير النظام فقط) -->
+        <section id="logsTab" style="display:none;">
+            <div class="card-box">
+                <h3><i class="fa-solid fa-shield-halved"></i> سجل نشاطات المستخدمين (اللوقات)</h3>
+                <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">يظهر هذا الجدول تفاصيل دخول وخروج المستخدمين، بالإضافة إلى من قام بإنشاء أو أرشفة العقود.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>المستخدم</th>
+                            <th>نوع النشاط / الحدث</th>
+                            <th>التفاصيل</th>
+                            <th>الوقت والتاريخ</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTableBody">
+                        <!-- يتم تعبئة السجلات هنا برمجياً -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- قسم إدارة المستخدمين (للمدير فقط) -->
+        <section id="usersTab" style="display:none;">
+            <div class="card-box">
+                <h3><i class="fa-solid fa-users-gear"></i> إدارة صلاحيات المستخدمين</h3>
+                <p>صلاحيات مدير النظام مفعلة لهذا الحساب.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // بيانات تجريبية للمستخدمين (مدير نظام ومستخدم عادي)
+        const usersDB = {
+            "admin": { pass: "123456", role: "admin", name: "مدير النظام (أحمد)" },
+            "user": { pass: "123456", role: "staff", name: "موظف الفريق" }
+        };
+
+        let currentUser = null;
+        let logsData = JSON.parse(localStorage.getItem('shams_logs')) || [];
+        let contractsData = JSON.parse(localStorage.getItem('shams_contracts')) || [];
+
+        // تسجيل الدخول
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('loginUser').value.trim();
+            const p = document.getElementById('loginPass').value.trim();
+
+            if (usersDB[u] && usersDB[u].pass === p) {
+                currentUser = { username: u, ...usersDB[u] };
+                localStorage.setItem('shams_current_user', JSON.stringify(currentUser));
+                
+                // تسجيل دخول في اللوقات
+                addLog(currentUser.name, "تسجيل دخول", "دخل المستخدم إلى النظام بنجاح");
+
+                initSystem();
+            } else {
+                alert("اسم المستخدم أو كلمة المرور غير صحيحة!");
+            }
+        }
+
+        function handleLogout() {
+            if (currentUser) {
+                addLog(currentUser.name, "تسجيل خروج", "قام المستخدم بالخروج من النظام");
+            }
+            localStorage.removeItem('shams_current_user');
+            location.reload();
+        }
+
+        // إضافة سجل جديد (لوق)
+        function addLog(userName, actionType, details) {
+            const now = new Date().toLocaleString('ar-SA');
+            const newLog = { user: userName, action: actionType, details: details, time: now };
+            logsData.unshift.call(logsData, newLog); // إضافة في البداية
+            localStorage.setItem('shams_logs', JSON.stringify(logsData));
+        }
+
+        // تهيئة واجهة النظام بناءً على الصلاحيات
+        function initSystem() {
+            const savedUser = JSON.parse(localStorage.getItem('shams_current_user'));
+            if (!savedUser) return;
+
+            currentUser = savedUser;
+            document.getElementById('authSection').style.display = 'none';
+            document.getElementById('mainHeader').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'block';
+
+            // إظهار لوقات وإدارة المستخدمين فقط إذا كان مدير نظام (admin)
+            if (currentUser.role === 'admin') {
+                document.getElementById('btnLogs').style.display = 'inline-block';
+                document.getElementById('btnUsers').style.display = 'inline-block';
+            } else {
+                document.getElementById('btnLogs').style.display = 'none';
+                document.getElementById('btnUsers').style.display = 'none';
+            }
+
+            renderArchive();
+            renderLogs();
+        }
+
+        // التبديل بين التبويبات
+        function switchTab(tabId) {
+            document.querySelectorAll('main > section').forEach(sec => sec.style.display = 'none');
+            document.getElementById(tabId).style.display = 'block';
+
+            document.querySelectorAll('.nav-links button').forEach(btn => btn.classList.remove('active'));
+            if(tabId === 'createTab') document.getElementById('btnCreate').classList.add('active');
+            if(tabId === 'uploadTab') document.getElementById('btnUpload').classList.add('active');
+            if(tabId === 'archiveTab') document.getElementById('btnArchive').classList.add('active');
+            if(tabId === 'logsTab') document.getElementById('btnLogs').classList.add('active');
+            if(tabId === 'usersTab') document.getElementById('btnUsers').classList.add('active');
+        }
+
+        // إنشاء العقد وتخزينه مع اسم المنشئ
+        function generateContract(e) {
+            e.preventDefault();
+            const name = document.getElementById('cName').value;
+            const id = document.getElementById('cId').value;
+            const role = document.getElementById('cRole').value;
+            const start = document.getElementById('cStart').value;
+            const end = document.getElementById('cEnd').value;
+
+            // عرض معاينة العقد
+            document.getElementById('pName').innerText = name;
+            document.getElementById('pId').innerText = id;
+            document.getElementById('pRole').innerText = role;
+            document.getElementById('pStart').innerText = start;
+            document.getElementById('pEnd').innerText = end;
+            document.getElementById('contractPreviewArea').style.display = 'block';
+
+            // حفظ في الأرشيف
+            const newContract = {
+                id: 'C-' + Math.floor(1000 + Math.random() * 9000),
+                title: name + ' (' + role + ')',
+                creator: currentUser.name,
+                date: new Date().toLocaleDateString('ar-SA')
+            };
+            contractsData.push(newContract);
+            localStorage.setItem('shams_contracts', JSON.stringify(contractsData));
+
+            // تسجيل النشاط في اللوقات
+            addLog(currentUser.name, "إنشاء عقد", `أنشأ عقداً جديداً باسم: ${name}`);
+
+            renderArchive();
+            alert("تم إنشاء العقد وحفظه في الأرشيف بنجاح!");
+        }
+
+        // رفع عقد خارجي
+        function uploadContract(e) {
+            e.preventDefault();
+            const title = document.getElementById('upTitle').value;
+            const fileInput = document.getElementById('upFile');
+
+            if (fileInput.files.length > 0) {
+                const newContract = {
+                    id: 'UP-' + Math.floor(1000 + Math.random() * 9000),
+                    title: title,
+                    creator: currentUser.name,
+                    date: new Date().toLocaleDateString('ar-SA')
+                };
+                contractsData.push(newContract);
+                localStorage.setItem('shams_contracts', JSON.stringify(contractsData));
+
+                // تسجيل النشاط في اللوقات
+                addLog(currentUser.name, "رفع عقد للأرشيف", `قام برفع وأرشفة عقد: ${title}`);
+
+                renderArchive();
+                alert("تم رفع العقد وأرشفته بنجاح!");
+                switchTab('archiveTab');
+            }
+        }
+
+        // عرض الأرشيف
+        function renderArchive() {
+            const tbody = document.getElementById('archiveTableBody');
+            tbody.innerHTML = '';
+            if (contractsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">لا توجد عقود محفوظة حالياً</td></tr>';
+                return;
+            }
+            contractsData.forEach((c, index) => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>${c.id}</b></td>
+                        <td>${c.title}</td>
+                        <td>${c.creator}</td>
+                        <td>${c.date}</td>
+                        <td><button class="btn-action btn-danger" style="padding: 5px 10px; font-size:11px;" onclick="deleteContract(${index})">حذف</button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // عرض اللوقات (سجل النشاطات)
+        function renderLogs() {
+            const tbody = document.getElementById('logsTableBody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            if (logsData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">لا توجد نشاطات مسجلة بعد</td></tr>';
+                return;
+            }
+            logsData.forEach(l => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td><b>${l.user}</b></td>
+                        <td><span style="background:#eef2f7; padding:3px 8px; border-radius:5px; font-weight:700;">${l.action}</span></td>
+                        <td>${l.details}</td>
+                        <td style="color: var(--text-muted);">${l.time}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function deleteContract(index) {
+            if(confirm("هل أنت متأكد من حذف هذا العقد من الأرشيف؟")) {
+                const deleted = contractsData.splice(index, 1)[0];
+                localStorage.setItem('shams_contracts', JSON.stringify(contractsData));
+                addLog(currentUser.name, "حذف عقد", `قام بحذف العقد: ${deleted.title}`);
+                renderArchive();
+            }
+        }
+
+        // التحقق من حالة الجلسة عند تحميل الصفحة
+        window.onload = function() {
+            if(localStorage.getItem('shams_current_user')) {
+                initSystem();
+            }
+        }
+    </script>
 </body>
 </html>
