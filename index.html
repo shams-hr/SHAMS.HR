@@ -157,4 +157,412 @@
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 20px; }
         .form-group { text-align: right; }
         .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 5px; color: var(--dark-navy); }
-        .form-control { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius:
+        .form-control { width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; outline: none; transition: 0.3s; }
+        .form-control:focus { border-color: var(--primary-orange); box-shadow: 0 0 0 3px rgba(243, 112, 33, 0.15); }
+
+        /* نموذج العقد الرسمي */
+        .contract-paper {
+            background: white; 
+            width: 794px; 
+            min-height: 1120px;
+            padding: 25px 40px; 
+            margin: 0 auto;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08); 
+            position: relative; 
+            box-sizing: border-box;
+        }
+        .contract-title { text-align: center; font-size: 16px; font-weight: 900; color: #000; margin: 5px 0 10px 0; }
+        .contract-row { font-size: 11.5px; line-height: 1.45; font-weight: 600; color: #111; margin-bottom: 2px; }
+        .fill-val { border-bottom: 1px dashed #555; padding: 0 5px; font-weight: 800; color: #000; display: inline-block; }
+        .section-h { font-size: 12px; font-weight: 900; color: #000; margin: 8px 0 2px 0; border-right: 3px solid var(--primary-orange); padding-right: 6px; }
+        .contract-ul { list-style: none; padding-right: 0; }
+        .contract-ul li { font-size: 11px; line-height: 1.35; color: #222; font-weight: 500; margin-bottom: 1px; }
+
+        /* التوقيعات */
+        .sig-grid { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end; 
+            margin-top: 15px; 
+            padding-top: 10px; 
+            border-top: 1px solid #e2e8f0; 
+        }
+        .sig-box { text-align: center; flex: 1; padding: 0 5px; }
+        .sig-box .title { color: #000; font-size: 10.5px; font-weight: 800; margin-bottom: 3px; }
+        .sig-line { border-bottom: 1px dashed #777; width: 85%; margin: 0 auto; }
+        .sig-img { height: 38px; object-fit: contain; display: block; margin: 0 auto 2px auto; }
+
+        /* أزرار تفاعلية متحركة */
+        .btn-action { 
+            padding: 10px 18px; border-radius: 6px; font-weight: 800; border: none; cursor: pointer; 
+            display: inline-flex; align-items: center; gap: 8px; transition: all 0.3s ease; 
+        }
+        .btn-action:hover { transform: translateY(-2px); filter: brightness(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .btn-orange { background: var(--primary-orange); color: white; }
+        .btn-navy { background: var(--dark-navy); color: white; }
+        .btn-green { background: #10b981; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        .btn-blue { background: #3b82f6; color: white; }
+        .btn-purple { background: #8b5cf6; color: white; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; text-align: right; border-bottom: 1px solid #eee; font-size: 13px; }
+        th { background: #f8fafc; color: var(--dark-navy); font-weight: 800; }
+        
+        .badge { padding: 5px 12px; border-radius: 20px; font-size: 11px; font-weight: 800; display: inline-block; }
+        .badge-active { background: #dcfce7; color: #15803d; }
+        .badge-warning { background: #fef9c3; color: #a16207; animation: pulseGlow 1.8s infinite; }
+        .badge-expired { background: #fee2e2; color: #b91c1c; animation: pulseGlow 1.2s infinite; }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; box-shadow: 0 0 8px rgba(239, 68, 68, 0.4); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @media print {
+            .auth-overlay, .top-navbar, .volunteer-ticker, .card-box, .btn-action, .no-print { display: none !important; }
+            .main-container { max-width: 100% !important; margin: 0 !important; padding: 0 !important; }
+            .contract-paper { box-shadow: none !important; margin: 0 !important; width: 100% !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="auth-overlay" id="authSection">
+        <div class="auth-card">
+            <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 100px; height: auto; max-height: 80px; object-fit: contain; margin-bottom: 10px;" onerror="this.style.display='none'">
+            <h2>فريق شمس التطوعي</h2>
+            <p>يرجى كتابة اسم المستخدم وكلمة المرور</p>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <input type="text" id="login_user" class="form-control" placeholder="اسم المستخدم" required>
+                </div>
+                <div class="form-group" style="margin-bottom: 20px;">
+                    <input type="password" id="login_pass" class="form-control" placeholder="كلمة المرور" required>
+                </div>
+                <button type="submit" class="btn-action btn-orange" style="width: 100%; justify-content: center; font-size: 15px; margin-bottom: 10px;"><i class="fas fa-lock-open"></i> تسجيل الدخول</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="appContent" style="display: none;">
+        
+        <div class="top-navbar">
+            <div class="brand-container">
+                <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" class="brand-logo" onerror="this.style.display='none'">
+                <div class="brand-title">فريق شمس التطوعي</div>
+            </div>
+            <div class="nav-links">
+                <button id="btn-create" class="active" onclick="switchTab('createTab')"><i class="fas fa-file-signature"></i> عقد جديد</button>
+                <button id="btn-upload" onclick="switchTab('uploadTab')"><i class="fas fa-file-upload"></i> إرفاق عقد خارجي</button>
+                <button id="btn-archive" onclick="switchTab('archiveTab')"><i class="fas fa-box-archive"></i> أرشيف العقود (<span id="contractCount">0</span>)</button>
+                <button id="btn-users" onclick="switchTab('usersTab')" style="display: none;"><i class="fas fa-users-gear"></i> إدارة المستخدمين (<span id="usersCount">0</span>)</button>
+            </div>
+            <button onclick="logoutSystem();" class="btn-action" style="background: #475569; color: white;"><i class="fas fa-sign-out-alt"></i> خروج</button>
+        </div>
+
+        <div class="volunteer-ticker">
+            <div class="ticker-text">
+                🌟 "التطوع حياة البذل والعطاء" &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 🤝 "بين الأيدي المتكاتفة تصنع الإنجازات" &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; ✨ "شمس التطوع... نور يضيء المجتمع" &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; 💙 "صنع الأثر يبدأ بخطوة تطوعية صادقة"
+            </div>
+        </div>
+
+        <div class="main-container">
+            
+            <div id="createTab">
+                <div class="card-box no-print">
+                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-edit"></i> تعبئة بيانات المتطوع الجديد</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>الاسم الكامل</label>
+                            <input type="text" id="in_name" class="form-control" placeholder="أدخل الاسم الكامل" oninput="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهوية / الإقامة</label>
+                            <input type="text" id="in_id" class="form-control" placeholder="10 أرقام" oninput="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الجوال</label>
+                            <input type="text" id="in_phone" class="form-control" placeholder="05xxxxxxxx" oninput="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ الميلاد</label>
+                            <input type="date" id="in_dob" class="form-control" onchange="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>القسم / الإدارة</label>
+                            <input type="text" id="in_dept" class="form-control" placeholder="مثال: الموارد البشرية" oninput="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ الاتفاق (التحرير)</label>
+                            <input type="date" id="in_today" class="form-control" onchange="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>تاريخ الانضمام الفعلي</label>
+                            <input type="date" id="in_startDate" class="form-control" onchange="updateContractPreview()">
+                        </div>
+                        <div class="form-group">
+                            <label>مدة العقد</label>
+                            <select id="in_duration" class="form-control" onchange="updateContractPreview()">
+                                <option value="1">شهر واحد</option>
+                                <option value="3">3 أشهر</option>
+                                <option value="6">6 أشهر</option>
+                                <option value="12">سنة كاملة (12 شهر)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button onclick="saveAndArchiveContract()" class="btn-action btn-orange"><i class="fas fa-save"></i> حفظ العقد في الأرشيف السحابي</button>
+                        <button onclick="downloadContractPDF()" class="btn-action btn-green"><i class="fas fa-file-pdf"></i> تنزيل العقد (PDF في صفحة واحدة)</button>
+                        <button onclick="window.print()" class="btn-action btn-navy"><i class="fas fa-print"></i> طباعة مباشرة</button>
+                    </div>
+                </div>
+
+                <div style="overflow-x: auto; width: 100%;">
+                    <div class="contract-paper" id="contractPaper">
+                        <div style="text-align: right;">
+                            <img src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس" style="width: 85px; height: auto; object-fit: contain;" onerror="this.style.display='none'">
+                        </div>
+
+                        <div class="contract-title">عقد اتفاقية انضمام لإدارة "شمس" التطوعي</div>
+
+                        <div class="contract-row">تم الاتفاق في تاريخ: ( <span class="fill-val" id="p_today">..../../....</span> ) بين كل من:</div>
+                        <div class="contract-row">الطرف الأول : إدارة فريق (شمس) التطوّعي</div>
+                        <div class="contract-row">الطرف الثاني : المتطوع/ـة ( <span class="fill-val" id="p_name">...................</span> )</div>
+                        <div class="contract-row">رقم الهوية / الإقامة: ( <span class="fill-val" id="p_id">...................</span> )</div>
+                        <div class="contract-row">رقم الجوال: ( <span class="fill-val" id="p_phone">...................</span> )</div>
+                        <div class="contract-row">تاريخ الميلاد: ( <span class="fill-val" id="p_dob">...................</span> )</div>
+                        <div class="contract-row">القسم / الإدارة: ( <span class="fill-val" id="p_dept">...................</span> )</div>
+
+                        <div class="section-h">أولاً : موضوع العقد</div>
+                        <p style="font-size:11px; line-height: 1.4; font-weight: 500;">انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس) وفق الأنظمة والتعليمات المعتمدة.</p>
+
+                        <div class="section-h">ثانياً : واجبات المتطوع</div>
+                        <ul class="contract-ul">
+                            <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
+                            <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
+                            <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
+                            <li>4. الالتزام بتتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
+                            <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
+                            <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
+                        </ul>
+
+                        <div class="section-h">ثالثاً : حقوق الإدارة</div>
+                        <ul class="contract-ul">
+                            <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
+                            <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
+                            <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
+                            <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
+                            <li>5. حفظ بيانات وسجلات المتطوع.</li>
+                        </ul>
+
+                        <div class="section-h">رابعاً : مدة العقد و انهاؤه</div>
+                        <div class="contract-row">مدة العقد: ( <span class="fill-val" id="p_duration">1 شهر</span> )</div>
+                        <div class="contract-row">تبدأ من تاريخ: ( <span class="fill-val" id="p_startDate">..../../....</span> ) وتنتهي في: ( <span class="fill-val" id="p_endDate">..../../....</span> )</div>
+                        <p style="font-size:11px; line-height: 1.4; font-weight: 500; margin-top: 2px;">يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد إشعار الإدارة بشكل رسمي.</p>
+
+                        <div class="sig-grid">
+                            <div class="sig-box">
+                                <div class="title">التوقيع</div>
+                                <div class="sig-line" style="margin-top: 38px;"></div>
+                            </div>
+                            <div class="sig-box">
+                                <div class="title">رئيس قسم الموارد البشرية</div>
+                                <img src="https://i.postimg.cc/44VchM5g/lqtt-shasht-2026-09-04-230838.png" alt="توقيع رئيس الموارد البشرية" class="sig-img" crossorigin="anonymous" onerror="this.style.display='none'">
+                                <div class="sig-line"></div>
+                            </div>
+                            <div class="sig-box">
+                                <div class="title">الرئيس التنفيذي</div>
+                                <img src="https://i.postimg.cc/QxSHQrK2/582b00f0-9e4e-48c6-b0ca-c8766e322887.png" alt="توقيع الرئيس التنفيذي" class="sig-img" crossorigin="anonymous" onerror="this.style.display='none'">
+                                <div class="sig-line"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="uploadTab" style="display: none;">
+                <div class="card-box">
+                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-cloud-upload-alt"></i> إرفاق عقد خارجي / موقع يدويًا</h3>
+                    <form onsubmit="handleFileUpload(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>اسم المتطوع</label>
+                                <input type="text" id="up_name" class="form-control" placeholder="أدخل اسم المتطوع" required>
+                            </div>
+                            <div class="form-group">
+                                <label>رقم الهوية</label>
+                                <input type="text" id="up_id" class="form-control" placeholder="10 أرقام" required>
+                            </div>
+                            <div class="form-group">
+                                <label>القسم</label>
+                                <input type="text" id="up_dept" class="form-control" placeholder="اسم القسم" required>
+                            </div>
+                            <div class="form-group">
+                                <label>تاريخ بداية العقد الخارجي</label>
+                                <input type="date" id="up_startDate" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>تاريخ انتهاء العقد الخارجي</label>
+                                <input type="date" id="up_endDate" class="form-control" required>
+                            </div>
+                            <div class="form-group" style="grid-column: span 2;">
+                                <label>اختيار ملف العقد (PDF / صورة)</label>
+                                <input type="file" id="up_file" class="form-control" accept=".pdf,image/*" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-upload"></i> رفع وحفظ العقد بالأرشيف مع التنبيهات</button>
+                    </form>
+                </div>
+            </div>
+
+            <div id="archiveTab" style="display: none;">
+                <div class="card-box">
+                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-archive"></i> أرشيف العقود المعتمدة والمرفقة (متزامن سحابياً)</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم المتطوع</th>
+                                <th>الهوية</th>
+                                <th>القسم</th>
+                                <th>تاريخ البداية</th>
+                                <th>تاريخ النهاية</th>
+                                <th>نوع العقد</th>
+                                <th>الحالة والعد التنازلي</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archiveTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="usersTab" style="display: none;">
+                <div class="card-box">
+                    <h3 style="margin-bottom: 20px; color: var(--dark-navy); border-bottom: 2px solid var(--primary-orange); padding-bottom: 8px;"><i class="fas fa-user-plus"></i> إضافة مستخدم جديد للنظام</h3>
+                    <form onsubmit="addUser(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>اسم الموظف / المستخدم</label>
+                                <input type="text" id="u_name" class="form-control" placeholder="مثال: أحمد علي" required>
+                            </div>
+                            <div class="form-group">
+                                <label>اسم الدخول (Username)</label>
+                                <input type="text" id="u_username" class="form-control" placeholder="مثال: ahmed" required>
+                            </div>
+                            <div class="form-group">
+                                <label>كلمة المرور (Password)</label>
+                                <input type="password" id="u_password" class="form-control" placeholder="••••••••" required>
+                            </div>
+                            <div class="form-group">
+                                <label>الصلاحية</label>
+                                <select id="u_role" class="form-control">
+                                    <option value="مدير النظام">مدير النظام</option>
+                                    <option value="مسؤول موارد بشرية">مسؤول موارد بشرية</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-action btn-orange"><i class="fas fa-check"></i> حفظ المستخدم سحابياً</button>
+                    </form>
+                </div>
+
+                <div class="card-box">
+                    <h3 style="color: var(--dark-navy); margin-bottom: 15px;"><i class="fas fa-users"></i> حسابات الدخول المسجلة سحابياً</h3>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>اسم الموظف</th>
+                                <th>اسم المستخدم</th>
+                                <th>كلمة المرور</th>
+                                <th>الصلاحية</th>
+                                <th>إجراءات التعديل والحذف</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAehKIHRrnIm-l6djL36mz5P7E_UED2PzE",
+            authDomain: "shamshr-b7b2b.firebaseapp.com",
+            projectId: "shamshr-b7b2b",
+            storageBucket: "shamshr-b7b2b.firebasestorage.app",
+            messagingSenderId: "1035491575998",
+            appId: "1:1035491575998:web:dfd07f262e72477706b6ef",
+            measurementId: "G-YD7EZJTJM9"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.usersList = [];
+        window.contractsArchive = [];
+        window.currentUserRole = '';
+
+        async function loadCloudData() {
+            try {
+                const usersSnap = await getDocs(collection(db, "users"));
+                window.usersList = [];
+                usersSnap.forEach((docSnap) => {
+                    window.usersList.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                const hasAdmin = window.usersList.some(u => u.username === 'admin');
+                if(!hasAdmin) {
+                    await addDoc(collection(db, "users"), { name: 'المدير العام', username: 'admin', password: '123456', role: 'مدير النظام' });
+                    const res = await getDocs(collection(db, "users"));
+                    window.usersList = [];
+                    res.forEach(d => window.usersList.push({ id: d.id, ...d.data() }));
+                }
+
+                const contractsSnap = await getDocs(collection(db, "contracts"));
+                window.contractsArchive = [];
+                contractsSnap.forEach((docSnap) => {
+                    window.contractsArchive.push({ id: docSnap.id, ...docSnap.data() });
+                });
+
+                renderUsers();
+                renderArchive();
+            } catch (err) {
+                console.error("Cloud Error: ", err);
+            }
+        }
+
+        loadCloudData();
+
+        window.handleLogin = async function(e) {
+            e.preventDefault();
+            const uInput = document.getElementById('login_user').value.trim();
+            const pInput = document.getElementById('login_pass').value.trim();
+
+            await loadCloudData();
+
+            const foundUser = window.usersList.find(u => u.username === uInput && u.password === pInput);
+
+            if(foundUser) {
+                window.currentUserRole = foundUser.role;
+
+                if(window.currentUserRole === 'مدير النظام') {
+                    document.getElementById('btn-users').style.display = 'inline-block';
+                } else {
+                    document.getElementById('btn-users').style.display = 'none';
+                }
+
+                document.getElementById('authSection').style.display = 'none';
+                document.getElementById('appContent').style.display = 'block';
+                renderUsers();
+                renderArchive();
+            } else {
+                alert('خطأ: اسم المستخدم أو
