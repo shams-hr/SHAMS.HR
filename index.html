@@ -1,3615 +1,472 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>فريق شمس التطوعي - نظام إدارة وأرشيف العقود</title>
-
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000a30">
-
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="فريق شمس">
-
-    <link rel="apple-touch-icon"
-          href="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png">
-
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
-          rel="stylesheet">
-
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-
-    <style>
-
-        :root {
-            --primary-orange: #f37021;
-            --dark-navy: #000a30;
-            --bg-body: #f4f6f9;
-            --text-dark: #1e293b;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Tajawal', sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-dark);
-            min-height: 100vh;
-        }
-
-        /* =========================
-           شاشة تسجيل الدخول
-        ========================= */
-
-        .auth-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background-color: var(--dark-navy);
-            z-index: 999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .auth-card {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 40px 30px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-
-        .auth-card h2 {
-            color: var(--dark-navy);
-            font-size: 22px;
-            font-weight: 900;
-            margin-top: 15px;
-            margin-bottom: 5px;
-        }
-
-        .auth-card p {
-            color: #64748b;
-            font-size: 13px;
-            margin-bottom: 25px;
-        }
-
-        /* =========================
-           شريط التنقل
-        ========================= */
-
-        .top-navbar {
-            background: var(--dark-navy);
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 10;
-            gap: 15px;
-        }
-
-        .nav-links {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .nav-links button {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 14px;
-            font-weight: 700;
-            margin-left: 10px;
-            padding: 8px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .nav-links button.active,
-        .nav-links button:hover {
-            background: var(--primary-orange);
-        }
-
-        .main-container {
-            max-width: 1100px;
-            margin: 30px auto;
-            padding: 0 20px;
-            position: relative;
-            z-index: 5;
-        }
-
-        .card-box {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            text-align: right;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: var(--dark-navy);
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            outline: none;
-        }
-
-        .form-control:focus {
-            border-color: var(--primary-orange);
-        }
-
-        /* =========================
-           لوحة الإحصائيات
-        ========================= */
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-        }
-
-        .dashboard-stat {
-            padding: 20px;
-            border-radius: 12px;
-            min-height: 125px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            transition: 0.25s;
-        }
-
-        .dashboard-stat:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-        }
-
-        .dashboard-stat-title {
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .dashboard-stat-number {
-            font-size: 32px;
-            font-weight: 900;
-        }
-
-        /* =========================
-           نموذج العقد
-        ========================= */
-
-        .contract-paper {
-            background: white;
-            width: 794px;
-            min-height: 1120px;
-            padding: 25px 40px;
-            margin: 0 auto;
-            border-radius: 12px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            position: relative;
-            box-sizing: border-box;
-        }
-
-        .contract-title {
-            text-align: center;
-            font-size: 16px;
-            font-weight: 900;
-            color: #000;
-            margin: 5px 0 10px 0;
-        }
-
-        .contract-row {
-            font-size: 11.5px;
-            line-height: 1.45;
-            font-weight: 600;
-            color: #111;
-            margin-bottom: 2px;
-        }
-
-        .fill-val {
-            border-bottom: 1px dashed #555;
-            padding: 0 5px;
-            font-weight: 800;
-            color: #000;
-            display: inline-block;
-        }
-
-        .section-h {
-            font-size: 12px;
-            font-weight: 900;
-            color: #000;
-            margin: 8px 0 2px 0;
-            border-right: 3px solid var(--primary-orange);
-            padding-right: 6px;
-        }
-
-        .contract-ul {
-            list-style: none;
-            padding-right: 0;
-        }
-
-        .contract-ul li {
-            font-size: 11px;
-            line-height: 1.35;
-            color: #222;
-            font-weight: 500;
-            margin-bottom: 1px;
-        }
-
-        /* =========================
-           التوقيعات
-        ========================= */
-
-        .sig-grid {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 15px;
-            padding-top: 10px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .sig-box {
-            text-align: center;
-            flex: 1;
-            padding: 0 5px;
-        }
-
-        .sig-box .title {
-            color: #000;
-            font-size: 10.5px;
-            font-weight: 800;
-            margin-bottom: 3px;
-        }
-
-        .sig-line {
-            border-bottom: 1px dashed #777;
-            width: 85%;
-            margin: 0 auto;
-        }
-
-        .sig-img {
-            height: 38px;
-            object-fit: contain;
-            display: block;
-            margin: 0 auto 2px auto;
-        }
-
-        /* =========================
-           الأزرار
-        ========================= */
-
-        .btn-action {
-            padding: 10px 18px;
-            border-radius: 6px;
-            font-weight: 800;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.2s;
-        }
-
-        .btn-action:hover {
-            opacity: 0.9;
-            transform: translateY(-1px);
-        }
-
-        .btn-orange {
-            background: var(--primary-orange);
-            color: white;
-        }
-
-        .btn-navy {
-            background: var(--dark-navy);
-            color: white;
-        }
-
-        .btn-green {
-            background: #10b981;
-            color: white;
-        }
-
-        .btn-danger {
-            background: #ef4444;
-            color: white;
-        }
-
-        .btn-blue {
-            background: #3b82f6;
-            color: white;
-        }
-
-        .btn-purple {
-            background: #8b5cf6;
-            color: white;
-        }
-
-        .btn-cancel {
-            background: #f97316;
-            color: white;
-        }
-
-        /* =========================
-           البحث
-        ========================= */
-
-        .search-box {
-            position: relative;
-            margin-bottom: 20px;
-        }
-
-        .search-box i {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #64748b;
-        }
-
-        .search-box input {
-            padding-right: 40px;
-        }
-
-        /* =========================
-           الجداول
-        ========================= */
-
-        .table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-            min-width: 850px;
-        }
-
-        th,
-        td {
-            padding: 12px;
-            text-align: right;
-            border-bottom: 1px solid #eee;
-            font-size: 13px;
-            vertical-align: middle;
-        }
-
-        th {
-            background: #f8fafc;
-            color: var(--dark-navy);
-            font-weight: 800;
-        }
-
-        .badge {
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 800;
-            display: inline-block;
-        }
-
-        .badge-active {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .badge-warning {
-            background: #fef9c3;
-            color: #a16207;
-        }
-
-        .badge-expired {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .badge-cancelled {
-            background: #ffedd5;
-            color: #c2410c;
-        }
-
-        .empty-message {
-            text-align: center;
-            color: #777;
-            padding: 25px;
-        }
-
-        /* =========================
-           تجاوب الجوال
-        ========================= */
-
-        @media (max-width: 900px) {
-
-            .top-navbar {
-                flex-direction: column;
-                padding: 15px;
-            }
-
-            .nav-links {
-                width: 100%;
-            }
-
-            .nav-links button {
-                margin: 3px;
-                font-size: 12px;
-            }
-
-            .contract-paper {
-                width: 794px;
-            }
-        }
-
-        @media print {
-
-            .auth-overlay,
-            .top-navbar,
-            .card-box,
-            .btn-action,
-            .no-print {
-                display: none !important;
-            }
-
-            .main-container {
-                max-width: 100% !important;
-                margin: 0 !important;
-                padding: 0 !important;
-            }
-
-            .contract-paper {
-                box-shadow: none !important;
-                margin: 0 !important;
-                width: 100% !important;
-            }
-        }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>شمس التطوعي | نظام إدارة الموارد البشرية والعقود</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#000a30">
+
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="شمس HR">
+
+<link rel="apple-touch-icon" href="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png">
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+:root{
+    --navy:#000a30;
+    --navy-2:#071542;
+    --orange:#f37021;
+    --orange-light:#ff984d;
+    --bg:#f5f7fb;
+    --card:#ffffff;
+    --text:#172033;
+    --muted:#718096;
+    --green:#10b981;
+    --blue:#3b82f6;
+    --purple:#8b5cf6;
+    --red:#ef4444;
+    --yellow:#f59e0b;
+    --border:#e8edf5;
+    --shadow: 0 15px 45px rgba(0,10,48,.07);
+    --radius:20px;
+}
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:'Tajawal',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background: radial-gradient(circle at 10% 10%, rgba(243,112,33,.05), transparent 30%), var(--bg);
+    color:var(--text);
+    min-height:100vh;
+}
+
+/* شاشة الدخول */
+.auth-overlay{
+    position:fixed;
+    inset:0;
+    background: radial-gradient(circle at 20% 20%, rgba(243,112,33,.18), transparent 28%), radial-gradient(circle at 80% 80%, rgba(59,130,246,.12), transparent 28%), var(--navy);
+    z-index:999999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    overflow:hidden;
+}
+
+.auth-card{
+    position:relative;
+    z-index:2;
+    width:100%;
+    max-width:430px;
+    padding:42px 36px;
+    background:rgba(255,255,255,.97);
+    border-radius:28px;
+    box-shadow: 0 30px 80px rgba(0,0,0,.35);
+    text-align:center;
+}
+
+.auth-logo{
+    width:105px;
+    height:105px;
+    object-fit:contain;
+    margin-bottom:12px;
+}
+
+.auth-title{
+    color:var(--navy);
+    font-size:25px;
+    font-weight:900;
+}
+
+.auth-subtitle{
+    color:var(--muted);
+    font-size:13px;
+    margin-top:6px;
+    margin-bottom:28px;
+}
+
+.auth-system{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    padding:7px 13px;
+    border-radius:30px;
+    background:#fff4eb;
+    color:var(--orange);
+    font-size:11px;
+    font-weight:800;
+    margin-bottom:15px;
+}
+
+.auth-field{
+    position:relative;
+    margin-bottom:14px;
+}
+
+.auth-field i{
+    position:absolute;
+    right:16px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#94a3b8;
+}
+
+.auth-input{
+    width:100%;
+    padding:15px 45px 15px 15px;
+    border:1px solid #e2e8f0;
+    border-radius:14px;
+    background:#f8fafc;
+    outline:none;
+    font-size:13px;
+    transition:.25s;
+}
+
+.auth-input:focus{
+    border-color:var(--orange);
+    background:white;
+    box-shadow: 0 0 0 4px rgba(243,112,33,.08);
+}
+
+.auth-button{
+    width:100%;
+    border:0;
+    padding:15px;
+    border-radius:14px;
+    background: linear-gradient(135deg, var(--orange), var(--orange-light));
+    color:white;
+    font-size:14px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow: 0 10px 25px rgba(243,112,33,.25);
+    transition:.25s;
+}
+
+.auth-button:hover{
+    opacity:.93;
+    transform:translateY(-1px);
+}
+
+/* Navbar */
+.top-navbar{
+    position:sticky;
+    top:0;
+    z-index:100;
+    min-height:78px;
+    padding:12px 28px;
+    background: linear-gradient(110deg, var(--navy), #071640);
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    box-shadow: 0 8px 30px rgba(0,10,48,.18);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.brand-logo{
+    width:46px;
+    height:46px;
+    object-fit:contain;
+    background:white;
+    border-radius:12px;
+    padding:5px;
+}
+
+.brand-name{
+    font-size:17px;
+    font-weight:900;
+}
+
+.brand-section{
+    color:#aeb8d2;
+    font-size:10px;
+    font-weight:700;
+}
+
+.nav-links{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    flex:1;
+}
+
+.nav-links button{
+    background:transparent;
+    border:0;
+    color:#cbd5e1;
+    padding:12px 15px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:12px;
+    font-weight:800;
+    transition:.25s;
+}
+
+.nav-links button:hover{
+    color:white;
+    background:rgba(255,255,255,.06);
+}
+
+.nav-links button.active{
+    background: linear-gradient(135deg, rgba(243,112,33,.98), rgba(255,152,77,.95));
+    color:white;
+}
+
+.main-container{
+    width:min(1250px, calc(100% - 40px));
+    margin:30px auto 60px;
+}
+
+.card-box{
+    background:rgba(255,255,255,.96);
+    border:1px solid rgba(226,232,240,.8);
+    border-radius:var(--radius);
+    padding:28px;
+    margin-bottom:24px;
+    box-shadow:var(--shadow);
+}
+
+.card-title{
+    font-size:18px;
+    font-weight:900;
+    color:var(--navy);
+    margin-bottom:8px;
+}
+
+.card-desc{
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:22px;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
+    gap:16px;
+    margin-bottom:18px;
+}
+
+.form-group label{
+    display:block;
+    margin-bottom:7px;
+    color:#334155;
+    font-size:11px;
+    font-weight:800;
+}
+
+.form-control{
+    width:100%;
+    min-height:45px;
+    padding:11px 13px;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    background:#f8fafc;
+    color:var(--text);
+    outline:none;
+    font-size:12px;
+}
+
+.form-control:focus{
+    border-color:var(--orange);
+    background:white;
+}
+
+.btn-main{
+    border:0;
+    padding:13px 24px;
+    border-radius:12px;
+    background:var(--orange);
+    color:white;
+    font-size:13px;
+    font-weight:900;
+    cursor:pointer;
+    transition:.25s;
+    box-shadow: 0 8px 20px rgba(243,112,33,.2);
+}
+
+.btn-main:hover{
+    opacity:.9;
+}
+
+.logout-button{
+    border:0;
+    padding:11px 14px;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    color:white;
+    cursor:pointer;
+    font-weight:800;
+    transition:.25s;
+}
+
+.logout-button:hover{
+    background:rgba(255,255,255,.15);
+}
+
+/* لوحة المعاينة */
+.preview-container{
+    background:#ffffff;
+    border:1px solid #e2e8f0;
+    border-radius:18px;
+    padding:35px;
+    margin-top:25px;
+}
+</style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     شاشة تسجيل الدخول
-===================================================== -->
-
+<!-- شاشة تسجيل الدخول -->
 <div class="auth-overlay" id="authSection">
-
     <div class="auth-card">
-
-        <img
-            src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
-            alt="شعار فريق شمس"
-            style="width:100px;height:auto;max-height:80px;object-fit:contain;margin-bottom:10px;"
-            onerror="this.style.display='none'"
-        >
-
-        <h2>فريق شمس التطوعي</h2>
-
-        <p>
-            يرجى كتابة اسم المستخدم وكلمة المرور
-        </p>
+        <div class="auth-system">
+            <i class="fas fa-shield-halved"></i>
+            نظام الموارد البشرية
+        </div>
+        <br>
+        <img class="auth-logo" src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شعار فريق شمس">
+        <div class="auth-title">فريق شمس التطوعي</div>
+        <div class="auth-subtitle">منصة إدارة الموارد البشرية والعقود</div>
 
         <form onsubmit="handleLogin(event)">
-
-            <div class="form-group" style="margin-bottom:12px;">
-
-                <input
-                    type="text"
-                    id="login_user"
-                    class="form-control"
-                    placeholder="اسم المستخدم"
-                    required
-                >
-
+            <div class="auth-field">
+                <input type="text" id="login_user" class="auth-input" placeholder="اسم المستخدم" required>
+                <i class="fas fa-user"></i>
             </div>
-
-            <div class="form-group" style="margin-bottom:20px;">
-
-                <input
-                    type="password"
-                    id="login_pass"
-                    class="form-control"
-                    placeholder="كلمة المرور"
-                    required
-                >
-
+            <div class="auth-field">
+                <input type="password" id="login_pass" class="auth-input" placeholder="كلمة المرور" required>
+                <i class="fas fa-lock"></i>
             </div>
-
-            <button
-                type="submit"
-                class="btn-action btn-orange"
-                style="width:100%;justify-content:center;font-size:15px;margin-bottom:10px;"
-            >
-                <i class="fas fa-lock-open"></i>
-                تسجيل الدخول
+            <button type="submit" class="auth-button">
+                <i class="fas fa-arrow-right-to-bracket"></i> &nbsp; تسجيل الدخول إلى النظام
             </button>
-
         </form>
-
     </div>
-
 </div>
 
-
-<!-- =====================================================
-     النظام الرئيسي
-===================================================== -->
-
+<!-- المحتوى الرئيسي للنظام -->
 <div id="appContent" style="display:none;">
-
-    <!-- شريط التنقل -->
-
     <div class="top-navbar">
-
-        <div style="font-weight:900;font-size:18px;white-space:nowrap;">
-            فريق شمس التطوعي
+        <div class="brand">
+            <img class="brand-logo" src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png" alt="شمس">
+            <div>
+                <div class="brand-name">فريق شمس التطوعي</div>
+                <div class="brand-section">إدارة الموارد البشرية</div>
+            </div>
         </div>
-
         <div class="nav-links">
-
-            <button
-                id="btn-create"
-                class="active"
-                onclick="switchTab('createTab')"
-            >
-                <i class="fas fa-file-signature"></i>
-                عقد جديد
-            </button>
-
-            <button
-                id="btn-upload"
-                onclick="switchTab('uploadTab')"
-            >
-                <i class="fas fa-file-upload"></i>
-                إرفاق عقد خارجي
-            </button>
-
-            <button
-                id="btn-archive"
-                onclick="switchTab('archiveTab')"
-            >
-                <i class="fas fa-box-archive"></i>
-                أرشيف العقود
-                (<span id="contractCount">0</span>)
-            </button>
-
-            <button
-                id="btn-users"
-                onclick="switchTab('usersTab')"
-                style="display:none;"
-            >
-                <i class="fas fa-chart-pie"></i>
-                لوحة التحكم
-            </button>
-
+            <button id="btn-create" class="active" onclick="switchTab('createTab')"><i class="fas fa-file-signature"></i> عقد جديد</button>
+            <button id="btn-archive" onclick="switchTab('archiveTab')"><i class="fas fa-box-archive"></i> الأرشيف</button>
         </div>
-
-        <button
-            onclick="logoutSystem();"
-            class="btn-action"
-            style="background:#475569;color:white;white-space:nowrap;"
-        >
-            <i class="fas fa-sign-out-alt"></i>
-            خروج
-        </button>
-
+        <button onclick="logoutSystem()" class="logout-button"><i class="fas fa-right-from-bracket"></i> تسجيل الخروج</button>
     </div>
-
 
     <div class="main-container">
-
-
-        <!-- =================================================
-             Tab 1: إنشاء عقد
-        ================================================= -->
-
+        <!-- قسم إنشاء العقد -->
         <div id="createTab">
-
-            <div class="card-box no-print">
-
-                <h3
-                    style="margin-bottom:20px;color:var(--dark-navy);border-bottom:2px solid var(--primary-orange);padding-bottom:8px;"
-                >
-                    <i class="fas fa-user-edit"></i>
-                    تعبئة بيانات المتطوع الجديد
-                </h3>
-
+            <div class="card-box">
+                <div class="card-title">إنشاء عقد تطوع جديد</div>
+                <div class="card-desc">أدخل بيانات المتطوع لإصدار الاتفاقية الرسمية الخاصة بالفريق.</div>
+                
                 <div class="form-grid">
-
                     <div class="form-group">
-
                         <label>الاسم الكامل</label>
-
-                        <input
-                            type="text"
-                            id="in_name"
-                            class="form-control"
-                            placeholder="أدخل الاسم الكامل"
-                            oninput="updateContractPreview()"
-                        >
-
+                        <input type="text" id="in_name" class="form-control" placeholder="أدخل الاسم الكامل">
                     </div>
-
                     <div class="form-group">
-
                         <label>رقم الهوية / الإقامة</label>
-
-                        <input
-                            type="text"
-                            id="in_id"
-                            class="form-control"
-                            placeholder="10 أرقام"
-                            oninput="updateContractPreview()"
-                        >
-
+                        <input type="text" id="in_id" class="form-control" placeholder="رقم الهوية">
                     </div>
-
                     <div class="form-group">
-
-                        <label>رقم الجوال</label>
-
-                        <input
-                            type="text"
-                            id="in_phone"
-                            class="form-control"
-                            placeholder="05xxxxxxxx"
-                            oninput="updateContractPreview()"
-                        >
-
+                        <label>المسمى التطوعي / اللجنة</label>
+                        <input type="text" id="in_role" class="form-control" placeholder="مثال: منسق مشاريع">
                     </div>
-
                     <div class="form-group">
-
-                        <label>تاريخ الميلاد</label>
-
-                        <input
-                            type="date"
-                            id="in_dob"
-                            class="form-control"
-                            onchange="updateContractPreview()"
-                        >
-
+                        <label>مدة التطوع</label>
+                        <input type="text" id="in_duration" class="form-control" placeholder="مثال: سنة ميلادية واحدة">
                     </div>
-
-                    <div class="form-group">
-
-                        <label>القسم / الإدارة</label>
-
-                        <input
-                            type="text"
-                            id="in_dept"
-                            class="form-control"
-                            placeholder="مثال: الموارد البشرية"
-                            oninput="updateContractPreview()"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>تاريخ الاتفاق (التحرير)</label>
-
-                        <input
-                            type="date"
-                            id="in_today"
-                            class="form-control"
-                            onchange="updateContractPreview()"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>تاريخ الانضمام الفعلي</label>
-
-                        <input
-                            type="date"
-                            id="in_startDate"
-                            class="form-control"
-                            onchange="updateContractPreview()"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label>مدة العقد</label>
-
-                        <select
-                            id="in_duration"
-                            class="form-control"
-                            onchange="updateContractPreview()"
-                        >
-                            <option value="1">شهر واحد</option>
-                            <option value="3">3 أشهر</option>
-                            <option value="6">6 أشهر</option>
-                            <option value="12">سنة كاملة (12 شهر)</option>
-                        </select>
-
-                    </div>
-
                 </div>
-
-
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-
-                    <button
-                        onclick="saveAndArchiveContract()"
-                        class="btn-action btn-orange"
-                    >
-                        <i class="fas fa-save"></i>
-                        حفظ العقد في الأرشيف السحابي
-                    </button>
-
-                    <button
-                        onclick="downloadContractPDF()"
-                        class="btn-action btn-green"
-                    >
-                        <i class="fas fa-file-pdf"></i>
-                        تنزيل العقد PDF
-                    </button>
-
-                    <button
-                        onclick="window.print()"
-                        class="btn-action btn-navy"
-                    >
-                        <i class="fas fa-print"></i>
-                        طباعة مباشرة
-                    </button>
-
-                </div>
-
+                <button class="btn-main" onclick="generateContractPreview()">
+                    <i class="fas fa-eye"></i> معاينة العقد
+                </button>
             </div>
 
-
-            <!-- معاينة العقد -->
-
-            <div style="overflow-x:auto;width:100%;">
-
-                <div class="contract-paper" id="contractPaper">
-
-                    <div style="text-align:right;">
-
-                        <img
-                            src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
-                            alt="شعار فريق شمس"
-                            style="width:85px;height:auto;object-fit:contain;"
-                            onerror="this.style.display='none'"
-                        >
-
-                    </div>
-
-
-                    <div class="contract-title">
-                        عقد اتفاقية انضمام لإدارة "شمس" التطوعي
-                    </div>
-
-
-                    <div class="contract-row">
-                        تم الاتفاق في تاريخ:
-                        (
-                        <span class="fill-val" id="p_today">
-                            ..../../....
-                        </span>
-                        )
-                        بين كل من:
-                    </div>
-
-                    <div class="contract-row">
-                        الطرف الأول : إدارة فريق (شمس) التطوّعي
-                    </div>
-
-                    <div class="contract-row">
-                        الطرف الثاني : المتطوع/ـة
-                        (
-                        <span class="fill-val" id="p_name">
-                            ...................
-                        </span>
-                        )
-                    </div>
-
-                    <div class="contract-row">
-                        رقم الهوية / الإقامة:
-                        (
-                        <span class="fill-val" id="p_id">
-                            ...................
-                        </span>
-                        )
-                    </div>
-
-                    <div class="contract-row">
-                        رقم الجوال:
-                        (
-                        <span class="fill-val" id="p_phone">
-                            ...................
-                        </span>
-                        )
-                    </div>
-
-                    <div class="contract-row">
-                        تاريخ الميلاد:
-                        (
-                        <span class="fill-val" id="p_dob">
-                            ...................
-                        </span>
-                        )
-                    </div>
-
-                    <div class="contract-row">
-                        القسم / الإدارة:
-                        (
-                        <span class="fill-val" id="p_dept">
-                            ...................
-                        </span>
-                        )
-                    </div>
-
-
-                    <div class="section-h">
-                        أولاً : موضوع العقد
-                    </div>
-
-                    <p style="font-size:11px;line-height:1.4;font-weight:500;">
-                        انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس)
-                        وفق الأنظمة والتعليمات المعتمدة.
-                    </p>
-
-
-                    <div class="section-h">
-                        ثانياً : واجبات المتطوع
-                    </div>
-
-                    <ul class="contract-ul">
-
-                        <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
-
-                        <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
-
-                        <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
-
-                        <li>4. الالتزام بتتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
-
-                        <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
-
-                        <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
-
-                    </ul>
-
-
-                    <div class="section-h">
-                        ثالثاً : حقوق الإدارة
-                    </div>
-
-                    <ul class="contract-ul">
-
-                        <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
-
-                        <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
-
-                        <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
-
-                        <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
-
-                        <li>5. حفظ بيانات وسجلات المتطوع.</li>
-
-                    </ul>
-
-
-                    <div class="section-h">
-                        رابعاً : مدة العقد و انهاؤه
-                    </div>
-
-                    <div class="contract-row">
-
-                        مدة العقد:
-                        (
-                        <span class="fill-val" id="p_duration">
-                            1 شهر
-                        </span>
-                        )
-
-                    </div>
-
-                    <div class="contract-row">
-
-                        تبدأ من تاريخ:
-                        (
-                        <span class="fill-val" id="p_startDate">
-                            ..../../....
-                        </span>
-                        )
-
-                        وتنتهي في:
-
-                        (
-                        <span class="fill-val" id="p_endDate">
-                            ..../../....
-                        </span>
-                        )
-
-                    </div>
-
-                    <p style="font-size:11px;line-height:1.4;font-weight:500;margin-top:2px;">
-
-                        يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام
-                        أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد
-                        إشعار الإدارة بشكل رسمي.
-
-                    </p>
-
-
-                    <div class="sig-grid">
-
-                        <div class="sig-box">
-
-                            <div class="title">
-                                التوقيع
-                            </div>
-
-                            <div
-                                class="sig-line"
-                                style="margin-top:38px;"
-                            ></div>
-
-                        </div>
-
-
-                        <div class="sig-box">
-
-                            <div class="title">
-                                رئيس قسم الموارد البشرية
-                            </div>
-
-                            <img
-                                src="https://i.postimg.cc/44VchM5g/lqtt-shasht-2026-09-04-230838.png"
-                                alt="توقيع رئيس الموارد البشرية"
-                                class="sig-img"
-                                crossorigin="anonymous"
-                                onerror="this.style.display='none'"
-                            >
-
-                            <div class="sig-line"></div>
-
-                        </div>
-
-
-                        <div class="sig-box">
-
-                            <div class="title">
-                                الرئيس التنفيذي
-                            </div>
-
-                            <img
-                                src="https://i.postimg.cc/QxSHQrK2/582b00f0-9e4e-48c6-b0ca-c8766e322887.png"
-                                alt="توقيع الرئيس التنفيذي"
-                                class="sig-img"
-                                crossorigin="anonymous"
-                                onerror="this.style.display='none'"
-                            >
-
-                            <div class="sig-line"></div>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
+            <div id="previewArea" style="display:none;" class="preview-container">
+                <h3>معاينة الوثيقة الرسمية</h3>
+                <p id="previewTextContent" style="margin-top: 15px; line-height: 1.8;"></p>
+                <br>
+                <button class="btn-main" onclick="downloadPDF()"><i class="fas fa-download"></i> تحميل العقد PDF</button>
             </div>
-
         </div>
 
-
-        <!-- =================================================
-             Tab 2: إرفاق عقد خارجي
-        ================================================= -->
-
-        <div id="uploadTab" style="display:none;">
-
-            <div class="card-box">
-
-                <h3
-                    style="margin-bottom:20px;color:var(--dark-navy);border-bottom:2px solid var(--primary-orange);padding-bottom:8px;"
-                >
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    إرفاق عقد خارجي / موقع يدويًا
-                </h3>
-
-
-                <form onsubmit="handleFileUpload(event)">
-
-                    <div class="form-grid">
-
-                        <div class="form-group">
-
-                            <label>اسم المتطوع</label>
-
-                            <input
-                                type="text"
-                                id="up_name"
-                                class="form-control"
-                                placeholder="أدخل اسم المتطوع"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>رقم الهوية</label>
-
-                            <input
-                                type="text"
-                                id="up_id"
-                                class="form-control"
-                                placeholder="10 أرقام"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>القسم</label>
-
-                            <input
-                                type="text"
-                                id="up_dept"
-                                class="form-control"
-                                placeholder="اسم القسم"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>تاريخ بداية العقد الخارجي</label>
-
-                            <input
-                                type="date"
-                                id="up_startDate"
-                                class="form-control"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>تاريخ انتهاء العقد الخارجي</label>
-
-                            <input
-                                type="date"
-                                id="up_endDate"
-                                class="form-control"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div
-                            class="form-group"
-                            style="grid-column:span 2;"
-                        >
-
-                            <label>
-                                اختيار ملف العقد (PDF / صورة)
-                            </label>
-
-                            <input
-                                type="file"
-                                id="up_file"
-                                class="form-control"
-                                accept=".pdf,image/*"
-                                required
-                            >
-
-                        </div>
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        class="btn-action btn-orange"
-                    >
-                        <i class="fas fa-upload"></i>
-                        رفع وحفظ العقد بالأرشيف
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-
-
-        <!-- =================================================
-             Tab 3: الأرشيف
-        ================================================= -->
-
+        <!-- قسم الأرشيف -->
         <div id="archiveTab" style="display:none;">
-
             <div class="card-box">
-
-                <h3
-                    style="color:var(--dark-navy);margin-bottom:15px;"
-                >
-                    <i class="fas fa-archive"></i>
-                    أرشيف العقود المعتمدة والمرفقة
-                </h3>
-
-
-                <!-- البحث -->
-
-                <div class="search-box">
-
-                    <i class="fas fa-search"></i>
-
-                    <input
-                        type="text"
-                        id="archiveSearch"
-                        class="form-control"
-                        placeholder="ابحث باسم المتطوع أو رقم الهوية..."
-                        oninput="renderArchive()"
-                    >
-
-                </div>
-
-
-                <div class="table-wrapper">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-
-                                <th>اسم المتطوع</th>
-
-                                <th>الهوية</th>
-
-                                <th>القسم</th>
-
-                                <th>تاريخ البداية</th>
-
-                                <th>تاريخ النهاية</th>
-
-                                <th>نوع العقد</th>
-
-                                <th>الحالة والعد التنازلي</th>
-
-                                <th>الإجراءات</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="archiveTableBody"></tbody>
-
-                    </table>
-
-                </div>
-
+                <div class="card-title">أشيف العقود والاتفاقيات</div>
+                <div class="card-desc">سجل كافة العقود الصادرة من النظام.</div>
+                <p style="color: var(--muted); font-size: 13px;">لا توجد عقود مؤرشفة حالياً.</p>
             </div>
-
         </div>
-
-
-        <!-- =================================================
-             Tab 4: لوحة التحكم
-        ================================================= -->
-
-        <div id="usersTab" style="display:none;">
-
-            <!-- لوحة التحكم -->
-
-            <div class="card-box">
-
-                <h3
-                    style="margin-bottom:20px;color:var(--dark-navy);border-bottom:2px solid var(--primary-orange);padding-bottom:8px;"
-                >
-                    <i class="fas fa-chart-pie"></i>
-                    لوحة التحكم
-                </h3>
-
-
-                <div class="dashboard-grid">
-
-                    <!-- إجمالي العقود -->
-
-                    <div
-                        class="dashboard-stat"
-                        style="background:#eff6ff;border-right:5px solid #3b82f6;"
-                    >
-
-                        <div class="dashboard-stat-title">
-                            <i class="fas fa-file-contract"></i>
-                            إجمالي العقود
-                        </div>
-
-                        <div
-                            id="dashboardTotalContracts"
-                            class="dashboard-stat-number"
-                            style="color:#3b82f6;"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <!-- العقود النشطة -->
-
-                    <div
-                        class="dashboard-stat"
-                        style="background:#f0fdf4;border-right:5px solid #10b981;"
-                    >
-
-                        <div class="dashboard-stat-title">
-                            <i class="fas fa-circle-check"></i>
-                            العقود النشطة
-                        </div>
-
-                        <div
-                            id="dashboardActiveContracts"
-                            class="dashboard-stat-number"
-                            style="color:#10b981;"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <!-- العقود المنتهية -->
-
-                    <div
-                        class="dashboard-stat"
-                        style="background:#fef2f2;border-right:5px solid #ef4444;"
-                    >
-
-                        <div class="dashboard-stat-title">
-                            <i class="fas fa-calendar-xmark"></i>
-                            العقود المنتهية
-                        </div>
-
-                        <div
-                            id="dashboardExpiredContracts"
-                            class="dashboard-stat-number"
-                            style="color:#ef4444;"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <!-- العقود الملغية -->
-
-                    <div
-                        class="dashboard-stat"
-                        style="background:#fff7ed;border-right:5px solid #f97316;"
-                    >
-
-                        <div class="dashboard-stat-title">
-                            <i class="fas fa-file-circle-xmark"></i>
-                            العقود الملغية
-                        </div>
-
-                        <div
-                            id="dashboardCancelledContracts"
-                            class="dashboard-stat-number"
-                            style="color:#f97316;"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <!-- المستخدمين -->
-
-                    <div
-                        class="dashboard-stat"
-                        style="background:#f5f3ff;border-right:5px solid #8b5cf6;"
-                    >
-
-                        <div class="dashboard-stat-title">
-                            <i class="fas fa-users"></i>
-                            المستخدمين
-                        </div>
-
-                        <div
-                            id="dashboardUsers"
-                            class="dashboard-stat-number"
-                            style="color:#8b5cf6;"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <!-- إضافة مستخدم -->
-
-            <div class="card-box">
-
-                <h3
-                    style="margin-bottom:20px;color:var(--dark-navy);border-bottom:2px solid var(--primary-orange);padding-bottom:8px;"
-                >
-                    <i class="fas fa-user-plus"></i>
-                    إضافة مستخدم جديد للنظام
-                </h3>
-
-
-                <form onsubmit="addUser(event)">
-
-                    <div class="form-grid">
-
-                        <div class="form-group">
-
-                            <label>
-                                اسم الموظف / المستخدم
-                            </label>
-
-                            <input
-                                type="text"
-                                id="u_name"
-                                class="form-control"
-                                placeholder="مثال: أحمد علي"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                اسم الدخول (Username)
-                            </label>
-
-                            <input
-                                type="text"
-                                id="u_username"
-                                class="form-control"
-                                placeholder="مثال: ahmed"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>
-                                كلمة المرور (Password)
-                            </label>
-
-                            <input
-                                type="password"
-                                id="u_password"
-                                class="form-control"
-                                placeholder="••••••••"
-                                required
-                            >
-
-                        </div>
-
-
-                        <div class="form-group">
-
-                            <label>الصلاحية</label>
-
-                            <select
-                                id="u_role"
-                                class="form-control"
-                            >
-
-                                <option value="مدير النظام">
-                                    مدير النظام
-                                </option>
-
-                                <option value="مسؤول موارد بشرية">
-                                    مسؤول موارد بشرية
-                                </option>
-
-                            </select>
-
-                        </div>
-
-                    </div>
-
-
-                    <button
-                        type="submit"
-                        class="btn-action btn-orange"
-                    >
-                        <i class="fas fa-check"></i>
-                        حفظ المستخدم سحابياً
-                    </button>
-
-                </form>
-
-            </div>
-
-
-            <!-- حسابات الدخول -->
-
-            <div class="card-box">
-
-                <h3
-                    style="color:var(--dark-navy);margin-bottom:15px;"
-                >
-                    <i class="fas fa-users"></i>
-                    حسابات الدخول المسجلة سحابياً
-                </h3>
-
-
-                <div class="table-wrapper">
-
-                    <table>
-
-                        <thead>
-
-                            <tr>
-
-                                <th>اسم الموظف</th>
-
-                                <th>اسم المستخدم</th>
-
-                                <th>كلمة المرور</th>
-
-                                <th>الصلاحية</th>
-
-                                <th>الإجراءات</th>
-
-                            </tr>
-
-                        </thead>
-
-                        <tbody id="usersTableBody"></tbody>
-
-                    </table>
-
-                </div>
-
-            </div>
-
-        </div>
-
     </div>
-
 </div>
 
-
-<!-- =====================================================
-     Firebase
-===================================================== -->
-
-<script type="module">
-
-    import { initializeApp }
-    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
-
-    import {
-        getFirestore,
-        collection,
-        getDocs,
-        addDoc,
-        updateDoc,
-        deleteDoc,
-        doc
-    }
-    from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-
-
-    const firebaseConfig = {
-
-        apiKey: "AIzaSyAehKIHRrnIm-l6djL36mzP7E_UED2PzE",
-
-        authDomain: "shamshr-b7b2b.firebaseapp.com",
-
-        projectId: "shamshr-b7b2b",
-
-        storageBucket: "shamshr-b7b2b.firebasestorage.app",
-
-        messagingSenderId: "1035491575998",
-
-        appId: "1:1035491575998:web:dfd07f262e72477706b6ef",
-
-        measurementId: "G-YD7EZJTJM9"
-
-    };
-
-
-    const app = initializeApp(firebaseConfig);
-
-    const db = getFirestore(app);
-
-
-    window.usersList = [];
-
-    window.contractsArchive = [];
-
-    window.currentUserRole = '';
-
-
-    /* =====================================================
-       تحميل البيانات من Firebase
-    ===================================================== */
-
-    async function loadCloudData() {
-
-        try {
-
-            /* المستخدمين */
-
-            const usersSnap =
-                await getDocs(collection(db, "users"));
-
-            window.usersList = [];
-
-            usersSnap.forEach((docSnap) => {
-
-                window.usersList.push({
-                    id: docSnap.id,
-                    ...docSnap.data()
-                });
-
-            });
-
-
-            /* إنشاء حساب المدير الأساسي إذا لم يكن موجوداً */
-
-            const hasAdmin =
-                window.usersList.some(
-                    u => u.username === 'admin'
-                );
-
-
-            if (!hasAdmin) {
-
-                await addDoc(
-                    collection(db, "users"),
-                    {
-                        name: 'المدير العام',
-                        username: 'admin',
-                        password: '123456',
-                        role: 'مدير النظام'
-                    }
-                );
-
-
-                const res =
-                    await getDocs(collection(db, "users"));
-
-                window.usersList = [];
-
-                res.forEach(d => {
-
-                    window.usersList.push({
-                        id: d.id,
-                        ...d.data()
-                    });
-
-                });
-
-            }
-
-
-            /* العقود */
-
-            const contractsSnap =
-                await getDocs(collection(db, "contracts"));
-
-            window.contractsArchive = [];
-
-            contractsSnap.forEach((docSnap) => {
-
-                window.contractsArchive.push({
-                    id: docSnap.id,
-                    ...docSnap.data()
-                });
-
-            });
-
-
-            renderUsers();
-
-            renderArchive();
-
-            updateDashboard();
-
-
-        } catch (err) {
-
-            console.error(
-                "Cloud Error: ",
-                err
-            );
-
-        }
-
-    }
-
-
-    loadCloudData();
-
-
-    /* =====================================================
-       تسجيل الدخول
-    ===================================================== */
-
-    window.handleLogin = async function(e) {
-
-        e.preventDefault();
-
-
-        const uInput =
-            document.getElementById('login_user')
-            .value
-            .trim();
-
-
-        const pInput =
-            document.getElementById('login_pass')
-            .value
-            .trim();
-
-
-        await loadCloudData();
-
-
-        const foundUser =
-            window.usersList.find(
-                u =>
-                    u.username === uInput &&
-                    u.password === pInput
-            );
-
-
-        if(foundUser) {
-
-            window.currentUserRole =
-                foundUser.role;
-
-
-            if(
-                window.currentUserRole ===
-                'مدير النظام'
-            ) {
-
-                document.getElementById(
-                    'btn-users'
-                ).style.display =
-                    'inline-block';
-
-            } else {
-
-                document.getElementById(
-                    'btn-users'
-                ).style.display =
-                    'none';
-
-            }
-
-
-            document.getElementById(
-                'authSection'
-            ).style.display =
-                'none';
-
-
-            document.getElementById(
-                'appContent'
-            ).style.display =
-                'block';
-
-
-            renderUsers();
-
-            renderArchive();
-
-            updateDashboard();
-
-
-        } else {
-
-            alert(
-                'خطأ: اسم المستخدم أو كلمة المرور غير صحيحة!'
-            );
-
-        }
-
-    };
-
-
-    /* =====================================================
-       إضافة مستخدم
-    ===================================================== */
-
-    window.addUser = async function(e) {
-
-        e.preventDefault();
-
-
-        const name =
-            document.getElementById('u_name').value;
-
-
-        const username =
-            document.getElementById('u_username')
-            .value
-            .trim();
-
-
-        const password =
-            document.getElementById('u_password')
-            .value
-            .trim();
-
-
-        const role =
-            document.getElementById('u_role').value;
-
-
-        if(
-            window.usersList.some(
-                u => u.username === username
-            )
-        ) {
-
-            alert(
-                'اسم المستخدم موجود بالفعل!'
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            await addDoc(
-                collection(db, "users"),
-                {
-                    name,
-                    username,
-                    password,
-                    role
-                }
-            );
-
-
-            alert(
-                'تمت إضافة المستخدم سحابياً بنجاح!'
-            );
-
-
-            document.getElementById(
-                'u_name'
-            ).value = '';
-
-
-            document.getElementById(
-                'u_username'
-            ).value = '';
-
-
-            document.getElementById(
-                'u_password'
-            ).value = '';
-
-
-            await loadCloudData();
-
-
-        } catch(err) {
-
-            console.error(err);
-
-            alert(
-                'حدث خطأ أثناء الحفظ بالسحابة'
-            );
-
-        }
-
-    };
-
-
-    /* =====================================================
-       تغيير كلمة المرور
-    ===================================================== */
-
-    window.changeUserPassword =
-    async function(docId, username) {
-
-        const newPass =
-            prompt(
-                `أدخل كلمة المرور الجديدة للمستخدم (${username}):`
-            );
-
-
-        if(newPass === null)
-            return;
-
-
-        if(newPass.trim() === '') {
-
-            alert(
-                'كلمة المرور لا يمكن أن تكون فارغة!'
-            );
-
-            return;
-
-        }
-
-
-        try {
-
-            const userRef =
-                doc(db, "users", docId);
-
-
-            await updateDoc(
-                userRef,
-                {
-                    password:
-                        newPass.trim()
-                }
-            );
-
-
-            alert(
-                'تم تحديث كلمة المرور سحابياً بنجاح!'
-            );
-
-
-            await loadCloudData();
-
-
-        } catch(err) {
-
-            alert(
-                'فشل تحديث كلمة المرور.'
-            );
-
-        }
-
-    };
-
-
-    /* =====================================================
-       حذف مستخدم
-    ===================================================== */
-
-    window.deleteUser =
-    async function(docId, username) {
-
-        if(username === 'admin') {
-
-            alert(
-                'لا يمكن حذف حساب المدير الأساسي (admin) حفاظاً على النظام!'
-            );
-
-            return;
-
-        }
-
-
-        if(window.usersList.length <= 1) {
-
-            alert(
-                'لا يمكن حذف المستخدم الوحيد!'
-            );
-
-            return;
-
-        }
-
-
-        if(
-            confirm(
-                'هل أنت متأكد من حذف هذا المستخدم نهائياً؟'
-            )
-        ) {
-
-            try {
-
-                await deleteDoc(
-                    doc(db, "users", docId)
-                );
-
-
-                await loadCloudData();
-
-
-            } catch(err) {
-
-                alert(
-                    'فشل الحذف'
-                );
-
-            }
-
-        }
-
-    };
-
-
-    /* =====================================================
-       حفظ عقد جديد
-    ===================================================== */
-
-    window.saveAndArchiveContract =
-    async function() {
-
-        const name =
-            document.getElementById('in_name')
-            .value
-            .trim();
-
-
-        const id =
-            document.getElementById('in_id')
-            .value
-            .trim();
-
-
-        if(!name || !id) {
-
-            alert(
-                'يرجى كتابة الاسم الكامل ورقم الهوية أولاً'
-            );
-
-            return;
-
-        }
-
-
-        const todayVal =
-            document.getElementById('in_today')
-            .value ||
-            new Date()
-            .toISOString()
-            .split('T')[0];
-
-
-        const startDateVal =
-            document.getElementById('in_startDate')
-            .value ||
-            todayVal;
-
-
-        const durationVal =
-            parseInt(
-                document.getElementById('in_duration').value
-            );
-
-
-        let startDate =
-            new Date(startDateVal);
-
-
-        let endDate =
-            new Date(startDate);
-
-
-        endDate.setMonth(
-            endDate.getMonth() +
-            durationVal
-        );
-
-
-        const newContract = {
-
-            name: name,
-
-            nationalId: id,
-
-            dept:
-                document.getElementById('in_dept')
-                .value ||
-                'غير محدد',
-
-            startDate:
-                startDate
-                .toISOString()
-                .split('T')[0],
-
-            endDate:
-                endDate
-                .toISOString()
-                .split('T')[0],
-
-            type:
-                'عقد محرر بالنظام',
-
-            status:
-                'active',
-
-            createdAt:
-                Date.now()
-
-        };
-
-
-        try {
-
-            await addDoc(
-                collection(db, "contracts"),
-                newContract
-            );
-
-
-            alert(
-                'تم حفظ العقد بنجاح في الأرشيف السحابي!'
-            );
-
-
-            await loadCloudData();
-
-
-            switchTab(
-                'archiveTab'
-            );
-
-
-        } catch(err) {
-
-            console.error(err);
-
-            alert(
-                'فشل حفظ العقد بالسحابة'
-            );
-
-        }
-
-    };
-
-
-    /* =====================================================
-       إرفاق عقد خارجي
-    ===================================================== */
-
-    window.handleFileUpload =
-    async function(e) {
-
-        e.preventDefault();
-
-
-        const name =
-            document.getElementById('up_name')
-            .value;
-
-
-        const id =
-            document.getElementById('up_id')
-            .value;
-
-
-        const dept =
-            document.getElementById('up_dept')
-            .value;
-
-
-        const startDate =
-            document.getElementById('up_startDate')
-            .value;
-
-
-        const endDate =
-            document.getElementById('up_endDate')
-            .value;
-
-
-        const fileInput =
-            document.getElementById('up_file');
-
-
-        if(fileInput.files.length === 0)
-            return;
-
-
-        const fileName =
-            fileInput.files[0].name;
-
-
-        const newContract = {
-
-            name: name,
-
-            nationalId: id,
-
-            dept: dept,
-
-            startDate: startDate,
-
-            endDate: endDate,
-
-            type:
-                'مرفق خارجي (' +
-                fileName +
-                ')',
-
-            status:
-                'active',
-
-            createdAt:
-                Date.now()
-
-        };
-
-
-        try {
-
-            await addDoc(
-                collection(db, "contracts"),
-                newContract
-            );
-
-
-            alert(
-                'تم إرفاق العقد الخارجي وحفظ تواريخه وحالته سحابياً بنجاح!'
-            );
-
-
-            await loadCloudData();
-
-
-            switchTab(
-                'archiveTab'
-            );
-
-
-        } catch(err) {
-
-            console.error(err);
-
-            alert(
-                'فشل الرفع'
-            );
-
-        }
-
-    };
-
-
-    /* =====================================================
-       تجديد العقد
-    ===================================================== */
-
-    window.renewContract =
-    async function(docId, currentEndDate) {
-
-        const contract =
-            window.contractsArchive.find(
-                c => c.id === docId
-            );
-
-
-        /* منع تجديد العقد الملغى */
-
-        if(
-            contract &&
-            contract.status === 'cancelled'
-        ) {
-
-            alert(
-                'لا يمكن تجديد عقد تم فسخه.'
-            );
-
-            return;
-
-        }
-
-
-        let monthsToAdd =
-            prompt(
-                'اختر مدة التجديد بالأشهر (مثال: 1 أو 3 أو 6 أو 12):',
-                '3'
-            );
-
-
-        if(monthsToAdd === null)
-            return;
-
-
-        let mNum =
-            parseInt(monthsToAdd);
-
-
-        if(
-            isNaN(mNum) ||
-            mNum <= 0
-        ) {
-
-            alert(
-                'يرجى إدخال رقم صحيح للأشهر!'
-            );
-
-            return;
-
-        }
-
-
-        let baseDate =
-            new Date(currentEndDate);
-
-
-        let today =
-            new Date();
-
-
-        today.setHours(
-            0,0,0,0
-        );
-
-
-        if(baseDate < today) {
-
-            baseDate =
-                today;
-
-        }
-
-
-        let newEnd =
-            new Date(baseDate);
-
-
-        newEnd.setMonth(
-            newEnd.getMonth() +
-            mNum
-        );
-
-
-        let newEndStr =
-            newEnd
-            .toISOString()
-            .split('T')[0];
-
-
-        try {
-
-            const contractRef =
-                doc(db, "contracts", docId);
-
-
-            await updateDoc(
-                contractRef,
-                {
-                    endDate:
-                        newEndStr,
-
-                    status:
-                        'active',
-
-                    renewedAt:
-                        new Date()
-                        .toISOString()
-                        .split('T')[0]
-                }
-            );
-
-
-            alert(
-                `تم تجديد العقد بنجاح حتى تاريخ: ${newEndStr}`
-            );
-
-
-            await loadCloudData();
-
-
-        } catch(err) {
-
-            console.error(err);
-
-            alert(
-                'فشل عملية تجديد العقد.'
-            );
-
-        }
-
-    };
-
-
-    /* =====================================================
-       فسخ العقد
-    ===================================================== */
-
-    window.cancelContract =
-    async function(docId) {
-
-        const contract =
-            window.contractsArchive.find(
-                c => c.id === docId
-            );
-
-
-        if(!contract) {
-
-            alert(
-                'لم يتم العثور على العقد.'
-            );
-
-            return;
-
-        }
-
-
-        if(
-            contract.status === 'cancelled'
-        ) {
-
-            alert(
-                'هذا العقد تم فسخه بالفعل.'
-            );
-
-            return;
-
-        }
-
-
-        const reason =
-            prompt(
-                'اكتب سبب فسخ العقد:\n\nمثال: انسحاب المتطوع / إنهاء من الإدارة / ظروف خاصة',
-                'انسحاب المتطوع'
-            );
-
-
-        if(reason === null)
-            return;
-
-
-        if(reason.trim() === '') {
-
-            alert(
-                'يجب كتابة سبب فسخ العقد.'
-            );
-
-            return;
-
-        }
-
-
-        if(
-            !confirm(
-                'هل أنت متأكد من فسخ هذا العقد؟\n\nبعد الفسخ لن يتم احتسابه ضمن العقود النشطة أو المنتهية.'
-            )
-        ) {
-
-            return;
-
-        }
-
-
-        try {
-
-            const contractRef =
-                doc(db, "contracts", docId);
-
-
-            const cancellationDate =
-                new Date()
-                .toISOString()
-                .split('T')[0];
-
-
-            await updateDoc(
-                contractRef,
-                {
-
-                    status:
-                        'cancelled',
-
-                    cancellationReason:
-                        reason.trim(),
-
-                    cancelledAt:
-                        cancellationDate
-
-                }
-            );
-
-
-            alert(
-                'تم فسخ العقد بنجاح.'
-            );
-
-
-            await loadCloudData();
-
-
-        } catch(err) {
-
-            console.error(err);
-
-            alert(
-                'فشل فسخ العقد.'
-            );
-
-        }
-
-    };
-
-
-    /* =====================================================
-       حذف عقد
-    ===================================================== */
-
-    window.deleteContract =
-    async function(docId) {
-
-        if(
-            confirm(
-                'هل أنت متأكد من حذف هذا العقد من الأرشيف؟'
-            )
-        ) {
-
-            try {
-
-                await deleteDoc(
-                    doc(db, "contracts", docId)
-                );
-
-
-                await loadCloudData();
-
-
-            } catch(err) {
-
-                console.error(err);
-
-                alert(
-                    'فشل الحذف'
-                );
-
-            }
-
-        }
-
-    };
-
-</script>
-
-
 <script>
-
-    /* =====================================================
-       تسجيل الخروج
-    ===================================================== */
-
-    function logoutSystem() {
-
-        document.getElementById(
-            'login_user'
-        ).value = '';
-
-
-        document.getElementById(
-            'login_pass'
-        ).value = '';
-
-
-        document.getElementById(
-            'authSection'
-        ).style.display =
-            'flex';
-
-
-        document.getElementById(
-            'appContent'
-        ).style.display =
-            'none';
-
-
-        window.currentUserRole = '';
-
-    }
-
-
-    /* =====================================================
-       تبديل الصفحات
-    ===================================================== */
-
-    function switchTab(tabId) {
-
-        if(
-            tabId === 'usersTab' &&
-            window.currentUserRole !==
-            'مدير النظام'
-        ) {
-
-            alert(
-                'غير مسموح لك بالدخول إلى لوحة التحكم!'
-            );
-
-            return;
-
-        }
-
-
-        document.getElementById(
-            'createTab'
-        ).style.display =
-            'none';
-
-
-        document.getElementById(
-            'uploadTab'
-        ).style.display =
-            'none';
-
-
-        document.getElementById(
-            'archiveTab'
-        ).style.display =
-            'none';
-
-
-        const usersTabEl =
-            document.getElementById(
-                'usersTab'
-            );
-
-
-        if(usersTabEl)
-            usersTabEl.style.display =
-                'none';
-
-
-        document.getElementById(
-            'btn-create'
-        ).classList.remove('active');
-
-
-        document.getElementById(
-            'btn-upload'
-        ).classList.remove('active');
-
-
-        document.getElementById(
-            'btn-archive'
-        ).classList.remove('active');
-
-
-        const btnUsersEl =
-            document.getElementById(
-                'btn-users'
-            );
-
-
-        if(btnUsersEl)
-            btnUsersEl.classList.remove(
-                'active'
-            );
-
-
-        document.getElementById(
-            tabId
-        ).style.display =
-            'block';
-
-
-        if(tabId === 'createTab') {
-
-            document.getElementById(
-                'btn-create'
-            ).classList.add('active');
-
-        }
-
-
-        if(tabId === 'uploadTab') {
-
-            document.getElementById(
-                'btn-upload'
-            ).classList.add('active');
-
-        }
-
-
-        if(tabId === 'archiveTab') {
-
-            document.getElementById(
-                'btn-archive'
-            ).classList.add('active');
-
-            renderArchive();
-
-        }
-
-
-        if(
-            tabId === 'usersTab' &&
-            btnUsersEl
-        ) {
-
-            btnUsersEl.classList.add(
-                'active'
-            );
-
-            renderUsers();
-
-            updateDashboard();
-
-        }
-
-    }
-
-
-    /* =====================================================
-       معاينة العقد
-    ===================================================== */
-
-    function updateContractPreview() {
-
-        const name =
-            document.getElementById('in_name')
-            .value ||
-            '...................';
-
-
-        const id =
-            document.getElementById('in_id')
-            .value ||
-            '...................';
-
-
-        const phone =
-            document.getElementById('in_phone')
-            .value ||
-            '...................';
-
-
-        const dob =
-            document.getElementById('in_dob')
-            .value ||
-            '...................';
-
-
-        const dept =
-            document.getElementById('in_dept')
-            .value ||
-            '...................';
-
-
-        const todayVal =
-            document.getElementById('in_today')
-            .value;
-
-
-        const startDateVal =
-            document.getElementById('in_startDate')
-            .value;
-
-
-        const durationVal =
-            parseInt(
-                document.getElementById(
-                    'in_duration'
-                ).value
-            );
-
-
-        document.getElementById(
-            'p_name'
-        ).innerText =
-            name;
-
-
-        document.getElementById(
-            'p_id'
-        ).innerText =
-            id;
-
-
-        document.getElementById(
-            'p_phone'
-        ).innerText =
-            phone;
-
-
-        document.getElementById(
-            'p_dob'
-        ).innerText =
-            dob;
-
-
-        document.getElementById(
-            'p_dept'
-        ).innerText =
-            dept;
-
-
-        if(todayVal) {
-
-            document.getElementById(
-                'p_today'
-            ).innerText =
-                todayVal;
-
-        } else {
-
-            document.getElementById(
-                'p_today'
-            ).innerText =
-                '..../../....';
-
-        }
-
-
-        let startDate =
-            startDateVal
-                ? new Date(startDateVal)
-                : null;
-
-
-        if(startDate) {
-
-            document.getElementById(
-                'p_startDate'
-            ).innerText =
-                startDate
-                .toISOString()
-                .split('T')[0];
-
-
-            let endDate =
-                new Date(startDate);
-
-
-            endDate.setMonth(
-                endDate.getMonth() +
-                durationVal
-            );
-
-
-            document.getElementById(
-                'p_endDate'
-            ).innerText =
-                endDate
-                .toISOString()
-                .split('T')[0];
-
-        } else {
-
-            document.getElementById(
-                'p_startDate'
-            ).innerText =
-                '..../../....';
-
-
-            document.getElementById(
-                'p_endDate'
-            ).innerText =
-                '..../../....';
-
-        }
-
-
-        document.getElementById(
-            'p_duration'
-        ).innerText =
-            durationVal +
-            ' شهر';
-
-    }
-
-
-    /* =====================================================
-       PDF
-    ===================================================== */
-
-    function downloadContractPDF() {
-
-        const name =
-            document.getElementById('in_name')
-            .value ||
-            'عقد_متطوع';
-
-
-        const element =
-            document.getElementById(
-                'contractPaper'
-            );
-
-
-        const opt = {
-
-            margin:
-                [2,2,2,2],
-
-            filename:
-                `عقد_${name}.pdf`,
-
-            image: {
-
-                type:
-                    'jpeg',
-
-                quality:
-                    0.98
-
-            },
-
-            html2canvas: {
-
-                scale:
-                    2,
-
-                useCORS:
-                    true,
-
-                allowTaint:
-                    true,
-
-                letterRendering:
-                    true
-
-            },
-
-            jsPDF: {
-
-                unit:
-                    'mm',
-
-                format:
-                    'a4',
-
-                orientation:
-                    'portrait'
-
-            }
-
-        };
-
-
-        html2pdf()
-            .from(element)
-            .set(opt)
-            .save();
-
-    }
-
-
-    /* =====================================================
-       عرض المستخدمين
-    ===================================================== */
-
-    function renderUsers() {
-
-        const tbody =
-            document.getElementById(
-                'usersTableBody'
-            );
-
-
-        const count =
-            document.getElementById(
-                'dashboardUsers'
-            );
-
-
-        if(count) {
-
-            count.innerText =
-                window.usersList.length;
-
-        }
-
-
-        if(!tbody)
-            return;
-
-
-        tbody.innerHTML = '';
-
-
-        if(
-            window.usersList.length === 0
-        ) {
-
-            tbody.innerHTML = `
-                <tr>
-                    <td colspan="5" class="empty-message">
-                        لا توجد حسابات مستخدمين.
-                    </td>
-                </tr>
-            `;
-
-            return;
-
-        }
-
-
-        window.usersList.forEach(u => {
-
-            tbody.innerHTML += `
-
-                <tr>
-
-                    <td>
-                        <b>${escapeHtml(u.name || '')}</b>
-                    </td>
-
-                    <td>
-                        <code>${escapeHtml(u.username || '')}</code>
-                    </td>
-
-                    <td>
-                        <code>${escapeHtml(u.password || '')}</code>
-                    </td>
-
-                    <td>
-                        <span class="badge badge-active">
-                            ${escapeHtml(u.role || '')}
-                        </span>
-                    </td>
-
-                    <td>
-
-                        <button
-                            onclick="changeUserPassword('${u.id}', '${escapeJs(u.username || '')}')"
-                            class="btn-action btn-blue"
-                            style="padding:4px 10px;font-size:12px;margin-left:5px;"
-                        >
-                            <i class="fas fa-key"></i>
-                            تغيير كلمة المرور
-                        </button>
-
-                        <button
-                            onclick="deleteUser('${u.id}', '${escapeJs(u.username || '')}')"
-                            class="btn-action btn-danger"
-                            style="padding:4px 10px;font-size:12px;"
-                        >
-                            <i class="fas fa-trash"></i>
-                            حذف
-                        </button>
-
-                    </td>
-
-                </tr>
-
-            `;
-
-        });
-
-    }
-
-
-    /* =====================================================
-       لوحة التحكم
-    ===================================================== */
-
-    function updateDashboard() {
-
-        const total =
-            window.contractsArchive.length;
-
-
-        let active = 0;
-
-        let expired = 0;
-
-        let cancelled = 0;
-
-
-        const today =
-            new Date();
-
-
-        today.setHours(
-            0,
-            0,
-            0,
-            0
-        );
-
-
-        window.contractsArchive.forEach(
-            c => {
-
-                /*
-                    إذا كان العقد ملغياً
-                    يتم احتسابه فقط في العقود الملغية
-                */
-
-                if(
-                    c.status === 'cancelled'
-                ) {
-
-                    cancelled++;
-
-                    return;
-
-                }
-
-
-                const endDate =
-                    new Date(c.endDate);
-
-
-                if(
-                    isNaN(endDate.getTime())
-                ) {
-
-                    active++;
-
-                    return;
-
-                }
-
-
-                endDate.setHours(
-                    0,
-                    0,
-                    0,
-                    0
-                );
-
-
-                if(endDate >= today) {
-
-                    active++;
-
-                } else {
-
-                    expired++;
-
-                }
-
-            }
-        );
-
-
-        document.getElementById(
-            'dashboardTotalContracts'
-        ).innerText =
-            total;
-
-
-        document.getElementById(
-            'dashboardActiveContracts'
-        ).innerText =
-            active;
-
-
-        document.getElementById(
-            'dashboardExpiredContracts'
-        ).innerText =
-            expired;
-
-
-        document.getElementById(
-            'dashboardCancelledContracts'
-        ).innerText =
-            cancelled;
-
-
-        document.getElementById(
-            'dashboardUsers'
-        ).innerText =
-            window.usersList.length;
-
-    }
-
-
-    /* =====================================================
-       عرض الأرشيف
-    ===================================================== */
-
-    function renderArchive() {
-
-        const tbody =
-            document.getElementById(
-                'archiveTableBody'
-            );
-
-
-        if(!tbody)
-            return;
-
-
-        document.getElementById(
-            'contractCount'
-        ).innerText =
-            window.contractsArchive.length;
-
-
-        const searchInput =
-            document.getElementById(
-                'archiveSearch'
-            );
-
-
-        const search =
-            searchInput
-                ? searchInput.value
-                    .trim()
-                    .toLowerCase()
-                : '';
-
-
-        let filteredContracts =
-            window.contractsArchive.filter(
-                c => {
-
-                    if(!search)
-                        return true;
-
-
-                    const name =
-                        String(
-                            c.name || ''
-                        ).toLowerCase();
-
-
-                    const nationalId =
-                        String(
-                            c.nationalId || ''
-                        ).toLowerCase();
-
-
-                    return (
-                        name.includes(search) ||
-                        nationalId.includes(search)
-                    );
-
-                }
-            );
-
-
-        tbody.innerHTML = '';
-
-
-        if(
-            filteredContracts.length === 0
-        ) {
-
-            tbody.innerHTML = `
-
-                <tr>
-
-                    <td
-                        colspan="8"
-                        class="empty-message"
-                    >
-
-                        ${
-                            window.contractsArchive.length === 0
-                                ? 'لا توجد عقود محفوظة في الأرشيف السحابي حالياً.'
-                                : 'لا توجد نتائج مطابقة للبحث.'
-                        }
-
-                    </td>
-
-                </tr>
-
-            `;
-
-            return;
-
-        }
-
-
-        const today =
-            new Date();
-
-
-        today.setHours(
-            0,
-            0,
-            0,
-            0
-        );
-
-
-        filteredContracts.forEach(
-            c => {
-
-                let statusBadge = '';
-
-
-                /*
-                    ====================================
-                    العقد الذي تم فسخه
-                    ====================================
-                */
-
-                if(
-                    c.status === 'cancelled'
-                ) {
-
-                    statusBadge = `
-
-                        <span class="badge badge-cancelled">
-
-                            <i class="fas fa-ban"></i>
-
-                            تم فسخ العقد
-
-                        </span>
-
-                        <div
-                            style="font-size:10px;margin-top:5px;color:#777;"
-                        >
-
-                            ${
-                                c.cancelledAt
-                                    ? 'تاريخ الفسخ: ' +
-                                      escapeHtml(c.cancelledAt)
-                                    : ''
-                            }
-
-                        </div>
-
-                        ${
-                            c.cancellationReason
-                                ? `
-                                    <div
-                                        style="font-size:10px;margin-top:3px;color:#c2410c;"
-                                    >
-                                        السبب:
-                                        ${escapeHtml(c.cancellationReason)}
-                                    </div>
-                                  `
-                                : ''
-                        }
-
-                    `;
-
-                } else {
-
-                    const endD =
-                        new Date(c.endDate);
-
-
-                    endD.setHours(
-                        0,
-                        0,
-                        0,
-                        0
-                    );
-
-
-                    const diffTime =
-                        endD - today;
-
-
-                    const diffDays =
-                        Math.ceil(
-                            diffTime /
-                            (1000 * 60 * 60 * 24)
-                        );
-
-
-                    if(
-                        isNaN(diffDays)
-                    ) {
-
-                        statusBadge = `
-                            <span class="badge badge-active">
-                                نشط
-                            </span>
-                        `;
-
-                    } else if(
-                        diffDays < 0
-                    ) {
-
-                        const passedDays =
-                            Math.abs(
-                                diffDays
-                            );
-
-
-                        statusBadge = `
-
-                            <span class="badge badge-expired">
-
-                                منتهي منذ
-                                ${passedDays}
-                                يوم
-
-                            </span>
-
-                        `;
-
-                    } else if(
-                        diffDays <= 7
-                    ) {
-
-                        statusBadge = `
-
-                            <span class="badge badge-warning">
-
-                                ينتهي خلال
-                                ${diffDays}
-                                أيام
-
-                            </span>
-
-                        `;
-
-                    } else {
-
-                        statusBadge = `
-
-                            <span class="badge badge-active">
-
-                                ساري
-                                (متبقي
-                                ${diffDays}
-                                يوم)
-
-                            </span>
-
-                        `;
-
-                    }
-
-                }
-
-
-                /*
-                    ====================================
-                    أزرار الإجراءات
-                    ====================================
-                */
-
-                let actionButtons = '';
-
-
-                if(
-                    c.status === 'cancelled'
-                ) {
-
-                    actionButtons = `
-
-                        <span
-                            class="badge badge-cancelled"
-                            style="margin-left:5px;"
-                        >
-                            <i class="fas fa-ban"></i>
-                            تم فسخ العقد
-                        </span>
-
-                    `;
-
-                } else {
-
-                    actionButtons = `
-
-                        <button
-                            onclick="renewContract('${c.id}', '${escapeJs(c.endDate || '')}')"
-                            class="btn-action btn-purple"
-                            style="padding:4px 10px;font-size:12px;margin-left:4px;"
-                            title="تجديد العقد"
-                        >
-
-                            <i class="fas fa-sync-alt"></i>
-
-                            تجديد
-
-                        </button>
-
-
-                        <button
-                            onclick="cancelContract('${c.id}')"
-                            class="btn-action btn-cancel"
-                            style="padding:4px 10px;font-size:12px;margin-left:4px;"
-                            title="فسخ العقد"
-                        >
-
-                            <i class="fas fa-file-circle-xmark"></i>
-
-                            فسخ العقد
-
-                        </button>
-
-                    `;
-
-                }
-
-
-                tbody.innerHTML += `
-
-                    <tr>
-
-                        <td>
-                            <b>
-                                ${escapeHtml(c.name || '')}
-                            </b>
-                        </td>
-
-                        <td>
-                            ${escapeHtml(c.nationalId || '')}
-                        </td>
-
-                        <td>
-                            ${escapeHtml(c.dept || '')}
-                        </td>
-
-                        <td>
-                            ${escapeHtml(c.startDate || 'غير محدد')}
-                        </td>
-
-                        <td>
-                            ${escapeHtml(c.endDate || 'غير محدد')}
-                        </td>
-
-                        <td>
-                            ${escapeHtml(c.type || '')}
-                        </td>
-
-                        <td>
-                            ${statusBadge}
-                        </td>
-
-                        <td>
-
-                            ${actionButtons}
-
-                            <button
-                                onclick="deleteContract('${c.id}')"
-                                class="btn-action btn-danger"
-                                style="padding:4px 10px;font-size:12px;"
-                                title="حذف العقد"
-                            >
-
-                                <i class="fas fa-trash"></i>
-
-                                حذف
-
-                            </button>
-
-                        </td>
-
-                    </tr>
-
-                `;
-
-            }
-        );
-
-    }
-
-
-    /* =====================================================
-       حماية عرض النصوص
-    ===================================================== */
-
-    function escapeHtml(value) {
-
-        return String(value)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#039;');
-
-    }
-
-
-    function escapeJs(value) {
-
-        return String(value)
-            .replace(/\\/g, '\\\\')
-            .replace(/'/g, "\\'")
-            .replace(/"/g, '\\"')
-            .replace(/\n/g, '\\n')
-            .replace(/\r/g, '\\r');
-
-    }
-
-
-    /* =====================================================
-       تاريخ اليوم تلقائياً
-    ===================================================== */
-
-    document.addEventListener(
-        'DOMContentLoaded',
-        function() {
-
-            const today =
-                new Date()
-                .toISOString()
-                .split('T')[0];
-
-
-            const todayInput =
-                document.getElementById(
-                    'in_today'
-                );
-
-
-            if(
-                todayInput &&
-                !todayInput.value
-            ) {
-
-                todayInput.value =
-                    today;
-
-            }
-
-
-            const startInput =
-                document.getElementById(
-                    'in_startDate'
-                );
-
-
-            if(
-                startInput &&
-                !startInput.value
-            ) {
-
-                startInput.value =
-                    today;
-
-            }
-
-
-            updateContractPreview();
-
-        }
-    );
-
+function handleLogin(e) {
+    e.preventDefault();
+    document.getElementById('authSection').style.display = 'none';
+    document.getElementById('appContent').style.display = 'block';
+}
+
+function logoutSystem() {
+    document.getElementById('authSection').style.display = 'flex';
+    document.getElementById('appContent').style.display = 'none';
+}
+
+function switchTab(tabId) {
+    document.getElementById('createTab').style.display = (tabId === 'createTab') ? 'block' : 'none';
+    document.getElementById('archiveTab').style.display = (tabId === 'archiveTab') ? 'block' : 'none';
+    
+    document.getElementById('btn-create').classList.toggle('active', tabId === 'createTab');
+    document.getElementById('btn-archive').classList.toggle('active', tabId === 'archiveTab');
+}
+
+function generateContractPreview() {
+    const name = document.getElementById('in_name').value || '---';
+    const idNum = document.getElementById('in_id').value || '---';
+    const role = document.getElementById('in_role').value || '---';
+    const duration = document.getElementById('in_duration').value || '---';
+
+    const text = `إنه في يومنا هذا تم إبرام عقد اتفاق تطوعي بين فريق شمس التطوعي والمتطوع/ـة: <strong>${name}</strong>، حامل/ـة هوية رقم: <strong>${idNum}</strong>، وذلك للعمل في لجنة (<strong>${role}</strong>) لمدة (<strong>${duration}</strong>)، وفقاً للأنظمة واللوائح الداخلية المتبعة في الفريق.`;
+    
+    document.getElementById('previewTextContent').innerHTML = text;
+    document.getElementById('previewArea').style.display = 'block';
+}
+
+function downloadPDF() {
+    const element = document.getElementById('previewArea');
+    html2pdf().from(element).save('Shams_Volunteer_Contract.pdf');
+}
 </script>
 
 </body>
