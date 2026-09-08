@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -13,16 +15,23 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="شمس HR">
 
-<link rel="apple-touch-icon"
-href="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png">
+<link
+rel="apple-touch-icon"
+href="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
+>
 
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
-rel="stylesheet">
+<link
+href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
+rel="stylesheet"
+>
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
 
 <style>
 
@@ -46,8 +55,7 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 
     --border:#e8edf5;
 
-    --shadow:
-        0 15px 45px rgba(0,10,48,.07);
+    --shadow:0 15px 45px rgba(0,10,48,.07);
 
     --radius:20px;
 }
@@ -77,9 +85,9 @@ body{
 }
 
 
-/* =====================================================
+/* ================================
    شاشة الدخول
-===================================================== */
+================================ */
 
 .auth-overlay{
     position:fixed;
@@ -146,6 +154,7 @@ body{
 }
 
 @keyframes rotateGlow{
+
     from{
         transform:rotate(0deg);
     }
@@ -153,6 +162,7 @@ body{
     to{
         transform:rotate(360deg);
     }
+
 }
 
 .auth-card{
@@ -173,11 +183,11 @@ body{
 
     text-align:center;
 
-    animation:
-        loginCard .8s ease;
+    animation:loginCard .8s ease;
 }
 
 @keyframes loginCard{
+
     from{
         opacity:0;
         transform:translateY(30px) scale(.97);
@@ -187,6 +197,7 @@ body{
         opacity:1;
         transform:none;
     }
+
 }
 
 .auth-logo{
@@ -197,29 +208,33 @@ body{
 
     margin-bottom:12px;
 
-    filter:
-        drop-shadow(
-            0 10px 20px
-            rgba(0,0,0,.12)
-        );
+    filter:drop-shadow(
+        0 10px 20px rgba(0,0,0,.12)
+    );
 }
 
 .auth-title{
     color:var(--navy);
+
     font-size:25px;
+
     font-weight:900;
 }
 
 .auth-subtitle{
     color:var(--muted);
+
     font-size:13px;
+
     margin-top:6px;
     margin-bottom:28px;
 }
 
 .auth-system{
     display:inline-flex;
+
     align-items:center;
+
     gap:7px;
 
     padding:7px 13px;
@@ -227,20 +242,19 @@ body{
     border-radius:30px;
 
     background:#fff4eb;
+
     color:var(--orange);
 
     font-size:11px;
+
     font-weight:800;
 
     margin-bottom:15px;
 }
 
-.auth-system i{
-    font-size:10px;
-}
-
 .auth-field{
     position:relative;
+
     margin-bottom:14px;
 }
 
@@ -253,8 +267,6 @@ body{
     transform:translateY(-50%);
 
     color:#94a3b8;
-
-    transition:.25s;
 }
 
 .auth-input{
@@ -285,10 +297,6 @@ body{
         rgba(243,112,33,.08);
 }
 
-.auth-input:focus + i{
-    color:var(--orange);
-}
-
 .auth-button{
     width:100%;
 
@@ -308,6 +316,7 @@ body{
     color:white;
 
     font-size:14px;
+
     font-weight:900;
 
     cursor:pointer;
@@ -321,28 +330,25 @@ body{
 
 .auth-button:hover{
     transform:translateY(-2px);
-
-    box-shadow:
-        0 15px 30px
-        rgba(243,112,33,.32);
 }
 
 
-/* =====================================================
+/* ================================
    التطبيق
-===================================================== */
+================================ */
 
 #appContent{
     min-height:100vh;
 }
 
 
-/* =====================================================
+/* ================================
    Navbar
-===================================================== */
+================================ */
 
 .top-navbar{
     position:sticky;
+
     top:0;
 
     z-index:100;
@@ -361,7 +367,9 @@ body{
     color:white;
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
     gap:20px;
@@ -372,7 +380,9 @@ body{
 
 .brand{
     display:flex;
+
     align-items:center;
+
     gap:12px;
 
     min-width:210px;
@@ -393,24 +403,31 @@ body{
 
 .brand-text{
     display:flex;
+
     flex-direction:column;
+
     gap:2px;
 }
 
 .brand-name{
     font-size:17px;
+
     font-weight:900;
 }
 
 .brand-section{
     color:#aeb8d2;
+
     font-size:10px;
+
     font-weight:700;
 }
 
 .nav-links{
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     gap:5px;
@@ -422,6 +439,7 @@ body{
     position:relative;
 
     background:transparent;
+
     border:0;
 
     color:#cbd5e1;
@@ -433,17 +451,15 @@ body{
     cursor:pointer;
 
     font-size:12px;
+
     font-weight:800;
 
     transition:.25s;
 }
 
-.nav-links button i{
-    margin-left:5px;
-}
-
 .nav-links button:hover{
     background:rgba(255,255,255,.07);
+
     color:white;
 }
 
@@ -462,15 +478,23 @@ body{
         rgba(243,112,33,.22);
 }
 
+.nav-links button i{
+    margin-left:5px;
+}
+
 .user-area{
     display:flex;
+
     align-items:center;
+
     gap:10px;
 }
 
 .current-user{
     display:flex;
+
     align-items:center;
+
     gap:8px;
 
     padding:8px 12px;
@@ -487,7 +511,9 @@ body{
     height:30px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     border-radius:9px;
@@ -499,16 +525,19 @@ body{
 
 .current-user-text{
     display:flex;
+
     flex-direction:column;
 }
 
 .current-user-text span:first-child{
     font-size:9px;
+
     color:#94a3b8;
 }
 
 .current-user-text span:last-child{
     font-size:11px;
+
     font-weight:800;
 }
 
@@ -535,12 +564,12 @@ body{
 }
 
 
-/* =====================================================
+/* ================================
    Main
-===================================================== */
+================================ */
 
 .main-container{
-    width:min(1250px, calc(100% - 40px));
+    width:min(1250px,calc(100% - 40px));
 
     margin:30px auto 60px;
 
@@ -548,13 +577,15 @@ body{
 }
 
 
-/* =====================================================
-   Page Header
-===================================================== */
+/* ================================
+   Headers
+================================ */
 
 .page-header{
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
     margin-bottom:24px;
@@ -564,7 +595,9 @@ body{
 
 .page-title{
     display:flex;
+
     align-items:center;
+
     gap:12px;
 }
 
@@ -573,7 +606,9 @@ body{
     height:48px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     border-radius:15px;
@@ -592,7 +627,9 @@ body{
 
 .page-title h2{
     font-size:23px;
+
     font-weight:900;
+
     color:var(--navy);
 }
 
@@ -606,6 +643,7 @@ body{
 
 .page-line{
     height:3px;
+
     width:55px;
 
     background:var(--orange);
@@ -616,6 +654,7 @@ body{
 }
 
 @keyframes fadeUp{
+
     from{
         opacity:0;
         transform:translateY(12px);
@@ -625,12 +664,13 @@ body{
         opacity:1;
         transform:none;
     }
+
 }
 
 
-/* =====================================================
+/* ================================
    Cards
-===================================================== */
+================================ */
 
 .card-box{
     background:rgba(255,255,255,.96);
@@ -650,7 +690,9 @@ body{
 
 .card-header{
     display:flex;
+
     align-items:center;
+
     gap:12px;
 
     padding-bottom:17px;
@@ -665,7 +707,9 @@ body{
     height:42px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     border-radius:12px;
@@ -677,24 +721,30 @@ body{
 
 .card-header h3{
     color:var(--navy);
+
     font-size:17px;
+
     font-weight:900;
 }
 
 .card-header p{
     color:var(--muted);
+
     font-size:10px;
+
     margin-top:2px;
 }
 
 
-/* =====================================================
-   Form
-===================================================== */
+/* ================================
+   Forms
+================================ */
 
 .form-section-title{
     display:flex;
+
     align-items:center;
+
     gap:8px;
 
     margin:22px 0 14px;
@@ -766,10 +816,6 @@ body{
     transition:.25s;
 }
 
-.form-control:hover{
-    border-color:#cbd5e1;
-}
-
 .form-control:focus{
     border-color:var(--orange);
 
@@ -780,22 +826,20 @@ body{
         rgba(243,112,33,.07);
 }
 
-select.form-control{
-    cursor:pointer;
-}
-
 textarea.form-control{
     resize:vertical;
 }
 
 
-/* =====================================================
+/* ================================
    Buttons
-===================================================== */
+================================ */
 
 .action-row{
     display:flex;
+
     align-items:center;
+
     gap:10px;
 
     flex-wrap:wrap;
@@ -813,7 +857,9 @@ textarea.form-control{
     border-radius:12px;
 
     display:inline-flex;
+
     align-items:center;
+
     justify-content:center;
 
     gap:8px;
@@ -821,6 +867,7 @@ textarea.form-control{
     cursor:pointer;
 
     font-size:11px;
+
     font-weight:900;
 
     transition:.25s;
@@ -839,64 +886,48 @@ textarea.form-control{
         );
 
     color:white;
-
-    box-shadow:
-        0 7px 18px
-        rgba(243,112,33,.18);
 }
 
 .btn-navy{
     background:var(--navy);
+
     color:white;
 }
 
 .btn-green{
     background:#10b981;
+
     color:white;
 }
 
 .btn-danger{
     background:#ef4444;
+
     color:white;
 }
 
 .btn-blue{
     background:#3b82f6;
+
     color:white;
 }
 
 .btn-purple{
     background:#8b5cf6;
+
     color:white;
 }
 
 .btn-cancel{
     background:#f97316;
+
     color:white;
 }
 
 
-/* =====================================================
-   سجل العمليات - العرض
-===================================================== */
-function renderLogs(){
-    const tbody = document.getElementById('logsTableBody');
-    if(!tbody) return;
-    const input = document.getElementById('logSearch');
-    const search = input ? input.value.trim().toLowerCase() : '';
-    const logs = window.logsList.filter(log => !search || [log.user,log.username,log.role,log.action,log.details].some(v => String(v || '').toLowerCase().includes(search)));
-    tbody.innerHTML = '';
-    if(!logs.length){ tbody.innerHTML = '<tr><td colspan="6" class="empty-message">لا توجد عمليات مسجلة.</td></tr>'; return; }
-    logs.forEach(log => {
-        const date = log.timestamp ? new Date(log.timestamp).toLocaleString('ar-SA') : 'غير محدد';
-        tbody.innerHTML += `<tr><td>${escapeHtml(date)}</td><td><b>${escapeHtml(log.user || '')}</b></td><td><code>${escapeHtml(log.username || '')}</code></td><td><span class="badge badge-active">${escapeHtml(log.role || 'غير محدد')}</span></td><td><span class="badge badge-warning">${escapeHtml(log.action || '')}</span></td><td>${escapeHtml(log.details || '')}</td></tr>`;
-    });
-}
-
-
-/* =====================================================
+/* ================================
    Dashboard
-===================================================== */
+================================ */
 
 .dashboard-welcome{
     background:
@@ -913,7 +944,9 @@ function renderLogs(){
     color:white;
 
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
     overflow:hidden;
@@ -923,29 +956,10 @@ function renderLogs(){
     margin-bottom:22px;
 }
 
-.dashboard-welcome::after{
-    content:"";
-
-    position:absolute;
-
-    width:220px;
-    height:220px;
-
-    border-radius:50%;
-
-    background:
-        rgba(243,112,33,.13);
-
-    left:-70px;
-    bottom:-100px;
-}
-
 .dashboard-welcome h2{
     font-size:21px;
-    font-weight:900;
 
-    position:relative;
-    z-index:2;
+    font-weight:900;
 }
 
 .dashboard-welcome p{
@@ -954,9 +968,6 @@ function renderLogs(){
     font-size:11px;
 
     margin-top:5px;
-
-    position:relative;
-    z-index:2;
 }
 
 .dashboard-welcome-icon{
@@ -964,7 +975,9 @@ function renderLogs(){
     height:65px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     border-radius:20px;
@@ -974,9 +987,6 @@ function renderLogs(){
     color:var(--orange-light);
 
     font-size:26px;
-
-    position:relative;
-    z-index:2;
 }
 
 .dashboard-grid{
@@ -1007,10 +1017,6 @@ function renderLogs(){
     overflow:hidden;
 
     transition:.3s;
-
-    box-shadow:
-        0 7px 25px
-        rgba(0,10,48,.04);
 }
 
 .dashboard-stat:hover{
@@ -1021,27 +1027,11 @@ function renderLogs(){
         rgba(0,10,48,.08);
 }
 
-.dashboard-stat::before{
-    content:"";
-
-    position:absolute;
-
-    width:70px;
-    height:70px;
-
-    border-radius:50%;
-
-    left:-25px;
-    bottom:-30px;
-
-    background:currentColor;
-
-    opacity:.04;
-}
-
 .dashboard-stat-top{
     display:flex;
+
     justify-content:space-between;
+
     align-items:center;
 }
 
@@ -1050,12 +1040,12 @@ function renderLogs(){
     height:40px;
 
     display:flex;
+
     align-items:center;
+
     justify-content:center;
 
     border-radius:12px;
-
-    font-size:15px;
 }
 
 .dashboard-stat-title{
@@ -1077,9 +1067,9 @@ function renderLogs(){
 }
 
 
-/* =====================================================
+/* ================================
    Search
-===================================================== */
+================================ */
 
 .search-box{
     position:relative;
@@ -1091,6 +1081,7 @@ function renderLogs(){
     position:absolute;
 
     right:15px;
+
     top:50%;
 
     transform:translateY(-50%);
@@ -1104,14 +1095,12 @@ function renderLogs(){
     padding-right:43px;
 
     min-height:48px;
-
-    background:#f8fafc;
 }
 
 
-/* =====================================================
+/* ================================
    Table
-===================================================== */
+================================ */
 
 .table-wrapper{
     width:100%;
@@ -1158,10 +1147,6 @@ td{
     color:#475569;
 }
 
-tbody tr{
-    transition:.2s;
-}
-
 tbody tr:hover{
     background:#fffaf6;
 }
@@ -1204,21 +1189,25 @@ code{
 
 .badge-active{
     background:#dcfce7;
+
     color:#15803d;
 }
 
 .badge-warning{
     background:#fef3c7;
+
     color:#a16207;
 }
 
 .badge-expired{
     background:#fee2e2;
+
     color:#b91c1c;
 }
 
 .badge-cancelled{
     background:#ffedd5;
+
     color:#c2410c;
 }
 
@@ -1233,9 +1222,9 @@ code{
 }
 
 
-/* =====================================================
-   Contract preview
-===================================================== */
+/* ================================
+   Contract
+================================ */
 
 .contract-container{
     padding:25px;
@@ -1254,7 +1243,9 @@ code{
 
 .contract-container-title{
     display:flex;
+
     align-items:center;
+
     justify-content:space-between;
 
     margin-bottom:17px;
@@ -1284,6 +1275,7 @@ code{
     background:white;
 
     width:794px;
+
     min-height:1120px;
 
     padding:25px 40px;
@@ -1295,10 +1287,6 @@ code{
     box-shadow:
         0 20px 55px
         rgba(0,0,0,.13);
-
-    position:relative;
-
-    box-sizing:border-box;
 }
 
 .contract-title{
@@ -1420,14 +1408,15 @@ code{
 }
 
 
-/* =====================================================
+/* ================================
    Toast
-===================================================== */
+================================ */
 
 .toast-container{
     position:fixed;
 
     left:25px;
+
     bottom:25px;
 
     z-index:1000000;
@@ -1462,8 +1451,7 @@ code{
 
     border-right:4px solid var(--orange);
 
-    animation:
-        toastIn .35s ease;
+    animation:toastIn .35s ease;
 
     font-size:11px;
 
@@ -1495,6 +1483,7 @@ code{
 }
 
 @keyframes toastIn{
+
     from{
         opacity:0;
         transform:translateX(-30px);
@@ -1504,12 +1493,13 @@ code{
         opacity:1;
         transform:none;
     }
+
 }
 
 
-/* =====================================================
+/* ================================
    Loading
-===================================================== */
+================================ */
 
 .loading-overlay{
     position:fixed;
@@ -1525,6 +1515,7 @@ code{
     display:none;
 
     align-items:center;
+
     justify-content:center;
 }
 
@@ -1536,10 +1527,6 @@ code{
     padding:30px 40px;
 
     text-align:center;
-
-    box-shadow:
-        0 20px 60px
-        rgba(0,0,0,.25);
 }
 
 .loader{
@@ -1552,16 +1539,17 @@ code{
 
     border-radius:50%;
 
-    animation:
-        spin .8s linear infinite;
+    animation:spin .8s linear infinite;
 
     margin:0 auto 15px;
 }
 
 @keyframes spin{
+
     to{
         transform:rotate(360deg);
     }
+
 }
 
 .loading-box strong{
@@ -1583,9 +1571,9 @@ code{
 }
 
 
-/* =====================================================
+/* ================================
    Responsive
-===================================================== */
+================================ */
 
 @media(max-width:1000px){
 
@@ -1607,8 +1595,6 @@ code{
         overflow-x:auto;
 
         justify-content:flex-start;
-
-        padding-bottom:3px;
     }
 
     .nav-links button{
@@ -1620,8 +1606,7 @@ code{
 @media(max-width:700px){
 
     .main-container{
-        width:
-            calc(100% - 20px);
+        width:calc(100% - 20px);
 
         margin-top:18px;
     }
@@ -1642,14 +1627,6 @@ code{
         display:none;
     }
 
-    .page-header{
-        align-items:flex-start;
-    }
-
-    .page-title h2{
-        font-size:19px;
-    }
-
     .card-box{
         padding:19px;
 
@@ -1657,18 +1634,7 @@ code{
     }
 
     .dashboard-grid{
-        grid-template-columns:
-            repeat(2,1fr);
-    }
-
-    .dashboard-stat{
-        min-height:115px;
-
-        padding:16px;
-    }
-
-    .dashboard-stat-number{
-        font-size:25px;
+        grid-template-columns:repeat(2,1fr);
     }
 
     .action-row{
@@ -1689,17 +1655,6 @@ code{
         padding:35px 22px;
     }
 
-    .toast-container{
-        left:12px;
-        right:12px;
-        bottom:12px;
-    }
-
-    .toast{
-        min-width:0;
-        width:100%;
-    }
-
 }
 
 @media(max-width:480px){
@@ -1711,9 +1666,9 @@ code{
 }
 
 
-/* =====================================================
+/* ================================
    Print
-===================================================== */
+================================ */
 
 @media print{
 
@@ -1764,23 +1719,27 @@ code{
 }
 
 </style>
+
 </head>
 
 
 <body>
 
 
-<!-- =====================================================
-     شاشة تسجيل الدخول
-===================================================== -->
+<!-- ================================
+     LOGIN
+================================ -->
 
 <div class="auth-overlay" id="authSection">
 
     <div class="auth-card">
 
         <div class="auth-system">
+
             <i class="fas fa-shield-halved"></i>
+
             نظام الموارد البشرية
+
         </div>
 
         <br>
@@ -1834,9 +1793,13 @@ code{
                 type="submit"
                 class="auth-button"
             >
+
                 <i class="fas fa-arrow-right-to-bracket"></i>
+
                 &nbsp;
+
                 تسجيل الدخول إلى النظام
+
             </button>
 
         </form>
@@ -1846,9 +1809,9 @@ code{
 </div>
 
 
-<!-- =====================================================
-     Loading
-===================================================== -->
+<!-- ================================
+     LOADING
+================================ -->
 
 <div
     class="loading-overlay"
@@ -1872,9 +1835,9 @@ code{
 </div>
 
 
-<!-- =====================================================
-     Toast
-===================================================== -->
+<!-- ================================
+     TOAST
+================================ -->
 
 <div
     class="toast-container"
@@ -1882,9 +1845,9 @@ code{
 ></div>
 
 
-<!-- =====================================================
-     التطبيق
-===================================================== -->
+<!-- ================================
+     APP
+================================ -->
 
 <div
     id="appContent"
@@ -1892,9 +1855,9 @@ code{
 >
 
 
-<!-- =====================================================
-     Navbar
-===================================================== -->
+<!-- ================================
+     NAVBAR
+================================ -->
 
 <div class="top-navbar">
 
@@ -1958,7 +1921,11 @@ code{
             لوحة التحكم
         </button>
 
-        <button id="btn-logs" onclick="switchTab('logsTab')" style="display:none;">
+        <button
+            id="btn-logs"
+            onclick="switchTab('logsTab')"
+            style="display:none;"
+        >
             <i class="fas fa-list-check"></i>
             سجل العمليات
         </button>
@@ -2001,16 +1968,12 @@ code{
 </div>
 
 
-<!-- =====================================================
-     Main
-===================================================== -->
-
 <div class="main-container">
 
 
-<!-- =====================================================
-     إنشاء عقد
-===================================================== -->
+<!-- ================================
+     CREATE CONTRACT
+================================ -->
 
 <div id="createTab">
 
@@ -2077,9 +2040,7 @@ code{
 
             <div class="form-group">
 
-                <label>
-                    الاسم الكامل
-                </label>
+                <label>الاسم الكامل</label>
 
                 <input
                     type="text"
@@ -2094,9 +2055,7 @@ code{
 
             <div class="form-group">
 
-                <label>
-                    رقم الهوية / الإقامة
-                </label>
+                <label>رقم الهوية / الإقامة</label>
 
                 <input
                     type="text"
@@ -2111,9 +2070,7 @@ code{
 
             <div class="form-group">
 
-                <label>
-                    رقم الجوال
-                </label>
+                <label>رقم الجوال</label>
 
                 <input
                     type="text"
@@ -2128,9 +2085,7 @@ code{
 
             <div class="form-group">
 
-                <label>
-                    تاريخ الميلاد
-                </label>
+                <label>تاريخ الميلاد</label>
 
                 <input
                     type="date"
@@ -2157,9 +2112,7 @@ code{
 
             <div class="form-group">
 
-                <label>
-                    القسم / الإدارة
-                </label>
+                <label>القسم / الإدارة</label>
 
                 <input
                     type="text"
@@ -2174,9 +2127,7 @@ code{
 
             <div class="form-group">
 
-                <label>
-                    تاريخ الاتفاق
-                </label>
+                <label>تاريخ الاتفاق</label>
 
                 <input
                     type="date"
@@ -2190,9 +2141,7 @@ code{
 
             <div class="form-group">
 
-                <label>
-                    تاريخ الانضمام الفعلي
-                </label>
+                <label>تاريخ الانضمام الفعلي</label>
 
                 <input
                     type="date"
@@ -2206,9 +2155,7 @@ code{
 
             <div class="form-group">
 
-                <label>
-                    مدة العقد
-                </label>
+                <label>مدة العقد</label>
 
                 <select
                     id="in_duration"
@@ -2270,8 +2217,6 @@ code{
     </div>
 
 
-    <!-- معاينة العقد -->
-
     <div class="contract-container">
 
         <div class="contract-container-title">
@@ -2317,10 +2262,7 @@ code{
                     تم الاتفاق في تاريخ:
 
                     (
-                    <span
-                        class="fill-val"
-                        id="p_today"
-                    >
+                    <span class="fill-val" id="p_today">
                         ..../../....
                     </span>
                     )
@@ -2340,10 +2282,7 @@ code{
                     الطرف الثاني : المتطوع/ـة
 
                     (
-                    <span
-                        class="fill-val"
-                        id="p_name"
-                    >
+                    <span class="fill-val" id="p_name">
                         ...................
                     </span>
                     )
@@ -2356,10 +2295,7 @@ code{
                     رقم الهوية / الإقامة:
 
                     (
-                    <span
-                        class="fill-val"
-                        id="p_id"
-                    >
+                    <span class="fill-val" id="p_id">
                         ...................
                     </span>
                     )
@@ -2372,10 +2308,7 @@ code{
                     رقم الجوال:
 
                     (
-                    <span
-                        class="fill-val"
-                        id="p_phone"
-                    >
+                    <span class="fill-val" id="p_phone">
                         ...................
                     </span>
                     )
@@ -2388,10 +2321,7 @@ code{
                     تاريخ الميلاد:
 
                     (
-                    <span
-                        class="fill-val"
-                        id="p_dob"
-                    >
+                    <span class="fill-val" id="p_dob">
                         ...................
                     </span>
                     )
@@ -2404,10 +2334,7 @@ code{
                     القسم / الإدارة:
 
                     (
-                    <span
-                        class="fill-val"
-                        id="p_dept"
-                    >
+                    <span class="fill-val" id="p_dept">
                         ...................
                     </span>
                     )
@@ -2418,7 +2345,6 @@ code{
                 <div class="section-h">
                     أولاً : موضوع العقد
                 </div>
-
 
                 <p style="font-size:11px;line-height:1.4;font-weight:500;">
 
@@ -2432,32 +2358,19 @@ code{
                     ثانياً : واجبات المتطوع
                 </div>
 
-
                 <ul class="contract-ul">
 
-                    <li>
-                        1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.
-                    </li>
+                    <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
 
-                    <li>
-                        2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.
-                    </li>
+                    <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
 
-                    <li>
-                        3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.
-                    </li>
+                    <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
 
-                    <li>
-                        4. الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.
-                    </li>
+                    <li>4. الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
 
-                    <li>
-                        5. عدم طلب الإعفاء خلال الشهر الأول.
-                    </li>
+                    <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
 
-                    <li>
-                        6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.
-                    </li>
+                    <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
 
                 </ul>
 
@@ -2466,28 +2379,17 @@ code{
                     ثالثاً : حقوق الإدارة
                 </div>
 
-
                 <ul class="contract-ul">
 
-                    <li>
-                        1. التعامل مع المتطوع باحترام وتقدير.
-                    </li>
+                    <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
 
-                    <li>
-                        2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.
-                    </li>
+                    <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
 
-                    <li>
-                        3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.
-                    </li>
+                    <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
 
-                    <li>
-                        4. توضيح أسباب إنهاء العقد عند حدوثه.
-                    </li>
+                    <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
 
-                    <li>
-                        5. حفظ بيانات وسجلات المتطوع.
-                    </li>
+                    <li>5. حفظ بيانات وسجلات المتطوع.</li>
 
                 </ul>
 
@@ -2502,10 +2404,7 @@ code{
                     مدة العقد:
 
                     (
-                    <span
-                        class="fill-val"
-                        id="p_duration"
-                    >
+                    <span class="fill-val" id="p_duration">
                         1 شهر
                     </span>
                     )
@@ -2518,10 +2417,7 @@ code{
                     تبدأ من تاريخ:
 
                     (
-                    <span
-                        class="fill-val"
-                        id="p_startDate"
-                    >
+                    <span class="fill-val" id="p_startDate">
                         ..../../....
                     </span>
                     )
@@ -2529,10 +2425,7 @@ code{
                     وتنتهي في:
 
                     (
-                    <span
-                        class="fill-val"
-                        id="p_endDate"
-                    >
+                    <span class="fill-val" id="p_endDate">
                         ..../../....
                     </span>
                     )
@@ -2573,7 +2466,6 @@ code{
 
                         <img
                             src="https://i.postimg.cc/44VchM5g/lqtt-shasht-2026-09-04-230838.png"
-                            alt="توقيع رئيس الموارد البشرية"
                             class="sig-img"
                             crossorigin="anonymous"
                             onerror="this.style.display='none'"
@@ -2592,7 +2484,6 @@ code{
 
                         <img
                             src="https://i.postimg.cc/QxSHQrK2/582b00f0-9e4e-48c6-b0ca-c8766e322887.png"
-                            alt="توقيع الرئيس التنفيذي"
                             class="sig-img"
                             crossorigin="anonymous"
                             onerror="this.style.display='none'"
@@ -2613,14 +2504,11 @@ code{
 </div>
 
 
-<!-- =====================================================
-     إرفاق عقد
-===================================================== -->
+<!-- ================================
+     UPLOAD
+================================ -->
 
-<div
-    id="uploadTab"
-    style="display:none;"
->
+<div id="uploadTab" style="display:none;">
 
     <div class="page-header">
 
@@ -2632,9 +2520,7 @@ code{
 
             <div>
 
-                <h2>
-                    إرفاق عقد خارجي
-                </h2>
+                <h2>إرفاق عقد خارجي</h2>
 
                 <p>
                     إضافة عقد موقع أو محرر خارج النظام
@@ -2659,9 +2545,7 @@ code{
 
             <div>
 
-                <h3>
-                    بيانات العقد الخارجي
-                </h3>
+                <h3>بيانات العقد الخارجي</h3>
 
                 <p>
                     أدخل بيانات العقد وارفق الملف
@@ -2678,15 +2562,12 @@ code{
 
                 <div class="form-group">
 
-                    <label>
-                        اسم المتطوع
-                    </label>
+                    <label>اسم المتطوع</label>
 
                     <input
                         type="text"
                         id="up_name"
                         class="form-control"
-                        placeholder="أدخل اسم المتطوع"
                         required
                     >
 
@@ -2695,15 +2576,12 @@ code{
 
                 <div class="form-group">
 
-                    <label>
-                        رقم الهوية
-                    </label>
+                    <label>رقم الهوية</label>
 
                     <input
                         type="text"
                         id="up_id"
                         class="form-control"
-                        placeholder="رقم الهوية"
                         required
                     >
 
@@ -2712,15 +2590,12 @@ code{
 
                 <div class="form-group">
 
-                    <label>
-                        القسم
-                    </label>
+                    <label>القسم</label>
 
                     <input
                         type="text"
                         id="up_dept"
                         class="form-control"
-                        placeholder="اسم القسم"
                         required
                     >
 
@@ -2729,9 +2604,7 @@ code{
 
                 <div class="form-group">
 
-                    <label>
-                        تاريخ بداية العقد
-                    </label>
+                    <label>تاريخ بداية العقد</label>
 
                     <input
                         type="date"
@@ -2745,9 +2618,7 @@ code{
 
                 <div class="form-group">
 
-                    <label>
-                        تاريخ انتهاء العقد
-                    </label>
+                    <label>تاريخ انتهاء العقد</label>
 
                     <input
                         type="date"
@@ -2761,9 +2632,7 @@ code{
 
                 <div class="form-group">
 
-                    <label>
-                        ملف العقد PDF / صورة
-                    </label>
+                    <label>ملف العقد PDF / صورة</label>
 
                     <input
                         type="file"
@@ -2784,8 +2653,11 @@ code{
                     type="submit"
                     class="btn-action btn-orange"
                 >
+
                     <i class="fas fa-cloud-arrow-up"></i>
+
                     رفع وحفظ العقد
+
                 </button>
 
             </div>
@@ -2797,14 +2669,11 @@ code{
 </div>
 
 
-<!-- =====================================================
-     الأرشيف
-===================================================== -->
+<!-- ================================
+     ARCHIVE
+================================ -->
 
-<div
-    id="archiveTab"
-    style="display:none;"
->
+<div id="archiveTab" style="display:none;">
 
     <div class="page-header">
 
@@ -2816,9 +2685,7 @@ code{
 
             <div>
 
-                <h2>
-                    أرشيف العقود
-                </h2>
+                <h2>أرشيف العقود</h2>
 
                 <p>
                     إدارة ومتابعة جميع العقود المسجلة
@@ -2843,9 +2710,7 @@ code{
 
             <div>
 
-                <h3>
-                    العقود المسجلة
-                </h3>
+                <h3>العقود المسجلة</h3>
 
                 <p>
                     البحث والمتابعة والتجديد والفسخ
@@ -2879,45 +2744,20 @@ code{
 
                     <tr>
 
-                        <th>
-                            المتطوع
-                        </th>
-
-                        <th>
-                            الهوية
-                        </th>
-
-                        <th>
-                            القسم
-                        </th>
-
-                        <th>
-                            البداية
-                        </th>
-
-                        <th>
-                            النهاية
-                        </th>
-
-                        <th>
-                            النوع
-                        </th>
-
-                        <th>
-                            الحالة
-                        </th>
-
-                        <th>
-                            الإجراءات
-                        </th>
+                        <th>المتطوع</th>
+                        <th>الهوية</th>
+                        <th>القسم</th>
+                        <th>البداية</th>
+                        <th>النهاية</th>
+                        <th>النوع</th>
+                        <th>الحالة</th>
+                        <th>الإجراءات</th>
 
                     </tr>
 
                 </thead>
 
-                <tbody
-                    id="archiveTableBody"
-                ></tbody>
+                <tbody id="archiveTableBody"></tbody>
 
             </table>
 
@@ -2928,40 +2768,125 @@ code{
 </div>
 
 
-<!-- =====================================================
-     سجل العمليات
-===================================================== -->
+<!-- ================================
+     LOGS
+================================ -->
+
 <div id="logsTab" style="display:none;">
-    <div class="page-header"><div class="page-title">
-        <div class="page-title-icon"><i class="fas fa-list-check"></i></div>
-        <div><h2>سجل العمليات</h2><p>متابعة جميع الحركات التي تمت داخل النظام</p><div class="page-line"></div></div>
-    </div></div>
-    <div class="card-box">
-        <div class="search-box"><i class="fas fa-search"></i>
-            <input type="text" id="logSearch" class="form-control" placeholder="ابحث باسم المستخدم أو العملية..." oninput="renderLogs()">
-        </div>
-        <div class="table-wrapper"><table>
-            <thead><tr><th>التاريخ والوقت</th><th>المستخدم</th><th>اسم الدخول</th><th>الصلاحية</th><th>العملية</th><th>التفاصيل</th></tr></thead>
-            <tbody id="logsTableBody"></tbody>
-        </table></div>
-    </div>
-</div>
-
-<!-- =====================================================
-     لوحة التحكم
-===================================================== -->
-
-<div
-    id="usersTab"
-    style="display:none;"
->
 
     <div class="page-header">
 
         <div class="page-title">
 
             <div class="page-title-icon">
+
+                <i class="fas fa-list-check"></i>
+
+            </div>
+
+            <div>
+
+                <h2>
+                    سجل العمليات
+                </h2>
+
+                <p>
+                    متابعة جميع الحركات التي تمت داخل النظام
+                </p>
+
+                <div class="page-line"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="card-box">
+
+        <div class="card-header">
+
+            <div class="card-header-icon">
+
+                <i class="fas fa-clock-rotate-left"></i>
+
+            </div>
+
+            <div>
+
+                <h3>
+                    سجل النظام
+                </h3>
+
+                <p>
+                    جميع العمليات المسجلة حسب المستخدم والتاريخ
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="search-box">
+
+            <i class="fas fa-search"></i>
+
+            <input
+                type="text"
+                id="logSearch"
+                class="form-control"
+                placeholder="ابحث باسم المستخدم أو العملية أو التفاصيل..."
+                oninput="renderLogs()"
+            >
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>التاريخ والوقت</th>
+                        <th>المستخدم</th>
+                        <th>اسم الدخول</th>
+                        <th>الصلاحية</th>
+                        <th>العملية</th>
+                        <th>التفاصيل</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="logsTableBody"></tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ================================
+     DASHBOARD
+================================ -->
+
+<div id="usersTab" style="display:none;">
+
+    <div class="page-header">
+
+        <div class="page-title">
+
+            <div class="page-title-icon">
+
                 <i class="fas fa-chart-line"></i>
+
             </div>
 
             <div>
@@ -2998,7 +2923,9 @@ code{
         </div>
 
         <div class="dashboard-welcome-icon">
+
             <i class="fas fa-chart-pie"></i>
+
         </div>
 
     </div>
@@ -3009,10 +2936,7 @@ code{
         <div class="dashboard-grid">
 
 
-            <div
-                class="dashboard-stat"
-                style="color:#3b82f6;"
-            >
+            <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
 
@@ -3022,12 +2946,11 @@ code{
 
                     <div
                         class="dashboard-stat-icon"
-                        style="
-                            background:#eff6ff;
-                            color:#3b82f6;
-                        "
+                        style="background:#eff6ff;color:#3b82f6;"
                     >
+
                         <i class="fas fa-file-contract"></i>
+
                     </div>
 
                 </div>
@@ -3042,10 +2965,7 @@ code{
             </div>
 
 
-            <div
-                class="dashboard-stat"
-                style="color:#10b981;"
-            >
+            <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
 
@@ -3055,12 +2975,11 @@ code{
 
                     <div
                         class="dashboard-stat-icon"
-                        style="
-                            background:#ecfdf5;
-                            color:#10b981;
-                        "
+                        style="background:#ecfdf5;color:#10b981;"
                     >
+
                         <i class="fas fa-circle-check"></i>
+
                     </div>
 
                 </div>
@@ -3075,10 +2994,7 @@ code{
             </div>
 
 
-            <div
-                class="dashboard-stat"
-                style="color:#ef4444;"
-            >
+            <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
 
@@ -3088,12 +3004,11 @@ code{
 
                     <div
                         class="dashboard-stat-icon"
-                        style="
-                            background:#fef2f2;
-                            color:#ef4444;
-                        "
+                        style="background:#fef2f2;color:#ef4444;"
                     >
+
                         <i class="fas fa-calendar-xmark"></i>
+
                     </div>
 
                 </div>
@@ -3108,10 +3023,7 @@ code{
             </div>
 
 
-            <div
-                class="dashboard-stat"
-                style="color:#f97316;"
-            >
+            <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
 
@@ -3121,12 +3033,11 @@ code{
 
                     <div
                         class="dashboard-stat-icon"
-                        style="
-                            background:#fff7ed;
-                            color:#f97316;
-                        "
+                        style="background:#fff7ed;color:#f97316;"
                     >
+
                         <i class="fas fa-file-circle-xmark"></i>
+
                     </div>
 
                 </div>
@@ -3141,10 +3052,7 @@ code{
             </div>
 
 
-            <div
-                class="dashboard-stat"
-                style="color:#8b5cf6;"
-            >
+            <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
 
@@ -3154,12 +3062,11 @@ code{
 
                     <div
                         class="dashboard-stat-icon"
-                        style="
-                            background:#f5f3ff;
-                            color:#8b5cf6;
-                        "
+                        style="background:#f5f3ff;color:#8b5cf6;"
                     >
+
                         <i class="fas fa-users"></i>
+
                     </div>
 
                 </div>
@@ -3173,7 +3080,6 @@ code{
 
             </div>
 
-
         </div>
 
     </div>
@@ -3186,7 +3092,9 @@ code{
         <div class="card-header">
 
             <div class="card-header-icon">
+
                 <i class="fas fa-user-plus"></i>
+
             </div>
 
             <div>
@@ -3218,7 +3126,6 @@ code{
                         type="text"
                         id="u_name"
                         class="form-control"
-                        placeholder="مثال: أحمد علي"
                         required
                     >
 
@@ -3235,7 +3142,6 @@ code{
                         type="text"
                         id="u_username"
                         class="form-control"
-                        placeholder="مثال: ahmed"
                         required
                     >
 
@@ -3252,7 +3158,6 @@ code{
                         type="password"
                         id="u_password"
                         class="form-control"
-                        placeholder="••••••••"
                         required
                     >
 
@@ -3291,8 +3196,11 @@ code{
                     type="submit"
                     class="btn-action btn-orange"
                 >
+
                     <i class="fas fa-user-plus"></i>
+
                     إنشاء المستخدم
+
                 </button>
 
             </div>
@@ -3309,7 +3217,9 @@ code{
         <div class="card-header">
 
             <div class="card-header-icon">
+
                 <i class="fas fa-users"></i>
+
             </div>
 
             <div>
@@ -3335,33 +3245,17 @@ code{
 
                     <tr>
 
-                        <th>
-                            اسم الموظف
-                        </th>
-
-                        <th>
-                            اسم المستخدم
-                        </th>
-
-                        <th>
-                            كلمة المرور
-                        </th>
-
-                        <th>
-                            الصلاحية
-                        </th>
-
-                        <th>
-                            الإجراءات
-                        </th>
+                        <th>اسم الموظف</th>
+                        <th>اسم المستخدم</th>
+                        <th>كلمة المرور</th>
+                        <th>الصلاحية</th>
+                        <th>الإجراءات</th>
 
                     </tr>
 
                 </thead>
 
-                <tbody
-                    id="usersTableBody"
-                ></tbody>
+                <tbody id="usersTableBody"></tbody>
 
             </table>
 
@@ -3377,9 +3271,9 @@ code{
 </div>
 
 
-<!-- =====================================================
-     Firebase
-===================================================== -->
+<!-- ================================
+     FIREBASE
+================================ -->
 
 <script type="module">
 
@@ -3440,28 +3334,26 @@ window.usersList = [];
 
 window.contractsArchive = [];
 
+window.logsList = [];
+
 window.currentUserRole = '';
 
 window.currentUsername = '';
+
 window.currentUserId = '';
-window.logsList = [];
 
 
 /* =====================================================
-   أدوات الواجهة
+   Loading
 ===================================================== */
 
 function showLoading(title='جاري تنفيذ العملية...'){
 
     const overlay =
-        document.getElementById(
-            'loadingOverlay'
-        );
+        document.getElementById('loadingOverlay');
 
     const titleEl =
-        document.getElementById(
-            'loadingTitle'
-        );
+        document.getElementById('loadingTitle');
 
     if(titleEl)
         titleEl.innerText = title;
@@ -3475,9 +3367,7 @@ function showLoading(title='جاري تنفيذ العملية...'){
 function hideLoading(){
 
     const overlay =
-        document.getElementById(
-            'loadingOverlay'
-        );
+        document.getElementById('loadingOverlay');
 
     if(overlay)
         overlay.style.display = 'none';
@@ -3485,13 +3375,15 @@ function hideLoading(){
 }
 
 
+/* =====================================================
+   Toast
+===================================================== */
+
 window.showToast =
 function(message,type='info'){
 
     const container =
-        document.getElementById(
-            'toastContainer'
-        );
+        document.getElementById('toastContainer');
 
     if(!container)
         return;
@@ -3514,13 +3406,8 @@ function(message,type='info'){
             'fa-circle-exclamation';
 
     toast.innerHTML = `
-
         <i class="fas ${icon}"></i>
-
-        <span>
-            ${escapeHtml(message)}
-        </span>
-
+        <span>${escapeHtml(message)}</span>
     `;
 
     container.appendChild(toast);
@@ -3558,12 +3445,11 @@ async function loadCloudData(){
         );
 
 
+        /* المستخدمين */
+
         const usersSnap =
             await getDocs(
-                collection(
-                    db,
-                    "users"
-                )
+                collection(db,'users')
             );
 
 
@@ -3575,8 +3461,7 @@ async function loadCloudData(){
 
                 window.usersList.push({
 
-                    id:
-                        docSnap.id,
+                    id:docSnap.id,
 
                     ...docSnap.data()
 
@@ -3585,6 +3470,8 @@ async function loadCloudData(){
             }
         );
 
+
+        /* إنشاء المدير الأساسي إذا لم يكن موجود */
 
         const hasAdmin =
             window.usersList.some(
@@ -3596,47 +3483,36 @@ async function loadCloudData(){
         if(!hasAdmin){
 
             await addDoc(
-                collection(
-                    db,
-                    "users"
-                ),
+                collection(db,'users'),
                 {
 
-                    name:
-                        'المدير العام',
+                    name:'المدير العام',
 
-                    username:
-                        'admin',
+                    username:'admin',
 
-                    password:
-                        '123456',
+                    password:'123456',
 
-                    role:
-                        'مدير النظام'
+                    role:'مدير النظام'
 
                 }
             );
 
 
-            const res =
+            const updatedUsers =
                 await getDocs(
-                    collection(
-                        db,
-                        "users"
-                    )
+                    collection(db,'users')
                 );
 
 
             window.usersList = [];
 
 
-            res.forEach(
+            updatedUsers.forEach(
                 d => {
 
                     window.usersList.push({
 
-                        id:
-                            d.id,
+                        id:d.id,
 
                         ...d.data()
 
@@ -3648,12 +3524,11 @@ async function loadCloudData(){
         }
 
 
+        /* العقود */
+
         const contractsSnap =
             await getDocs(
-                collection(
-                    db,
-                    "contracts"
-                )
+                collection(db,'contracts')
             );
 
 
@@ -3665,8 +3540,7 @@ async function loadCloudData(){
 
                 window.contractsArchive.push({
 
-                    id:
-                        docSnap.id,
+                    id:docSnap.id,
 
                     ...docSnap.data()
 
@@ -3676,14 +3550,52 @@ async function loadCloudData(){
         );
 
 
+        /* السجل */
+
         try{
-            const logsSnap = await getDocs(query(collection(db, 'logs'), orderBy('timestamp', 'desc')));
+
+            const logsSnap =
+                await getDocs(
+                    query(
+                        collection(db,'logs'),
+                        orderBy(
+                            'timestamp',
+                            'desc'
+                        )
+                    )
+                );
+
+
             window.logsList = [];
-            logsSnap.forEach(docSnap => window.logsList.push({id:docSnap.id, ...docSnap.data()}));
-        }catch(logErr){
-            console.warn('Logs Error:', logErr);
-            window.logsList = [];
+
+
+            logsSnap.forEach(
+                docSnap => {
+
+                    window.logsList.push({
+
+                        id:docSnap.id,
+
+                        ...docSnap.data()
+
+                    });
+
+                }
+            );
+
         }
+
+        catch(logError){
+
+            console.warn(
+                'Logs Error:',
+                logError
+            );
+
+            window.logsList = [];
+
+        }
+
 
         renderUsers();
 
@@ -3691,12 +3603,21 @@ async function loadCloudData(){
 
         updateDashboard();
 
+        if(
+            window.currentUserRole ===
+            'مدير النظام'
+        ){
+
+            renderLogs();
+
+        }
+
     }
 
     catch(err){
 
         console.error(
-            "Cloud Error:",
+            'Cloud Error:',
             err
         );
 
@@ -3720,6 +3641,306 @@ loadCloudData();
 
 
 /* =====================================================
+   تسجيل العمليات
+===================================================== */
+
+async function logAction(
+    action,
+    details,
+    actorName=null,
+    actorUsername=null,
+    actorRole=null
+){
+
+    try{
+
+        const name =
+            actorName ||
+            window.currentUsername ||
+            'غير معروف';
+
+
+        const username =
+            actorUsername ||
+            (
+                window.usersList.find(
+                    u =>
+                        u.id ===
+                        window.currentUserId
+                )?.username
+            ) ||
+            window.currentUsername ||
+            'غير معروف';
+
+
+        const role =
+            actorRole ||
+            window.currentUserRole ||
+            '';
+
+
+        await addDoc(
+            collection(db,'logs'),
+            {
+
+                action,
+
+                details,
+
+                user:name,
+
+                username,
+
+                role,
+
+                timestamp:Date.now()
+
+            }
+        );
+
+
+        /*
+           تحديث الواجهة مباشرة
+           إذا كان المستخدم مدير النظام
+        */
+
+        if(
+            window.currentUserRole ===
+            'مدير النظام'
+        ){
+
+            window.logsList.unshift({
+
+                action,
+
+                details,
+
+                user:name,
+
+                username,
+
+                role,
+
+                timestamp:Date.now()
+
+            });
+
+
+            renderLogs();
+
+        }
+
+    }
+
+    catch(err){
+
+        console.warn(
+            'Log Error:',
+            err
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   عرض سجل العمليات
+===================================================== */
+
+function renderLogs(){
+
+    const tbody =
+        document.getElementById(
+            'logsTableBody'
+        );
+
+
+    if(!tbody)
+        return;
+
+
+    if(
+        window.currentUserRole !==
+        'مدير النظام'
+    ){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty-message"
+                >
+                    غير مسموح لك بمشاهدة سجل العمليات.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    const input =
+        document.getElementById(
+            'logSearch'
+        );
+
+
+    const search =
+        input
+            ? input.value.trim().toLowerCase()
+            : '';
+
+
+    const logs =
+        window.logsList.filter(
+            log => {
+
+                return !search ||
+
+                    [
+
+                        log.user,
+
+                        log.username,
+
+                        log.role,
+
+                        log.action,
+
+                        log.details
+
+                    ]
+
+                    .some(
+                        value =>
+                            String(
+                                value || ''
+                            )
+                            .toLowerCase()
+                            .includes(search)
+                    );
+
+            }
+        );
+
+
+    tbody.innerHTML = '';
+
+
+    if(logs.length === 0){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    class="empty-message"
+                >
+                    لا توجد عمليات مسجلة.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    logs.forEach(
+        log => {
+
+            const date =
+                log.timestamp
+                    ?
+                    new Date(
+                        log.timestamp
+                    )
+                    .toLocaleString('ar-SA')
+                    :
+                    'غير محدد';
+
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>
+                        ${escapeHtml(date)}
+                    </td>
+
+                    <td>
+
+                        <b>
+                            ${escapeHtml(
+                                log.user || ''
+                            )}
+                        </b>
+
+                    </td>
+
+                    <td>
+
+                        <code>
+                            ${escapeHtml(
+                                log.username || ''
+                            )}
+                        </code>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge badge-active">
+
+                            ${escapeHtml(
+                                log.role ||
+                                'غير محدد'
+                            )}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        <span class="badge badge-warning">
+
+                            ${escapeHtml(
+                                log.action || ''
+                            )}
+
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        ${escapeHtml(
+                            log.details || ''
+                        )}
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
    تسجيل الدخول
 ===================================================== */
 
@@ -3731,18 +3952,14 @@ async function(e){
 
     const uInput =
         document
-            .getElementById(
-                'login_user'
-            )
+            .getElementById('login_user')
             .value
             .trim();
 
 
     const pInput =
         document
-            .getElementById(
-                'login_pass'
-            )
+            .getElementById('login_pass')
             .value
             .trim();
 
@@ -3784,18 +4001,33 @@ async function(e){
                 );
 
 
-            if(
+            const logsButton =
+                document.getElementById(
+                    'btn-logs'
+                );
+
+
+            const isAdmin =
                 window.currentUserRole ===
-                'مدير النظام'
-            ){
+                'مدير النظام';
+
+
+            if(isAdmin){
 
                 usersButton.style.display =
                     'inline-block';
 
+                logsButton.style.display =
+                    'inline-block';
+
             }
+
             else{
 
                 usersButton.style.display =
+                    'none';
+
+                logsButton.style.display =
                     'none';
 
             }
@@ -3834,7 +4066,11 @@ async function(e){
             updateDashboard();
 
 
-            await logAction('تسجيل دخول', `تم تسجيل دخول المستخدم ${window.currentUsername}`);
+            await logAction(
+                'تسجيل دخول',
+                `تم تسجيل دخول المستخدم ${window.currentUsername}`
+            );
+
 
             showToast(
                 `مرحباً ${window.currentUsername}`,
@@ -3842,9 +4078,22 @@ async function(e){
             );
 
         }
+
         else{
 
-            await logAction('محاولة دخول فاشلة', `محاولة تسجيل دخول فاشلة باسم المستخدم ${uInput}`, uInput, uInput);
+            /*
+               تسجيل محاولة الدخول الفاشلة
+               بدون إعطاء صلاحية وهمية
+            */
+
+            await logAction(
+                'محاولة دخول فاشلة',
+                `محاولة تسجيل دخول فاشلة باسم المستخدم ${uInput}`,
+                uInput,
+                uInput,
+                ''
+            );
+
 
             showToast(
                 'اسم المستخدم أو كلمة المرور غير صحيحة.',
@@ -3874,17 +4123,6 @@ async function(e){
 
 };
 
-
-/* =====================================================
-   سجل العمليات
-===================================================== */
-async function logAction(action, details, actorName=null, actorUsername=null){
-    try{
-        const name = actorName || window.currentUsername || 'غير معروف';
-        const username = actorUsername || (window.usersList.find(u => u.id === window.currentUserId)?.username || window.currentUsername || 'غير معروف');
-        await addDoc(collection(db, 'logs'), {action, details, user:name, username, role:window.currentUserRole || '', timestamp:Date.now()});
-    }catch(err){ console.warn('Log Error:', err); }
-}
 
 /* =====================================================
    إضافة مستخدم
@@ -3955,6 +4193,21 @@ async function(e){
     }
 
 
+    if(
+        role !== 'مدير النظام' &&
+        role !== 'مسؤول موارد بشرية'
+    ){
+
+        showToast(
+            'الصلاحية غير صحيحة.',
+            'error'
+        );
+
+        return;
+
+    }
+
+
     try{
 
         showLoading(
@@ -3963,18 +4216,24 @@ async function(e){
 
 
         await addDoc(
-            collection(
-                db,
-                "users"
-            ),
+            collection(db,'users'),
             {
 
                 name,
+
                 username,
+
                 password,
+
                 role
 
             }
+        );
+
+
+        await logAction(
+            'إضافة مستخدم',
+            `تم إنشاء المستخدم ${username} (${name}) بصلاحية ${role}`
         );
 
 
@@ -4024,27 +4283,146 @@ async function(e){
 
 
 /* =====================================================
-   تغيير صلاحية المستخدم
+   تغيير الصلاحية
 ===================================================== */
-window.changeUserRole = async function(docId, username, currentRole){
-    if(window.currentUserRole !== 'مدير النظام'){
-        showToast('غير مسموح لك بتغيير صلاحيات المستخدمين.', 'error'); return;
+
+window.changeUserRole =
+async function(
+    docId,
+    username,
+    currentRole
+){
+
+    if(
+        window.currentUserRole !==
+        'مدير النظام'
+    ){
+
+        showToast(
+            'غير مسموح لك بتغيير صلاحيات المستخدمين.',
+            'error'
+        );
+
+        return;
+
     }
-    const choice = prompt(`الصلاحية الحالية: ${currentRole}\n\nاختر الصلاحية الجديدة بكتابة رقم:\n1 - مدير النظام\n2 - مسؤول موارد بشرية`, currentRole === 'مدير النظام' ? '1' : '2');
-    if(choice === null) return;
-    const roleMap = {'1':'مدير النظام','2':'مسؤول موارد بشرية'};
-    const newRole = roleMap[String(choice).trim()];
-    if(!newRole){ showToast('اختيار غير صحيح. اختر 1 أو 2.', 'error'); return; }
-    if(newRole === currentRole){ showToast('الصلاحية لم تتغير.', 'info'); return; }
+
+
+    const choice =
+        prompt(
+            `الصلاحية الحالية: ${currentRole}
+
+اختر الصلاحية الجديدة بكتابة رقم:
+
+1 - مدير النظام
+2 - مسؤول موارد بشرية`,
+            currentRole ===
+            'مدير النظام'
+                ? '1'
+                : '2'
+        );
+
+
+    if(choice === null)
+        return;
+
+
+    const roleMap = {
+
+        '1':'مدير النظام',
+
+        '2':'مسؤول موارد بشرية'
+
+    };
+
+
+    const newRole =
+        roleMap[
+            String(choice).trim()
+        ];
+
+
+    if(!newRole){
+
+        showToast(
+            'اختيار غير صحيح. اختر 1 أو 2.',
+            'error'
+        );
+
+        return;
+
+    }
+
+
+    if(
+        newRole ===
+        currentRole
+    ){
+
+        showToast(
+            'الصلاحية لم تتغير.',
+            'info'
+        );
+
+        return;
+
+    }
+
+
     try{
-        showLoading('جاري تحديث صلاحية المستخدم...');
-        await updateDoc(doc(db, 'users', docId), {role:newRole});
-        await logAction('تغيير صلاحية', `تم تغيير صلاحية المستخدم ${username} من ${currentRole} إلى ${newRole}`);
+
+        showLoading(
+            'جاري تحديث صلاحية المستخدم...'
+        );
+
+
+        await updateDoc(
+            doc(
+                db,
+                'users',
+                docId
+            ),
+            {
+                role:newRole
+            }
+        );
+
+
+        await logAction(
+            'تغيير صلاحية',
+            `تم تغيير صلاحية المستخدم ${username} من ${currentRole} إلى ${newRole}`
+        );
+
+
         await loadCloudData();
-        showToast(`تم تغيير صلاحية ${username} إلى ${newRole}.`, 'success');
-    }catch(err){ console.error(err); showToast('فشل تغيير صلاحية المستخدم.', 'error'); }
-    finally{ hideLoading(); }
+
+
+        showToast(
+            `تم تغيير صلاحية ${username} إلى ${newRole}.`,
+            'success'
+        );
+
+    }
+
+    catch(err){
+
+        console.error(err);
+
+        showToast(
+            'فشل تغيير صلاحية المستخدم.',
+            'error'
+        );
+
+    }
+
+    finally{
+
+        hideLoading();
+
+    }
+
 };
+
 
 /* =====================================================
    تغيير كلمة المرور
@@ -4056,6 +4434,21 @@ async function(
     username
 ){
 
+    if(
+        window.currentUserRole !==
+        'مدير النظام'
+    ){
+
+        showToast(
+            'غير مسموح لك بتغيير كلمات المرور.',
+            'error'
+        );
+
+        return;
+
+    }
+
+
     const newPass =
         prompt(
             `أدخل كلمة المرور الجديدة للمستخدم (${username}):`
@@ -4066,7 +4459,9 @@ async function(
         return;
 
 
-    if(newPass.trim() === ''){
+    if(
+        newPass.trim() === ''
+    ){
 
         showToast(
             'كلمة المرور لا يمكن أن تكون فارغة.',
@@ -4088,7 +4483,7 @@ async function(
         await updateDoc(
             doc(
                 db,
-                "users",
+                'users',
                 docId
             ),
             {
@@ -4097,6 +4492,12 @@ async function(
                     newPass.trim()
 
             }
+        );
+
+
+        await logAction(
+            'تغيير كلمة المرور',
+            `تم تغيير كلمة مرور المستخدم ${username}`
         );
 
 
@@ -4140,10 +4541,13 @@ async function(
     username
 ){
 
-    if(username === 'admin'){
+    if(
+        window.currentUserRole !==
+        'مدير النظام'
+    ){
 
         showToast(
-            'لا يمكن حذف حساب المدير الأساسي.',
+            'غير مسموح لك بحذف المستخدمين.',
             'error'
         );
 
@@ -4152,10 +4556,10 @@ async function(
     }
 
 
-    if(window.usersList.length <= 1){
+    if(username === 'admin'){
 
         showToast(
-            'لا يمكن حذف المستخدم الوحيد.',
+            'لا يمكن حذف حساب المدير الأساسي.',
             'error'
         );
 
@@ -4182,9 +4586,15 @@ async function(
         await deleteDoc(
             doc(
                 db,
-                "users",
+                'users',
                 docId
             )
+        );
+
+
+        await logAction(
+            'حذف مستخدم',
+            `تم حذف المستخدم ${username}`
         );
 
 
@@ -4219,15 +4629,35 @@ async function(
 
 
 /* =====================================================
-   التحقق من المتطوع المفسوخ عقده
+   التحقق من العقد المفسوخ
 ===================================================== */
-function hasCancelledContract(nationalId){
-    const normalizedId = String(nationalId || '').trim();
-    return window.contractsArchive.some(c => String(c.nationalId || '').trim() === normalizedId && c.status === 'cancelled');
+
+function hasCancelledContract(
+    nationalId
+){
+
+    const normalizedId =
+        String(
+            nationalId || ''
+        ).trim();
+
+
+    return window.contractsArchive.some(
+        c =>
+
+            String(
+                c.nationalId || ''
+            ).trim() === normalizedId &&
+
+            c.status === 'cancelled'
+
+    );
+
 }
 
+
 /* =====================================================
-   حفظ عقد
+   حفظ العقد
 ===================================================== */
 
 window.saveAndArchiveContract =
@@ -4259,10 +4689,19 @@ async function(){
     }
 
 
-    if(hasCancelledContract(id)){
-        showToast('لا يمكن إضافة المتطوع، سبق فسخ عقده.', 'error');
+    if(
+        hasCancelledContract(id)
+    ){
+
+        showToast(
+            'لا يمكن إضافة المتطوع، سبق فسخ عقده.',
+            'error'
+        );
+
         return;
+
     }
+
 
     const todayVal =
         document
@@ -4306,8 +4745,18 @@ async function(){
 
         name,
 
-        nationalId:
-            id,
+        nationalId:id,
+
+        phone:
+            document
+                .getElementById('in_phone')
+                .value
+                .trim(),
+
+        dob:
+            document
+                .getElementById('in_dob')
+                .value,
 
         dept:
             document
@@ -4315,6 +4764,9 @@ async function(){
                 .value
                 .trim() ||
             'غير محدد',
+
+        agreementDate:
+            todayVal,
 
         startDate:
             startDate
@@ -4325,6 +4777,9 @@ async function(){
             endDate
                 .toISOString()
                 .split('T')[0],
+
+        duration:
+            durationVal,
 
         type:
             'عقد محرر بالنظام',
@@ -4346,15 +4801,16 @@ async function(){
 
 
         await addDoc(
-            collection(
-                db,
-                "contracts"
-            ),
+            collection(db,'contracts'),
             newContract
         );
 
 
-        await logAction('إضافة عقد', `تم إضافة عقد للمتطوع ${name} - الهوية ${id}`);
+        await logAction(
+            'إضافة عقد',
+            `تم إضافة عقد للمتطوع ${name} - الهوية ${id}`
+        );
+
 
         await loadCloudData();
 
@@ -4392,7 +4848,7 @@ async function(){
 
 
 /* =====================================================
-   رفع عقد خارجي
+   إرفاق عقد خارجي
 ===================================================== */
 
 window.handleFileUpload =
@@ -4441,15 +4897,24 @@ async function(e){
 
 
     if(
-        fileInput.files.length === 0
+        !fileInput.files.length
     )
         return;
 
 
-    if(hasCancelledContract(id)){
-        showToast('لا يمكن إضافة المتطوع، سبق فسخ عقده.', 'error');
+    if(
+        hasCancelledContract(id)
+    ){
+
+        showToast(
+            'لا يمكن إضافة المتطوع، سبق فسخ عقده.',
+            'error'
+        );
+
         return;
+
     }
+
 
     const fileName =
         fileInput.files[0].name;
@@ -4459,8 +4924,7 @@ async function(e){
 
         name,
 
-        nationalId:
-            id,
+        nationalId:id,
 
         dept,
 
@@ -4473,11 +4937,9 @@ async function(e){
             fileName +
             ')',
 
-        status:
-            'active',
+        status:'active',
 
-        createdAt:
-            Date.now()
+        createdAt:Date.now()
 
     };
 
@@ -4490,15 +4952,16 @@ async function(e){
 
 
         await addDoc(
-            collection(
-                db,
-                "contracts"
-            ),
+            collection(db,'contracts'),
             newContract
         );
 
 
-        await logAction('إرفاق عقد', `تم إرفاق عقد خارجي للمتطوع ${name} - الهوية ${id}`);
+        await logAction(
+            'إرفاق عقد',
+            `تم إرفاق عقد خارجي للمتطوع ${name} - الهوية ${id} - الملف ${fileName}`
+        );
+
 
         await loadCloudData();
 
@@ -4536,7 +4999,7 @@ async function(e){
 
 
 /* =====================================================
-   تجديد عقد
+   تجديد العقد
 ===================================================== */
 
 window.renewContract =
@@ -4554,7 +5017,8 @@ async function(
 
     if(
         contract &&
-        contract.status === 'cancelled'
+        contract.status ===
+        'cancelled'
     ){
 
         showToast(
@@ -4567,7 +5031,7 @@ async function(
     }
 
 
-    let monthsToAdd =
+    const monthsToAdd =
         prompt(
             'أدخل مدة التجديد بالأشهر:',
             '3'
@@ -4578,7 +5042,7 @@ async function(
         return;
 
 
-    let mNum =
+    const mNum =
         parseInt(monthsToAdd);
 
 
@@ -4606,7 +5070,10 @@ async function(
 
 
     today.setHours(
-        0,0,0,0
+        0,
+        0,
+        0,
+        0
     );
 
 
@@ -4624,7 +5091,7 @@ async function(
     );
 
 
-    let newEndStr =
+    const newEndStr =
         newEnd
             .toISOString()
             .split('T')[0];
@@ -4640,16 +5107,14 @@ async function(
         await updateDoc(
             doc(
                 db,
-                "contracts",
+                'contracts',
                 docId
             ),
             {
 
-                endDate:
-                    newEndStr,
+                endDate:newEndStr,
 
-                status:
-                    'active',
+                status:'active',
 
                 renewedAt:
                     new Date()
@@ -4660,7 +5125,11 @@ async function(
         );
 
 
-        await logAction('تجديد عقد', `تم تجديد عقد ${contract?.name || ''} حتى ${newEndStr}`);
+        await logAction(
+            'تجديد عقد',
+            `تم تجديد عقد ${contract?.name || ''} حتى ${newEndStr} لمدة ${mNum} شهر`
+        );
+
 
         await loadCloudData();
 
@@ -4693,7 +5162,7 @@ async function(
 
 
 /* =====================================================
-   فسخ عقد
+   فسخ العقد
 ===================================================== */
 
 window.cancelContract =
@@ -4719,7 +5188,8 @@ async function(docId){
 
 
     if(
-        contract.status === 'cancelled'
+        contract.status ===
+        'cancelled'
     ){
 
         showToast(
@@ -4743,7 +5213,9 @@ async function(docId){
         return;
 
 
-    if(reason.trim() === ''){
+    if(
+        reason.trim() === ''
+    ){
 
         showToast(
             'يجب كتابة سبب الفسخ.',
@@ -4773,13 +5245,12 @@ async function(docId){
         await updateDoc(
             doc(
                 db,
-                "contracts",
+                'contracts',
                 docId
             ),
             {
 
-                status:
-                    'cancelled',
+                status:'cancelled',
 
                 cancellationReason:
                     reason.trim(),
@@ -4793,7 +5264,11 @@ async function(docId){
         );
 
 
-        await logAction('فسخ عقد', `تم فسخ عقد ${contract.name} - الهوية ${contract.nationalId} - السبب: ${reason.trim()}`);
+        await logAction(
+            'فسخ عقد',
+            `تم فسخ عقد ${contract.name} - الهوية ${contract.nationalId} - السبب: ${reason.trim()}`
+        );
+
 
         await loadCloudData();
 
@@ -4831,8 +5306,24 @@ async function(docId){
 
 window.deleteContract =
 async function(docId){
-    const contract = window.contractsArchive.find(c => c.id === docId);
-    if(!contract){ showToast('لم يتم العثور على العقد.', 'error'); return; }
+
+    const contract =
+        window.contractsArchive.find(
+            c =>
+                c.id === docId
+        );
+
+
+    if(!contract){
+
+        showToast(
+            'لم يتم العثور على العقد.',
+            'error'
+        );
+
+        return;
+
+    }
 
 
     if(
@@ -4853,13 +5344,17 @@ async function(docId){
         await deleteDoc(
             doc(
                 db,
-                "contracts",
+                'contracts',
                 docId
             )
         );
 
 
-        await logAction('حذف عقد', `تم حذف عقد ${contract.name} - الهوية ${contract.nationalId}`);
+        await logAction(
+            'حذف عقد',
+            `تم حذف عقد ${contract.name} - الهوية ${contract.nationalId}`
+        );
+
 
         await loadCloudData();
 
@@ -4890,63 +5385,759 @@ async function(docId){
 
 };
 
-</script>
-
-
-<script>
 
 /* =====================================================
-   تسجيل الخروج
+   عرض المستخدمين
 ===================================================== */
 
-async function logoutSystem(){
+function renderUsers(){
 
-    if(window.currentUsername){
-        await logAction('تسجيل خروج', `تم تسجيل خروج المستخدم ${window.currentUsername}`);
+    const tbody =
+        document.getElementById(
+            'usersTableBody'
+        );
+
+
+    const count =
+        document.getElementById(
+            'dashboardUsers'
+        );
+
+
+    if(count)
+        count.innerText =
+            window.usersList.length;
+
+
+    if(!tbody)
+        return;
+
+
+    tbody.innerHTML = '';
+
+
+    if(
+        window.usersList.length === 0
+    ){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="empty-message"
+                >
+                    لا توجد حسابات مستخدمين.
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
     }
 
-    document.getElementById(
-        'login_user'
-    ).value = '';
+
+    window.usersList.forEach(
+        u => {
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>
+
+                        <b>
+                            ${escapeHtml(
+                                u.name || ''
+                            )}
+                        </b>
+
+                    </td>
+
+
+                    <td>
+
+                        <code>
+                            ${escapeHtml(
+                                u.username || ''
+                            )}
+                        </code>
+
+                    </td>
+
+
+                    <td>
+
+                        <code>
+                            ${escapeHtml(
+                                u.password || ''
+                            )}
+                        </code>
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="badge badge-active"
+                        >
+
+                            <i class="fas fa-shield-halved"></i>
+
+                            ${escapeHtml(
+                                u.role || ''
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+
+                        <div
+                            style="
+                                display:flex;
+                                gap:4px;
+                                flex-wrap:wrap;
+                            "
+                        >
+
+                            <button
+                                onclick="changeUserRole(
+                                    '${u.id}',
+                                    '${escapeJs(u.username || '')}',
+                                    '${escapeJs(u.role || '')}'
+                                )"
+                                class="btn-action btn-purple"
+                                style="
+                                    padding:7px 10px;
+                                    font-size:10px;
+                                    width:auto;
+                                "
+                            >
+
+                                <i class="fas fa-user-shield"></i>
+
+                                تغيير الصلاحية
+
+                            </button>
+
+
+                            <button
+                                onclick="changeUserPassword(
+                                    '${u.id}',
+                                    '${escapeJs(u.username || '')}'
+                                )"
+                                class="btn-action btn-blue"
+                                style="
+                                    padding:7px 10px;
+                                    font-size:10px;
+                                    width:auto;
+                                "
+                            >
+
+                                <i class="fas fa-key"></i>
+
+                                تغيير كلمة المرور
+
+                            </button>
+
+
+                            <button
+                                onclick="deleteUser(
+                                    '${u.id}',
+                                    '${escapeJs(u.username || '')}'
+                                )"
+                                class="btn-action btn-danger"
+                                style="
+                                    padding:7px 10px;
+                                    font-size:10px;
+                                    width:auto;
+                                "
+                            >
+
+                                <i class="fas fa-trash"></i>
+
+                                حذف
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   Dashboard
+===================================================== */
+
+function updateDashboard(){
+
+    const total =
+        window.contractsArchive.length;
+
+
+    let active = 0;
+
+    let expired = 0;
+
+    let cancelled = 0;
+
+
+    const today =
+        new Date();
+
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    window.contractsArchive.forEach(
+        c => {
+
+            if(
+                c.status ===
+                'cancelled'
+            ){
+
+                cancelled++;
+
+                return;
+
+            }
+
+
+            const endDate =
+                new Date(c.endDate);
+
+
+            if(
+                isNaN(
+                    endDate.getTime()
+                )
+            ){
+
+                active++;
+
+                return;
+
+            }
+
+
+            endDate.setHours(
+                0,
+                0,
+                0,
+                0
+            );
+
+
+            if(endDate >= today)
+                active++;
+
+            else
+                expired++;
+
+        }
+    );
 
 
     document.getElementById(
-        'login_pass'
-    ).value = '';
+        'dashboardTotalContracts'
+    ).innerText =
+        total;
 
 
     document.getElementById(
-        'authSection'
-    ).style.display =
-        'flex';
+        'dashboardActiveContracts'
+    ).innerText =
+        active;
 
 
     document.getElementById(
-        'appContent'
-    ).style.display =
-        'none';
-
-
-    window.currentUserRole = '';
-
-    window.currentUsername = '';
-window.currentUserId = '';
-window.logsList = [];
-
-    document.getElementById(
-        'currentUserDisplay'
-    ).innerText = '—';
+        'dashboardExpiredContracts'
+    ).innerText =
+        expired;
 
 
     document.getElementById(
-        'btn-users'
-    ).style.display =
-        'none';
-    document.getElementById('btn-logs').style.display = 'none';
+        'dashboardCancelledContracts'
+    ).innerText =
+        cancelled;
 
 
-    switchTab(
-        'createTab'
+    document.getElementById(
+        'dashboardUsers'
+    ).innerText =
+        window.usersList.length;
+
+}
+
+
+/* =====================================================
+   الأرشيف
+===================================================== */
+
+function renderArchive(){
+
+    const tbody =
+        document.getElementById(
+            'archiveTableBody'
+        );
+
+
+    if(!tbody)
+        return;
+
+
+    document.getElementById(
+        'contractCount'
+    ).innerText =
+        window.contractsArchive.length;
+
+
+    const searchInput =
+        document.getElementById(
+            'archiveSearch'
+        );
+
+
+    const search =
+        searchInput
+            ?
+            searchInput.value
+                .trim()
+                .toLowerCase()
+            :
+            '';
+
+
+    const filteredContracts =
+        window.contractsArchive.filter(
+            c => {
+
+                if(!search)
+                    return true;
+
+
+                return [
+
+                    c.name,
+
+                    c.nationalId,
+
+                    c.dept
+
+                ]
+                .some(
+                    value =>
+                        String(
+                            value || ''
+                        )
+                        .toLowerCase()
+                        .includes(search)
+                );
+
+            }
+        );
+
+
+    tbody.innerHTML = '';
+
+
+    if(
+        filteredContracts.length === 0
+    ){
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="8"
+                    class="empty-message"
+                >
+
+                    ${
+                        window.contractsArchive.length === 0
+                        ?
+                        'لا توجد عقود محفوظة في الأرشيف حالياً.'
+                        :
+                        'لا توجد نتائج مطابقة للبحث.'
+                    }
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    const today =
+        new Date();
+
+
+    today.setHours(
+        0,
+        0,
+        0,
+        0
+    );
+
+
+    filteredContracts.forEach(
+        c => {
+
+            let statusBadge = '';
+
+
+            if(
+                c.status ===
+                'cancelled'
+            ){
+
+                statusBadge = `
+
+                    <span
+                        class="badge badge-cancelled"
+                    >
+
+                        <i class="fas fa-ban"></i>
+
+                        تم فسخ العقد
+
+                    </span>
+
+                    ${
+                        c.cancellationReason
+                        ?
+                        `
+                        <div
+                            style="
+                                font-size:9px;
+                                margin-top:4px;
+                                color:#c2410c;
+                            "
+                        >
+
+                            السبب:
+                            ${escapeHtml(
+                                c.cancellationReason
+                            )}
+
+                        </div>
+                        `
+                        :
+                        ''
+                    }
+
+                `;
+
+            }
+
+            else{
+
+                const endD =
+                    new Date(
+                        c.endDate
+                    );
+
+
+                endD.setHours(
+                    0,
+                    0,
+                    0,
+                    0
+                );
+
+
+                const diffDays =
+                    Math.ceil(
+                        (
+                            endD -
+                            today
+                        ) /
+                        (
+                            1000 *
+                            60 *
+                            60 *
+                            24
+                        )
+                    );
+
+
+                if(
+                    isNaN(diffDays)
+                ){
+
+                    statusBadge = `
+
+                        <span class="badge badge-active">
+                            ساري
+                        </span>
+
+                    `;
+
+                }
+
+                else if(
+                    diffDays < 0
+                ){
+
+                    statusBadge = `
+
+                        <span class="badge badge-expired">
+
+                            <i class="fas fa-circle-xmark"></i>
+
+                            منتهي منذ
+                            ${Math.abs(diffDays)}
+                            يوم
+
+                        </span>
+
+                    `;
+
+                }
+
+                else if(
+                    diffDays <= 7
+                ){
+
+                    statusBadge = `
+
+                        <span class="badge badge-warning">
+
+                            <i class="fas fa-triangle-exclamation"></i>
+
+                            ينتهي خلال
+                            ${diffDays}
+                            أيام
+
+                        </span>
+
+                    `;
+
+                }
+
+                else{
+
+                    statusBadge = `
+
+                        <span class="badge badge-active">
+
+                            <i class="fas fa-circle-check"></i>
+
+                            ساري
+
+                            <span>
+                                ${diffDays} يوم
+                            </span>
+
+                        </span>
+
+                    `;
+
+                }
+
+            }
+
+
+            let actionButtons = '';
+
+
+            if(
+                c.status ===
+                'cancelled'
+            ){
+
+                actionButtons = `
+
+                    <span class="badge badge-cancelled">
+                        ملغى
+                    </span>
+
+                `;
+
+            }
+
+            else{
+
+                actionButtons = `
+
+                    <button
+                        onclick="renewContract(
+                            '${c.id}',
+                            '${escapeJs(c.endDate || '')}'
+                        )"
+                        class="btn-action btn-purple"
+                        style="
+                            padding:7px 9px;
+                            font-size:9px;
+                            width:auto;
+                        "
+                    >
+
+                        <i class="fas fa-rotate"></i>
+
+                        تجديد
+
+                    </button>
+
+
+                    <button
+                        onclick="cancelContract(
+                            '${c.id}'
+                        )"
+                        class="btn-action btn-cancel"
+                        style="
+                            padding:7px 9px;
+                            font-size:9px;
+                            width:auto;
+                        "
+                    >
+
+                        <i class="fas fa-ban"></i>
+
+                        فسخ
+
+                    </button>
+
+                `;
+
+            }
+
+
+            tbody.innerHTML += `
+
+                <tr>
+
+                    <td>
+
+                        <b>
+                            ${escapeHtml(
+                                c.name || ''
+                            )}
+                        </b>
+
+                    </td>
+
+
+                    <td>
+                        ${escapeHtml(
+                            c.nationalId || ''
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${escapeHtml(
+                            c.dept || ''
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${escapeHtml(
+                            c.startDate ||
+                            'غير محدد'
+                        )}
+                    </td>
+
+
+                    <td>
+                        ${escapeHtml(
+                            c.endDate ||
+                            'غير محدد'
+                        )}
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            style="
+                                font-size:10px;
+                                color:#64748b;
+                            "
+                        >
+
+                            ${escapeHtml(
+                                c.type || ''
+                            )}
+
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        ${statusBadge}
+                    </td>
+
+
+                    <td>
+
+                        <div
+                            style="
+                                display:flex;
+                                gap:4px;
+                                flex-wrap:wrap;
+                            "
+                        >
+
+                            ${actionButtons}
+
+
+                            <button
+                                onclick="deleteContract(
+                                    '${c.id}'
+                                )"
+                                class="btn-action btn-danger"
+                                style="
+                                    padding:7px 9px;
+                                    font-size:9px;
+                                    width:auto;
+                                "
+                            >
+
+                                <i class="fas fa-trash"></i>
+
+                                حذف
+
+                            </button>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+            `;
+
+        }
     );
 
 }
@@ -4956,21 +6147,30 @@ window.logsList = [];
    تبديل الصفحات
 ===================================================== */
 
-function printContract(){
-    logAction('طباعة عقد', `تمت طباعة عقد ${document.getElementById('in_name')?.value || 'غير محدد'}`);
-    window.print();
-}
+window.switchTab =
+function(tabId){
 
-function switchTab(tabId){
+    /*
+       منع أي مستخدم غير مدير النظام
+       من فتح لوحة التحكم أو السجل
+    */
 
     if(
-        (tabId === 'usersTab' || tabId === 'logsTab') &&
+
+        (
+            tabId === 'usersTab' ||
+            tabId === 'logsTab'
+        )
+
+        &&
+
         window.currentUserRole !==
         'مدير النظام'
+
     ){
 
         showToast(
-            'غير مسموح لك بالدخول إلى لوحة التحكم.',
+            'غير مسموح لك بالدخول إلى هذا القسم.',
             'error'
         );
 
@@ -4982,9 +6182,13 @@ function switchTab(tabId){
     const tabs = [
 
         'createTab',
+
         'uploadTab',
+
         'archiveTab',
+
         'usersTab',
+
         'logsTab'
 
     ];
@@ -5007,9 +6211,13 @@ function switchTab(tabId){
     const buttons = [
 
         'btn-create',
+
         'btn-upload',
+
         'btn-archive',
+
         'btn-users',
+
         'btn-logs'
 
     ];
@@ -5038,26 +6246,18 @@ function switchTab(tabId){
         target.style.display =
             'block';
 
-    if(window.currentUsername){
-        logAction('فتح قسم', `تم فتح القسم ${tabId}`);
-    }
-
 
     const map = {
 
-        createTab:
-            'btn-create',
+        createTab:'btn-create',
 
-        uploadTab:
-            'btn-upload',
+        uploadTab:'btn-upload',
 
-        archiveTab:
-            'btn-archive',
+        archiveTab:'btn-archive',
 
-        usersTab:
-            'btn-users',
-        logsTab:
-            'btn-logs'
+        usersTab:'btn-users',
+
+        logsTab:'btn-logs'
 
     };
 
@@ -5081,11 +6281,20 @@ function switchTab(tabId){
     }
 
 
-    if(tabId === 'archiveTab')
+    if(
+        tabId ===
+        'archiveTab'
+    ){
+
         renderArchive();
 
+    }
 
-    if(tabId === 'usersTab'){
+
+    if(
+        tabId ===
+        'usersTab'
+    ){
 
         renderUsers();
 
@@ -5093,14 +6302,42 @@ function switchTab(tabId){
 
     }
 
-}
+
+    if(
+        tabId ===
+        'logsTab'
+    ){
+
+        renderLogs();
+
+    }
+
+
+    /*
+       تسجيل فتح الأقسام
+    */
+
+    if(
+        window.currentUsername &&
+        tabId !== 'logsTab'
+    ){
+
+        logAction(
+            'فتح قسم',
+            `تم فتح القسم ${tabId}`
+        );
+
+    }
+
+};
 
 
 /* =====================================================
    معاينة العقد
 ===================================================== */
 
-function updateContractPreview(){
+window.updateContractPreview =
+function(){
 
     const name =
         document
@@ -5196,13 +6433,11 @@ function updateContractPreview(){
         '..../../....';
 
 
-    let startDate =
-        startDateVal
-            ? new Date(startDateVal)
-            : null;
+    if(startDateVal){
 
+        const startDate =
+            new Date(startDateVal);
 
-    if(startDate){
 
         document.getElementById(
             'p_startDate'
@@ -5212,7 +6447,7 @@ function updateContractPreview(){
                 .split('T')[0];
 
 
-        let endDate =
+        const endDate =
             new Date(startDate);
 
 
@@ -5230,6 +6465,7 @@ function updateContractPreview(){
                 .split('T')[0];
 
     }
+
     else{
 
         document.getElementById(
@@ -5252,21 +6488,45 @@ function updateContractPreview(){
         durationVal +
         ' شهر';
 
-}
+};
+
+
+/* =====================================================
+   طباعة العقد
+===================================================== */
+
+window.printContract =
+function(){
+
+    logAction(
+        'طباعة عقد',
+        `تمت طباعة عقد ${document.getElementById('in_name')?.value || 'غير محدد'}`
+    );
+
+
+    window.print();
+
+};
 
 
 /* =====================================================
    PDF
 ===================================================== */
 
-function downloadContractPDF(){
-    logAction('تنزيل PDF', `تم طلب تنزيل PDF للعقد ${document.getElementById('in_name')?.value || 'غير محدد'}`);
+window.downloadContractPDF =
+function(){
 
     const name =
         document
             .getElementById('in_name')
             .value ||
         'عقد_متطوع';
+
+
+    logAction(
+        'تنزيل PDF',
+        `تم طلب تنزيل PDF للعقد ${name}`
+    );
 
 
     const element =
@@ -5285,40 +6545,31 @@ function downloadContractPDF(){
 
         image:{
 
-            type:
-                'jpeg',
+            type:'jpeg',
 
-            quality:
-                .98
+            quality:.98
 
         },
 
         html2canvas:{
 
-            scale:
-                2,
+            scale:2,
 
-            useCORS:
-                true,
+            useCORS:true,
 
-            allowTaint:
-                true,
+            allowTaint:true,
 
-            letterRendering:
-                true
+            letterRendering:true
 
         },
 
         jsPDF:{
 
-            unit:
-                'mm',
+            unit:'mm',
 
-            format:
-                'a4',
+            format:'a4',
 
-            orientation:
-                'portrait'
+            orientation:'portrait'
 
         }
 
@@ -5334,9 +6585,13 @@ function downloadContractPDF(){
         () => {
 
             html2pdf()
+
                 .from(element)
+
                 .set(opt)
+
                 .save()
+
                 .then(
                     () => {
 
@@ -5349,6 +6604,7 @@ function downloadContractPDF(){
 
                     }
                 )
+
                 .catch(
                     err => {
 
@@ -5368,793 +6624,163 @@ function downloadContractPDF(){
         250
     );
 
-}
+};
 
 
 /* =====================================================
-   المستخدمين
+   تسجيل الخروج
 ===================================================== */
 
-function renderUsers(){
+window.logoutSystem =
+async function(){
 
-    const tbody =
-        document.getElementById(
-            'usersTableBody'
+    /*
+       نحفظ معلومات المستخدم قبل تصفير المتغيرات
+       حتى لا يضيع سجل الخروج
+    */
+
+    const logoutName =
+        window.currentUsername;
+
+    const logoutId =
+        window.currentUserId;
+
+
+    const logoutUser =
+        window.usersList.find(
+            u =>
+                u.id === logoutId
         );
 
 
-    const count =
-        document.getElementById(
-            'dashboardUsers'
+    if(logoutName){
+
+        await logAction(
+            'تسجيل خروج',
+            `تم تسجيل خروج المستخدم ${logoutName}`,
+            logoutName,
+            logoutUser?.username || '',
+            logoutUser?.role || window.currentUserRole
         );
-
-
-    if(count)
-        count.innerText =
-            window.usersList.length;
-
-
-    if(!tbody)
-        return;
-
-
-    tbody.innerHTML = '';
-
-
-    if(
-        window.usersList.length === 0
-    ){
-
-        tbody.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="5"
-                    class="empty-message"
-                >
-                    لا توجد حسابات مستخدمين.
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
 
     }
 
 
-    window.usersList.forEach(
-        u => {
-
-            tbody.innerHTML += `
-
-                <tr>
-
-                    <td>
-                        <b>
-                            ${escapeHtml(
-                                u.name || ''
-                            )}
-                        </b>
-                    </td>
-
-                    <td>
-                        <code>
-                            ${escapeHtml(
-                                u.username || ''
-                            )}
-                        </code>
-                    </td>
-
-                    <td>
-                        <code>
-                            ${escapeHtml(
-                                u.password || ''
-                            )}
-                        </code>
-                    </td>
-
-                    <td>
-
-                        <span
-                            class="badge badge-active"
-                        >
-                            <i class="fas fa-shield-halved"></i>
-
-                            ${escapeHtml(
-                                u.role || ''
-                            )}
-
-                        </span>
-
-                    </td>
-
-                    <td>
-
-                        <button
-                            onclick="
-                                changeUserRole('${u.id}','${escapeJs(u.username || '')}','${escapeJs(u.role || '')}')
-                            "
-                            class="btn-action btn-purple"
-                            style="padding:7px 10px;font-size:10px;width:auto;"
-                        >
-                            <i class="fas fa-user-shield"></i>
-                            تغيير الصلاحية
-                        </button>
-
-                        <button
-                            onclick="
-                                changeUserPassword(
-                                    '${u.id}',
-                                    '${escapeJs(
-                                        u.username || ''
-                                    )}'
-                                )
-                            "
-                            class="btn-action btn-blue"
-                            style="
-                                padding:7px 10px;
-                                font-size:10px;
-                                width:auto;
-                            "
-                        >
-
-                            <i class="fas fa-key"></i>
-
-                            تغيير كلمة المرور
-
-                        </button>
+    document.getElementById(
+        'login_user'
+    ).value = '';
 
 
-                        <button
-                            onclick="
-                                deleteUser(
-                                    '${u.id}',
-                                    '${escapeJs(
-                                        u.username || ''
-                                    )}'
-                                )
-                            "
-                            class="btn-action btn-danger"
-                            style="
-                                padding:7px 10px;
-                                font-size:10px;
-                                width:auto;
-                            "
-                        >
-
-                            <i class="fas fa-trash"></i>
-
-                            حذف
-
-                        </button>
-
-                    </td>
-
-                </tr>
-
-            `;
-
-        }
-    );
-
-}
+    document.getElementById(
+        'login_pass'
+    ).value = '';
 
 
-/* =====================================================
-   Dashboard
-===================================================== */
-
-function updateDashboard(){
-
-    const total =
-        window.contractsArchive.length;
+    document.getElementById(
+        'authSection'
+    ).style.display =
+        'flex';
 
 
-    let active = 0;
-
-    let expired = 0;
-
-    let cancelled = 0;
-
-
-    const today =
-        new Date();
+    document.getElementById(
+        'appContent'
+    ).style.display =
+        'none';
 
 
-    today.setHours(
-        0,
-        0,
-        0,
-        0
-    );
+    window.currentUserRole = '';
+
+    window.currentUsername = '';
+
+    window.currentUserId = '';
 
 
-    window.contractsArchive.forEach(
-        c => {
-
-            if(
-                c.status ===
-                'cancelled'
-            ){
-
-                cancelled++;
-
-                return;
-
-            }
+    document.getElementById(
+        'currentUserDisplay'
+    ).innerText =
+        '—';
 
 
-            const endDate =
-                new Date(c.endDate);
+    document.getElementById(
+        'btn-users'
+    ).style.display =
+        'none';
 
 
-            if(
-                isNaN(
-                    endDate.getTime()
-                )
-            ){
-
-                active++;
-
-                return;
-
-            }
+    document.getElementById(
+        'btn-logs'
+    ).style.display =
+        'none';
 
 
-            endDate.setHours(
-                0,
-                0,
-                0,
-                0
-            );
+    /*
+       إعادة صفحة البداية
+    */
+
+    const tabs = [
+
+        'createTab',
+        'uploadTab',
+        'archiveTab',
+        'usersTab',
+        'logsTab'
+
+    ];
 
 
-            if(endDate >= today){
+    tabs.forEach(
+        id => {
 
-                active++;
+            const el =
+                document.getElementById(id);
 
-            }
-            else{
-
-                expired++;
-
-            }
+            if(el)
+                el.style.display =
+                    'none';
 
         }
     );
 
 
     document.getElementById(
-        'dashboardTotalContracts'
-    ).innerText =
-        total;
+        'createTab'
+    ).style.display =
+        'block';
 
 
-    document.getElementById(
-        'dashboardActiveContracts'
-    ).innerText =
-        active;
+    const buttons = [
+
+        'btn-create',
+        'btn-upload',
+        'btn-archive',
+        'btn-users',
+        'btn-logs'
+
+    ];
 
 
-    document.getElementById(
-        'dashboardExpiredContracts'
-    ).innerText =
-        expired;
+    buttons.forEach(
+        id => {
 
+            const el =
+                document.getElementById(id);
 
-    document.getElementById(
-        'dashboardCancelledContracts'
-    ).innerText =
-        cancelled;
-
-
-    document.getElementById(
-        'dashboardUsers'
-    ).innerText =
-        window.usersList.length;
-
-}
-
-
-/* =====================================================
-   الأرشيف
-===================================================== */
-
-function renderArchive(){
-
-    const tbody =
-        document.getElementById(
-            'archiveTableBody'
-        );
-
-
-    if(!tbody)
-        return;
-
-
-    document.getElementById(
-        'contractCount'
-    ).innerText =
-        window.contractsArchive.length;
-
-
-    const searchInput =
-        document.getElementById(
-            'archiveSearch'
-        );
-
-
-    const search =
-        searchInput
-            ? searchInput.value
-                .trim()
-                .toLowerCase()
-            : '';
-
-
-    let filteredContracts =
-        window.contractsArchive.filter(
-            c => {
-
-                if(!search)
-                    return true;
-
-
-                const name =
-                    String(
-                        c.name || ''
-                    )
-                    .toLowerCase();
-
-
-                const nationalId =
-                    String(
-                        c.nationalId || ''
-                    )
-                    .toLowerCase();
-
-
-                const dept =
-                    String(
-                        c.dept || ''
-                    )
-                    .toLowerCase();
-
-
-                return (
-
-                    name.includes(search) ||
-
-                    nationalId.includes(search) ||
-
-                    dept.includes(search)
-
+            if(el)
+                el.classList.remove(
+                    'active'
                 );
 
-            }
-        );
-
-
-    tbody.innerHTML = '';
-
-
-    if(
-        filteredContracts.length === 0
-    ){
-
-        tbody.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="8"
-                    class="empty-message"
-                >
-
-                    ${
-                        window.contractsArchive.length === 0
-                        ?
-                        'لا توجد عقود محفوظة في الأرشيف حالياً.'
-                        :
-                        'لا توجد نتائج مطابقة للبحث.'
-                    }
-
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    const today =
-        new Date();
-
-
-    today.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-
-    filteredContracts.forEach(
-        c => {
-
-            let statusBadge = '';
-
-
-            if(
-                c.status ===
-                'cancelled'
-            ){
-
-                statusBadge = `
-
-                    <span
-                        class="badge badge-cancelled"
-                    >
-
-                        <i class="fas fa-ban"></i>
-
-                        تم فسخ العقد
-
-                    </span>
-
-                    ${
-                        c.cancelledAt
-                        ?
-                        `
-                        <div
-                            style="
-                                font-size:9px;
-                                margin-top:5px;
-                                color:#94a3b8;
-                            "
-                        >
-                            ${escapeHtml(
-                                c.cancelledAt
-                            )}
-                        </div>
-                        `
-                        :
-                        ''
-                    }
-
-                    ${
-                        c.cancellationReason
-                        ?
-                        `
-                        <div
-                            style="
-                                font-size:9px;
-                                margin-top:4px;
-                                color:#c2410c;
-                            "
-                        >
-                            السبب:
-                            ${escapeHtml(
-                                c.cancellationReason
-                            )}
-                        </div>
-                        `
-                        :
-                        ''
-                    }
-
-                `;
-
-            }
-            else{
-
-                const endD =
-                    new Date(
-                        c.endDate
-                    );
-
-
-                endD.setHours(
-                    0,
-                    0,
-                    0,
-                    0
-                );
-
-
-                const diffTime =
-                    endD - today;
-
-
-                const diffDays =
-                    Math.ceil(
-                        diffTime /
-                        (
-                            1000 *
-                            60 *
-                            60 *
-                            24
-                        )
-                    );
-
-
-                if(
-                    isNaN(diffDays)
-                ){
-
-                    statusBadge = `
-
-                        <span
-                            class="badge badge-active"
-                        >
-                            ساري
-                        </span>
-
-                    `;
-
-                }
-                else if(
-                    diffDays < 0
-                ){
-
-                    const passedDays =
-                        Math.abs(
-                            diffDays
-                        );
-
-
-                    statusBadge = `
-
-                        <span
-                            class="badge badge-expired"
-                        >
-
-                            <i class="fas fa-circle-xmark"></i>
-
-                            منتهي منذ
-                            ${passedDays}
-                            يوم
-
-                        </span>
-
-                    `;
-
-                }
-                else if(
-                    diffDays <= 7
-                ){
-
-                    statusBadge = `
-
-                        <span
-                            class="badge badge-warning"
-                        >
-
-                            <i class="fas fa-triangle-exclamation"></i>
-
-                            ينتهي خلال
-                            ${diffDays}
-                            أيام
-
-                        </span>
-
-                    `;
-
-                }
-                else{
-
-                    statusBadge = `
-
-                        <span
-                            class="badge badge-active"
-                        >
-
-                            <i class="fas fa-circle-check"></i>
-
-                            ساري
-
-                            <span>
-                                ${diffDays} يوم
-                            </span>
-
-                        </span>
-
-                    `;
-
-                }
-
-            }
-
-
-            let actionButtons = '';
-
-
-            if(
-                c.status ===
-                'cancelled'
-            ){
-
-                actionButtons = `
-
-                    <span
-                        class="badge badge-cancelled"
-                    >
-                        ملغى
-                    </span>
-
-                `;
-
-            }
-            else{
-
-                actionButtons = `
-
-                    <button
-                        onclick="
-                            renewContract(
-                                '${c.id}',
-                                '${escapeJs(
-                                    c.endDate || ''
-                                )}'
-                            )
-                        "
-                        class="btn-action btn-purple"
-                        style="
-                            padding:7px 9px;
-                            font-size:9px;
-                            width:auto;
-                        "
-                    >
-
-                        <i class="fas fa-rotate"></i>
-                        تجديد
-
-                    </button>
-
-
-                    <button
-                        onclick="
-                            cancelContract(
-                                '${c.id}'
-                            )
-                        "
-                        class="btn-action btn-cancel"
-                        style="
-                            padding:7px 9px;
-                            font-size:9px;
-                            width:auto;
-                        "
-                    >
-
-                        <i class="fas fa-ban"></i>
-                        فسخ
-
-                    </button>
-
-                `;
-
-            }
-
-
-            tbody.innerHTML += `
-
-                <tr>
-
-                    <td>
-
-                        <b>
-                            ${escapeHtml(
-                                c.name || ''
-                            )}
-                        </b>
-
-                    </td>
-
-
-                    <td>
-                        ${escapeHtml(
-                            c.nationalId || ''
-                        )}
-                    </td>
-
-
-                    <td>
-                        ${escapeHtml(
-                            c.dept || ''
-                        )}
-                    </td>
-
-
-                    <td>
-                        ${escapeHtml(
-                            c.startDate ||
-                            'غير محدد'
-                        )}
-                    </td>
-
-
-                    <td>
-                        ${escapeHtml(
-                            c.endDate ||
-                            'غير محدد'
-                        )}
-                    </td>
-
-
-                    <td>
-
-                        <span
-                            style="
-                                font-size:10px;
-                                color:#64748b;
-                            "
-                        >
-
-                            ${escapeHtml(
-                                c.type || ''
-                            )}
-
-                        </span>
-
-                    </td>
-
-
-                    <td>
-                        ${statusBadge}
-                    </td>
-
-
-                    <td>
-
-                        <div
-                            style="
-                                display:flex;
-                                gap:4px;
-                                flex-wrap:wrap;
-                            "
-                        >
-
-                            ${actionButtons}
-
-
-                            <button
-                                onclick="
-                                    deleteContract(
-                                        '${c.id}'
-                                    )
-                                "
-                                class="btn-action btn-danger"
-                                style="
-                                    padding:7px 9px;
-                                    font-size:9px;
-                                    width:auto;
-                                "
-                            >
-
-                                <i class="fas fa-trash"></i>
-
-                                حذف
-
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            `;
-
         }
     );
 
-}
+
+    document.getElementById(
+        'btn-create'
+    ).classList.add(
+        'active'
+    );
+
+};
 
 
 /* =====================================================
@@ -6245,6 +6871,12 @@ document.addEventListener(
             );
 
 
+        const startInput =
+            document.getElementById(
+                'in_startDate'
+            );
+
+
         if(
             todayInput &&
             !todayInput.value
@@ -6254,12 +6886,6 @@ document.addEventListener(
                 today;
 
         }
-
-
-        const startInput =
-            document.getElementById(
-                'in_startDate'
-            );
 
 
         if(
@@ -6281,4 +6907,5 @@ document.addEventListener(
 </script>
 
 </body>
+
 </html>
