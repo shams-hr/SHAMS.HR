@@ -877,6 +877,24 @@ textarea.form-control{
 
 
 /* =====================================================
+   سجل العمليات - العرض
+===================================================== */
+function renderLogs(){
+    const tbody = document.getElementById('logsTableBody');
+    if(!tbody) return;
+    const input = document.getElementById('logSearch');
+    const search = input ? input.value.trim().toLowerCase() : '';
+    const logs = window.logsList.filter(log => !search || [log.user,log.username,log.role,log.action,log.details].some(v => String(v || '').toLowerCase().includes(search)));
+    tbody.innerHTML = '';
+    if(!logs.length){ tbody.innerHTML = '<tr><td colspan="6" class="empty-message">لا توجد عمليات مسجلة.</td></tr>'; return; }
+    logs.forEach(log => {
+        const date = log.timestamp ? new Date(log.timestamp).toLocaleString('ar-SA') : 'غير محدد';
+        tbody.innerHTML += `<tr><td>${escapeHtml(date)}</td><td><b>${escapeHtml(log.user || '')}</b></td><td><code>${escapeHtml(log.username || '')}</code></td><td><span class="badge badge-active">${escapeHtml(log.role || 'غير محدد')}</span></td><td><span class="badge badge-warning">${escapeHtml(log.action || '')}</span></td><td>${escapeHtml(log.details || '')}</td></tr>`;
+    });
+}
+
+
+/* =====================================================
    Dashboard
 ===================================================== */
 
@@ -1940,6 +1958,11 @@ code{
             لوحة التحكم
         </button>
 
+        <button id="btn-logs" onclick="switchTab('logsTab')" style="display:none;">
+            <i class="fas fa-list-check"></i>
+            سجل العمليات
+        </button>
+
     </div>
 
 
@@ -2235,7 +2258,7 @@ code{
             </button>
 
             <button
-                onclick="window.print()"
+                onclick="printContract()"
                 class="btn-action btn-navy"
             >
                 <i class="fas fa-print"></i>
@@ -2906,6 +2929,25 @@ code{
 
 
 <!-- =====================================================
+     سجل العمليات
+===================================================== -->
+<div id="logsTab" style="display:none;">
+    <div class="page-header"><div class="page-title">
+        <div class="page-title-icon"><i class="fas fa-list-check"></i></div>
+        <div><h2>سجل العمليات</h2><p>متابعة جميع الحركات التي تمت داخل النظام</p><div class="page-line"></div></div>
+    </div></div>
+    <div class="card-box">
+        <div class="search-box"><i class="fas fa-search"></i>
+            <input type="text" id="logSearch" class="form-control" placeholder="ابحث باسم المستخدم أو العملية..." oninput="renderLogs()">
+        </div>
+        <div class="table-wrapper"><table>
+            <thead><tr><th>التاريخ والوقت</th><th>المستخدم</th><th>اسم الدخول</th><th>الصلاحية</th><th>العملية</th><th>التفاصيل</th></tr></thead>
+            <tbody id="logsTableBody"></tbody>
+        </table></div>
+    </div>
+</div>
+
+<!-- =====================================================
      لوحة التحكم
 ===================================================== -->
 
@@ -3353,6 +3395,8 @@ import {
     getDocs,
     addDoc,
     updateDoc,
+    query,
+    orderBy,
     deleteDoc,
     doc
 }
@@ -3399,6 +3443,8 @@ window.contractsArchive = [];
 window.currentUserRole = '';
 
 window.currentUsername = '';
+window.currentUserId = '';
+window.logsList = [];
 
 
 /* =====================================================
@@ -3630,6 +3676,15 @@ async function loadCloudData(){
         );
 
 
+        try{
+            const logsSnap = await getDocs(query(collection(db, 'logs'), orderBy('timestamp', 'desc')));
+            window.logsList = [];
+            logsSnap.forEach(docSnap => window.logsList.push({id:docSnap.id, ...docSnap.data()}));
+        }catch(logErr){
+            console.warn('Logs Error:', logErr);
+            window.logsList = [];
+        }
+
         renderUsers();
 
         renderArchive();
@@ -3715,6 +3770,9 @@ async function(e){
             window.currentUserRole =
                 foundUser.role;
 
+            window.currentUserId =
+                foundUser.id;
+
             window.currentUsername =
                 foundUser.name ||
                 foundUser.username;
@@ -3776,6 +3834,8 @@ async function(e){
             updateDashboard();
 
 
+            await logAction('تسجيل دخول', `تم تسجيل دخول المستخدم ${window.currentUsername}`);
+
             showToast(
                 `مرحباً ${window.currentUsername}`,
                 'success'
@@ -3783,6 +3843,8 @@ async function(e){
 
         }
         else{
+
+            await logAction('محاولة دخول فاشلة', `محاولة تسجيل دخول فاشلة باسم المستخدم ${uInput}`, uInput, uInput);
 
             showToast(
                 'اسم المستخدم أو كلمة المرور غير صحيحة.',
@@ -3812,6 +3874,17 @@ async function(e){
 
 };
 
+
+/* =====================================================
+   سجل العمليات
+===================================================== */
+async function logAction(action, details, actorName=null, actorUsername=null){
+    try{
+        const name = actorName || window.currentUsername || 'غير معروف';
+        const username = actorUsername || (window.usersList.find(u => u.id === window.currentUserId)?.username || window.currentUsername || 'غير معروف');
+        await addDoc(collection(db, 'logs'), {action, details, user:name, username, role:window.currentUserRole || '', timestamp:Date.now()});
+    }catch(err){ console.warn('Log Error:', err); }
+}
 
 /* =====================================================
    إضافة مستخدم
@@ -3949,6 +4022,29 @@ async function(e){
 
 };
 
+
+/* =====================================================
+   تغيير صلاحية المستخدم
+===================================================== */
+window.changeUserRole = async function(docId, username, currentRole){
+    if(window.currentUserRole !== 'مدير النظام'){
+        showToast('غير مسموح لك بتغيير صلاحيات المستخدمين.', 'error'); return;
+    }
+    const choice = prompt(`الصلاحية الحالية: ${currentRole}\n\nاختر الصلاحية الجديدة بكتابة رقم:\n1 - مدير النظام\n2 - مسؤول موارد بشرية`, currentRole === 'مدير النظام' ? '1' : '2');
+    if(choice === null) return;
+    const roleMap = {'1':'مدير النظام','2':'مسؤول موارد بشرية'};
+    const newRole = roleMap[String(choice).trim()];
+    if(!newRole){ showToast('اختيار غير صحيح. اختر 1 أو 2.', 'error'); return; }
+    if(newRole === currentRole){ showToast('الصلاحية لم تتغير.', 'info'); return; }
+    try{
+        showLoading('جاري تحديث صلاحية المستخدم...');
+        await updateDoc(doc(db, 'users', docId), {role:newRole});
+        await logAction('تغيير صلاحية', `تم تغيير صلاحية المستخدم ${username} من ${currentRole} إلى ${newRole}`);
+        await loadCloudData();
+        showToast(`تم تغيير صلاحية ${username} إلى ${newRole}.`, 'success');
+    }catch(err){ console.error(err); showToast('فشل تغيير صلاحية المستخدم.', 'error'); }
+    finally{ hideLoading(); }
+};
 
 /* =====================================================
    تغيير كلمة المرور
@@ -4123,6 +4219,14 @@ async function(
 
 
 /* =====================================================
+   التحقق من المتطوع المفسوخ عقده
+===================================================== */
+function hasCancelledContract(nationalId){
+    const normalizedId = String(nationalId || '').trim();
+    return window.contractsArchive.some(c => String(c.nationalId || '').trim() === normalizedId && c.status === 'cancelled');
+}
+
+/* =====================================================
    حفظ عقد
 ===================================================== */
 
@@ -4154,6 +4258,11 @@ async function(){
 
     }
 
+
+    if(hasCancelledContract(id)){
+        showToast('لا يمكن إضافة المتطوع، سبق فسخ عقده.', 'error');
+        return;
+    }
 
     const todayVal =
         document
@@ -4245,6 +4354,8 @@ async function(){
         );
 
 
+        await logAction('إضافة عقد', `تم إضافة عقد للمتطوع ${name} - الهوية ${id}`);
+
         await loadCloudData();
 
 
@@ -4335,6 +4446,11 @@ async function(e){
         return;
 
 
+    if(hasCancelledContract(id)){
+        showToast('لا يمكن إضافة المتطوع، سبق فسخ عقده.', 'error');
+        return;
+    }
+
     const fileName =
         fileInput.files[0].name;
 
@@ -4381,6 +4497,8 @@ async function(e){
             newContract
         );
 
+
+        await logAction('إرفاق عقد', `تم إرفاق عقد خارجي للمتطوع ${name} - الهوية ${id}`);
 
         await loadCloudData();
 
@@ -4542,6 +4660,8 @@ async function(
         );
 
 
+        await logAction('تجديد عقد', `تم تجديد عقد ${contract?.name || ''} حتى ${newEndStr}`);
+
         await loadCloudData();
 
 
@@ -4673,6 +4793,8 @@ async function(docId){
         );
 
 
+        await logAction('فسخ عقد', `تم فسخ عقد ${contract.name} - الهوية ${contract.nationalId} - السبب: ${reason.trim()}`);
+
         await loadCloudData();
 
 
@@ -4709,6 +4831,9 @@ async function(docId){
 
 window.deleteContract =
 async function(docId){
+    const contract = window.contractsArchive.find(c => c.id === docId);
+    if(!contract){ showToast('لم يتم العثور على العقد.', 'error'); return; }
+
 
     if(
         !confirm(
@@ -4733,6 +4858,8 @@ async function(docId){
             )
         );
 
+
+        await logAction('حذف عقد', `تم حذف عقد ${contract.name} - الهوية ${contract.nationalId}`);
 
         await loadCloudData();
 
@@ -4772,7 +4899,11 @@ async function(docId){
    تسجيل الخروج
 ===================================================== */
 
-function logoutSystem(){
+async function logoutSystem(){
+
+    if(window.currentUsername){
+        await logAction('تسجيل خروج', `تم تسجيل خروج المستخدم ${window.currentUsername}`);
+    }
 
     document.getElementById(
         'login_user'
@@ -4799,6 +4930,8 @@ function logoutSystem(){
     window.currentUserRole = '';
 
     window.currentUsername = '';
+window.currentUserId = '';
+window.logsList = [];
 
     document.getElementById(
         'currentUserDisplay'
@@ -4809,6 +4942,7 @@ function logoutSystem(){
         'btn-users'
     ).style.display =
         'none';
+    document.getElementById('btn-logs').style.display = 'none';
 
 
     switchTab(
@@ -4822,10 +4956,15 @@ function logoutSystem(){
    تبديل الصفحات
 ===================================================== */
 
+function printContract(){
+    logAction('طباعة عقد', `تمت طباعة عقد ${document.getElementById('in_name')?.value || 'غير محدد'}`);
+    window.print();
+}
+
 function switchTab(tabId){
 
     if(
-        tabId === 'usersTab' &&
+        (tabId === 'usersTab' || tabId === 'logsTab') &&
         window.currentUserRole !==
         'مدير النظام'
     ){
@@ -4845,7 +4984,8 @@ function switchTab(tabId){
         'createTab',
         'uploadTab',
         'archiveTab',
-        'usersTab'
+        'usersTab',
+        'logsTab'
 
     ];
 
@@ -4869,7 +5009,8 @@ function switchTab(tabId){
         'btn-create',
         'btn-upload',
         'btn-archive',
-        'btn-users'
+        'btn-users',
+        'btn-logs'
 
     ];
 
@@ -4897,6 +5038,10 @@ function switchTab(tabId){
         target.style.display =
             'block';
 
+    if(window.currentUsername){
+        logAction('فتح قسم', `تم فتح القسم ${tabId}`);
+    }
+
 
     const map = {
 
@@ -4910,7 +5055,9 @@ function switchTab(tabId){
             'btn-archive',
 
         usersTab:
-            'btn-users'
+            'btn-users',
+        logsTab:
+            'btn-logs'
 
     };
 
@@ -5113,6 +5260,7 @@ function updateContractPreview(){
 ===================================================== */
 
 function downloadContractPDF(){
+    logAction('تنزيل PDF', `تم طلب تنزيل PDF للعقد ${document.getElementById('in_name')?.value || 'غير محدد'}`);
 
     const name =
         document
@@ -5324,6 +5472,17 @@ function renderUsers(){
                     </td>
 
                     <td>
+
+                        <button
+                            onclick="
+                                changeUserRole('${u.id}','${escapeJs(u.username || '')}','${escapeJs(u.role || '')}')
+                            "
+                            class="btn-action btn-purple"
+                            style="padding:7px 10px;font-size:10px;width:auto;"
+                        >
+                            <i class="fas fa-user-shield"></i>
+                            تغيير الصلاحية
+                        </button>
 
                         <button
                             onclick="
