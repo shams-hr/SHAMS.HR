@@ -84,11 +84,6 @@ body{
     min-height:100vh;
 }
 
-
-/* ================================
-   شاشة الدخول
-================================ */
-
 .auth-overlay{
     position:fixed;
     inset:0;
@@ -332,19 +327,9 @@ body{
     transform:translateY(-2px);
 }
 
-
-/* ================================
-   التطبيق
-================================ */
-
 #appContent{
     min-height:100vh;
 }
-
-
-/* ================================
-   Navbar
-================================ */
 
 .top-navbar{
     position:sticky;
@@ -563,11 +548,6 @@ body{
     background:#ef4444;
 }
 
-
-/* ================================
-   Main
-================================ */
-
 .main-container{
     width:min(1250px,calc(100% - 40px));
 
@@ -575,11 +555,6 @@ body{
 
     position:relative;
 }
-
-
-/* ================================
-   Headers
-================================ */
 
 .page-header{
     display:flex;
@@ -667,11 +642,6 @@ body{
 
 }
 
-
-/* ================================
-   Cards
-================================ */
-
 .card-box{
     background:rgba(255,255,255,.96);
 
@@ -734,11 +704,6 @@ body{
 
     margin-top:2px;
 }
-
-
-/* ================================
-   Forms
-================================ */
 
 .form-section-title{
     display:flex;
@@ -830,11 +795,6 @@ textarea.form-control{
     resize:vertical;
 }
 
-
-/* ================================
-   Buttons
-================================ */
-
 .action-row{
     display:flex;
 
@@ -923,11 +883,6 @@ textarea.form-control{
 
     color:white;
 }
-
-
-/* ================================
-   Dashboard
-================================ */
 
 .dashboard-welcome{
     background:
@@ -1066,11 +1021,6 @@ textarea.form-control{
     color:var(--navy);
 }
 
-
-/* ================================
-   Search
-================================ */
-
 .search-box{
     position:relative;
 
@@ -1096,11 +1046,6 @@ textarea.form-control{
 
     min-height:48px;
 }
-
-
-/* ================================
-   Table
-================================ */
 
 .table-wrapper{
     width:100%;
@@ -1220,11 +1165,6 @@ code{
 
     font-weight:700;
 }
-
-
-/* ================================
-   Contract
-================================ */
 
 .contract-container{
     padding:25px;
@@ -1407,11 +1347,6 @@ code{
     margin:0 auto 2px;
 }
 
-
-/* ================================
-   Toast
-================================ */
-
 .toast-container{
     position:fixed;
 
@@ -1496,11 +1431,6 @@ code{
 
 }
 
-
-/* ================================
-   Loading
-================================ */
-
 .loading-overlay{
     position:fixed;
 
@@ -1569,11 +1499,6 @@ code{
 
     margin-top:4px;
 }
-
-
-/* ================================
-   Responsive
-================================ */
 
 @media(max-width:1000px){
 
@@ -1665,11 +1590,6 @@ code{
 
 }
 
-
-/* ================================
-   Print
-================================ */
-
 @media print{
 
     body{
@@ -1722,13 +1642,7 @@ code{
 
 </head>
 
-
 <body>
-
-
-<!-- ================================
-     LOGIN
-================================ -->
 
 <div class="auth-overlay" id="authSection">
 
@@ -1808,11 +1722,6 @@ code{
 
 </div>
 
-
-<!-- ================================
-     LOADING
-================================ -->
-
 <div
     class="loading-overlay"
     id="loadingOverlay"
@@ -1834,30 +1743,15 @@ code{
 
 </div>
 
-
-<!-- ================================
-     TOAST
-================================ -->
-
 <div
     class="toast-container"
     id="toastContainer"
 ></div>
 
-
-<!-- ================================
-     APP
-================================ -->
-
 <div
     id="appContent"
     style="display:none;"
 >
-
-
-<!-- ================================
-     NAVBAR
-================================ -->
 
 <div class="top-navbar">
 
@@ -1882,7 +1776,6 @@ code{
         </div>
 
     </div>
-
 
     <div class="nav-links">
 
@@ -1921,17 +1814,18 @@ code{
             لوحة التحكم
         </button>
 
+        <!-- LOG فقط -->
         <button
             id="btn-logs"
             onclick="switchTab('logsTab')"
             style="display:none;"
+            title="سجل العمليات"
         >
             <i class="fas fa-list-check"></i>
-            سجل العمليات
+            LOG
         </button>
 
     </div>
-
 
     <div class="user-area">
 
@@ -1967,13 +1861,7 @@ code{
 
 </div>
 
-
 <div class="main-container">
-
-
-<!-- ================================
-     CREATE CONTRACT
-================================ -->
 
 <div id="createTab">
 
@@ -2003,7 +1891,6 @@ code{
 
     </div>
 
-
     <div class="card-box no-print">
 
         <div class="card-header">
@@ -2026,7 +1913,6 @@ code{
 
         </div>
 
-
         <div class="form-section-title">
 
             <i class="fas fa-id-card"></i>
@@ -2034,7 +1920,6 @@ code{
             المعلومات الشخصية
 
         </div>
-
 
         <div class="form-grid">
 
@@ -2052,7 +1937,6 @@ code{
 
             </div>
 
-
             <div class="form-group">
 
                 <label>رقم الهوية / الإقامة</label>
@@ -2067,7 +1951,6 @@ code{
 
             </div>
 
-
             <div class="form-group">
 
                 <label>رقم الجوال</label>
@@ -2081,7 +1964,6 @@ code{
                 >
 
             </div>
-
 
             <div class="form-group">
 
@@ -2098,7 +1980,6 @@ code{
 
         </div>
 
-
         <div class="form-section-title">
 
             <i class="fas fa-briefcase"></i>
@@ -2106,7 +1987,6 @@ code{
             المعلومات الوظيفية والعقد
 
         </div>
-
 
         <div class="form-grid">
 
@@ -2124,7 +2004,6 @@ code{
 
             </div>
 
-
             <div class="form-group">
 
                 <label>تاريخ الاتفاق</label>
@@ -2138,7 +2017,6 @@ code{
 
             </div>
 
-
             <div class="form-group">
 
                 <label>تاريخ الانضمام الفعلي</label>
@@ -2151,7 +2029,6 @@ code{
                 >
 
             </div>
-
 
             <div class="form-group">
 
@@ -2185,7 +2062,6 @@ code{
 
         </div>
 
-
         <div class="action-row">
 
             <button
@@ -2216,7 +2092,6 @@ code{
 
     </div>
 
-
     <div class="contract-container">
 
         <div class="contract-container-title">
@@ -2231,7 +2106,6 @@ code{
             </span>
 
         </div>
-
 
         <div style="overflow-x:auto;width:100%;">
 
@@ -2251,11 +2125,9 @@ code{
 
                 </div>
 
-
                 <div class="contract-title">
                     عقد اتفاقية انضمام لإدارة "شمس" التطوعي
                 </div>
-
 
                 <div class="contract-row">
 
@@ -2271,11 +2143,9 @@ code{
 
                 </div>
 
-
                 <div class="contract-row">
                     الطرف الأول : إدارة فريق (شمس) التطوّعي
                 </div>
-
 
                 <div class="contract-row">
 
@@ -2289,7 +2159,6 @@ code{
 
                 </div>
 
-
                 <div class="contract-row">
 
                     رقم الهوية / الإقامة:
@@ -2301,7 +2170,6 @@ code{
                     )
 
                 </div>
-
 
                 <div class="contract-row">
 
@@ -2315,7 +2183,6 @@ code{
 
                 </div>
 
-
                 <div class="contract-row">
 
                     تاريخ الميلاد:
@@ -2327,7 +2194,6 @@ code{
                     )
 
                 </div>
-
 
                 <div class="contract-row">
 
@@ -2341,7 +2207,6 @@ code{
 
                 </div>
 
-
                 <div class="section-h">
                     أولاً : موضوع العقد
                 </div>
@@ -2352,7 +2217,6 @@ code{
                     وفق الأنظمة والتعليمات المعتمدة.
 
                 </p>
-
 
                 <div class="section-h">
                     ثانياً : واجبات المتطوع
@@ -2374,7 +2238,6 @@ code{
 
                 </ul>
 
-
                 <div class="section-h">
                     ثالثاً : حقوق الإدارة
                 </div>
@@ -2393,11 +2256,9 @@ code{
 
                 </ul>
 
-
                 <div class="section-h">
                     رابعاً : مدة العقد وانهاؤه
                 </div>
-
 
                 <div class="contract-row">
 
@@ -2410,7 +2271,6 @@ code{
                     )
 
                 </div>
-
 
                 <div class="contract-row">
 
@@ -2432,7 +2292,6 @@ code{
 
                 </div>
 
-
                 <p style="font-size:11px;line-height:1.4;font-weight:500;margin-top:2px;">
 
                     يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام
@@ -2440,7 +2299,6 @@ code{
                     إشعار الإدارة بشكل رسمي.
 
                 </p>
-
 
                 <div class="sig-grid">
 
@@ -2456,7 +2314,6 @@ code{
                         ></div>
 
                     </div>
-
 
                     <div class="sig-box">
 
@@ -2474,7 +2331,6 @@ code{
                         <div class="sig-line"></div>
 
                     </div>
-
 
                     <div class="sig-box">
 
@@ -2503,11 +2359,6 @@ code{
 
 </div>
 
-
-<!-- ================================
-     UPLOAD
-================================ -->
-
 <div id="uploadTab" style="display:none;">
 
     <div class="page-header">
@@ -2534,7 +2385,6 @@ code{
 
     </div>
 
-
     <div class="card-box">
 
         <div class="card-header">
@@ -2555,7 +2405,6 @@ code{
 
         </div>
 
-
         <form onsubmit="handleFileUpload(event)">
 
             <div class="form-grid">
@@ -2573,7 +2422,6 @@ code{
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label>رقم الهوية</label>
@@ -2586,7 +2434,6 @@ code{
                     >
 
                 </div>
-
 
                 <div class="form-group">
 
@@ -2601,7 +2448,6 @@ code{
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label>تاريخ بداية العقد</label>
@@ -2615,7 +2461,6 @@ code{
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label>تاريخ انتهاء العقد</label>
@@ -2628,7 +2473,6 @@ code{
                     >
 
                 </div>
-
 
                 <div class="form-group">
 
@@ -2645,7 +2489,6 @@ code{
                 </div>
 
             </div>
-
 
             <div class="action-row">
 
@@ -2667,11 +2510,6 @@ code{
     </div>
 
 </div>
-
-
-<!-- ================================
-     ARCHIVE
-================================ -->
 
 <div id="archiveTab" style="display:none;">
 
@@ -2699,7 +2537,6 @@ code{
 
     </div>
 
-
     <div class="card-box">
 
         <div class="card-header">
@@ -2720,7 +2557,6 @@ code{
 
         </div>
 
-
         <div class="search-box">
 
             <i class="fas fa-search"></i>
@@ -2734,7 +2570,6 @@ code{
             >
 
         </div>
-
 
         <div class="table-wrapper">
 
@@ -2767,9 +2602,8 @@ code{
 
 </div>
 
-
 <!-- ================================
-     LOGS
+     LOG
 ================================ -->
 
 <div id="logsTab" style="display:none;">
@@ -2787,7 +2621,7 @@ code{
             <div>
 
                 <h2>
-                    سجل العمليات
+                    LOG
                 </h2>
 
                 <p>
@@ -2801,7 +2635,6 @@ code{
         </div>
 
     </div>
-
 
     <div class="card-box">
 
@@ -2827,7 +2660,6 @@ code{
 
         </div>
 
-
         <div class="search-box">
 
             <i class="fas fa-search"></i>
@@ -2841,7 +2673,6 @@ code{
             >
 
         </div>
-
 
         <div class="table-wrapper">
 
@@ -2871,11 +2702,6 @@ code{
     </div>
 
 </div>
-
-
-<!-- ================================
-     DASHBOARD
-================================ -->
 
 <div id="usersTab" style="display:none;">
 
@@ -2907,7 +2733,6 @@ code{
 
     </div>
 
-
     <div class="dashboard-welcome">
 
         <div>
@@ -2930,11 +2755,9 @@ code{
 
     </div>
 
-
     <div class="card-box">
 
         <div class="dashboard-grid">
-
 
             <div class="dashboard-stat">
 
@@ -2964,7 +2787,6 @@ code{
 
             </div>
 
-
             <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
@@ -2992,7 +2814,6 @@ code{
                 </div>
 
             </div>
-
 
             <div class="dashboard-stat">
 
@@ -3022,7 +2843,6 @@ code{
 
             </div>
 
-
             <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
@@ -3050,7 +2870,6 @@ code{
                 </div>
 
             </div>
-
 
             <div class="dashboard-stat">
 
@@ -3084,9 +2903,6 @@ code{
 
     </div>
 
-
-    <!-- إضافة مستخدم -->
-
     <div class="card-box">
 
         <div class="card-header">
@@ -3111,7 +2927,6 @@ code{
 
         </div>
 
-
         <form onsubmit="addUser(event)">
 
             <div class="form-grid">
@@ -3131,7 +2946,6 @@ code{
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label>
@@ -3147,7 +2961,6 @@ code{
 
                 </div>
 
-
                 <div class="form-group">
 
                     <label>
@@ -3162,7 +2975,6 @@ code{
                     >
 
                 </div>
-
 
                 <div class="form-group">
 
@@ -3189,7 +3001,6 @@ code{
 
             </div>
 
-
             <div class="action-row">
 
                 <button
@@ -3208,9 +3019,6 @@ code{
         </form>
 
     </div>
-
-
-    <!-- المستخدمين -->
 
     <div class="card-box">
 
@@ -3235,7 +3043,6 @@ code{
             </div>
 
         </div>
-
 
         <div class="table-wrapper">
 
@@ -3265,15 +3072,10 @@ code{
 
 </div>
 
-
 </div>
 
 </div>
 
-
-<!-- ================================
-     FIREBASE
-================================ -->
 
 <script type="module">
 
@@ -3343,10 +3145,6 @@ window.currentUsername = '';
 window.currentUserId = '';
 
 
-/* =====================================================
-   Loading
-===================================================== */
-
 function showLoading(title='جاري تنفيذ العملية...'){
 
     const overlay =
@@ -3374,10 +3172,6 @@ function hideLoading(){
 
 }
 
-
-/* =====================================================
-   Toast
-===================================================== */
 
 window.showToast =
 function(message,type='info'){
@@ -3432,9 +3226,69 @@ function(message,type='info'){
 };
 
 
-/* =====================================================
-   تحميل البيانات
-===================================================== */
+async function loadLogs(){
+
+    if(
+        window.currentUserRole !==
+        'مدير النظام'
+    )
+        return;
+
+
+    try{
+
+        const logsSnap =
+            await getDocs(
+                query(
+                    collection(db,'logs'),
+                    orderBy(
+                        'timestamp',
+                        'desc'
+                    )
+                )
+            );
+
+
+        window.logsList = [];
+
+
+        logsSnap.forEach(
+            docSnap => {
+
+                window.logsList.push({
+
+                    id:docSnap.id,
+
+                    ...docSnap.data()
+
+                });
+
+            }
+        );
+
+
+        renderLogs();
+
+    }
+
+    catch(err){
+
+        console.warn(
+            'Logs Error:',
+            err
+        );
+
+        showToast(
+            'تعذر تحميل سجل العمليات.',
+            'error'
+        );
+
+        renderLogs();
+
+    }
+
+}
+
 
 async function loadCloudData(){
 
@@ -3444,8 +3298,6 @@ async function loadCloudData(){
             'جاري تحميل بيانات النظام...'
         );
 
-
-        /* المستخدمين */
 
         const usersSnap =
             await getDocs(
@@ -3470,8 +3322,6 @@ async function loadCloudData(){
             }
         );
 
-
-        /* إنشاء المدير الأساسي إذا لم يكن موجود */
 
         const hasAdmin =
             window.usersList.some(
@@ -3524,8 +3374,6 @@ async function loadCloudData(){
         }
 
 
-        /* العقود */
-
         const contractsSnap =
             await getDocs(
                 collection(db,'contracts')
@@ -3550,49 +3398,16 @@ async function loadCloudData(){
         );
 
 
-        /* السجل */
+        /*
+           تحميل LOG فقط للمدير
+        */
 
-        try{
+        if(
+            window.currentUserRole ===
+            'مدير النظام'
+        ){
 
-            const logsSnap =
-                await getDocs(
-                    query(
-                        collection(db,'logs'),
-                        orderBy(
-                            'timestamp',
-                            'desc'
-                        )
-                    )
-                );
-
-
-            window.logsList = [];
-
-
-            logsSnap.forEach(
-                docSnap => {
-
-                    window.logsList.push({
-
-                        id:docSnap.id,
-
-                        ...docSnap.data()
-
-                    });
-
-                }
-            );
-
-        }
-
-        catch(logError){
-
-            console.warn(
-                'Logs Error:',
-                logError
-            );
-
-            window.logsList = [];
+            await loadLogs();
 
         }
 
@@ -3602,15 +3417,6 @@ async function loadCloudData(){
         renderArchive();
 
         updateDashboard();
-
-        if(
-            window.currentUserRole ===
-            'مدير النظام'
-        ){
-
-            renderLogs();
-
-        }
 
     }
 
@@ -3639,10 +3445,6 @@ async function loadCloudData(){
 
 loadCloudData();
 
-
-/* =====================================================
-   تسجيل العمليات
-===================================================== */
 
 async function logAction(
     action,
@@ -3679,6 +3481,10 @@ async function logAction(
             '';
 
 
+        const logTimestamp =
+            Date.now();
+
+
         await addDoc(
             collection(db,'logs'),
             {
@@ -3693,16 +3499,11 @@ async function logAction(
 
                 role,
 
-                timestamp:Date.now()
+                timestamp:logTimestamp
 
             }
         );
 
-
-        /*
-           تحديث الواجهة مباشرة
-           إذا كان المستخدم مدير النظام
-        */
 
         if(
             window.currentUserRole ===
@@ -3721,7 +3522,7 @@ async function logAction(
 
                 role,
 
-                timestamp:Date.now()
+                timestamp:logTimestamp
 
             });
 
@@ -3743,10 +3544,6 @@ async function logAction(
 
 }
 
-
-/* =====================================================
-   عرض سجل العمليات
-===================================================== */
 
 function renderLogs(){
 
@@ -3940,10 +3737,6 @@ function renderLogs(){
 }
 
 
-/* =====================================================
-   تسجيل الدخول
-===================================================== */
-
 window.handleLogin =
 async function(e){
 
@@ -4014,21 +3807,25 @@ async function(e){
 
             if(isAdmin){
 
-                usersButton.style.display =
-                    'inline-block';
+                if(usersButton)
+                    usersButton.style.display =
+                        'inline-flex';
 
-                logsButton.style.display =
-                    'inline-block';
+                if(logsButton)
+                    logsButton.style.display =
+                        'inline-flex';
 
             }
 
             else{
 
-                usersButton.style.display =
-                    'none';
+                if(usersButton)
+                    usersButton.style.display =
+                        'none';
 
-                logsButton.style.display =
-                    'none';
+                if(logsButton)
+                    logsButton.style.display =
+                        'none';
 
             }
 
@@ -4081,11 +3878,6 @@ async function(e){
 
         else{
 
-            /*
-               تسجيل محاولة الدخول الفاشلة
-               بدون إعطاء صلاحية وهمية
-            */
-
             await logAction(
                 'محاولة دخول فاشلة',
                 `محاولة تسجيل دخول فاشلة باسم المستخدم ${uInput}`,
@@ -4123,10 +3915,6 @@ async function(e){
 
 };
 
-
-/* =====================================================
-   إضافة مستخدم
-===================================================== */
 
 window.addUser =
 async function(e){
@@ -4282,10 +4070,6 @@ async function(e){
 };
 
 
-/* =====================================================
-   تغيير الصلاحية
-===================================================== */
-
 window.changeUserRole =
 async function(
     docId,
@@ -4424,10 +4208,6 @@ async function(
 };
 
 
-/* =====================================================
-   تغيير كلمة المرور
-===================================================== */
-
 window.changeUserPassword =
 async function(
     docId,
@@ -4531,10 +4311,6 @@ async function(
 };
 
 
-/* =====================================================
-   حذف مستخدم
-===================================================== */
-
 window.deleteUser =
 async function(
     docId,
@@ -4628,10 +4404,6 @@ async function(
 };
 
 
-/* =====================================================
-   التحقق من العقد المفسوخ
-===================================================== */
-
 function hasCancelledContract(
     nationalId
 ){
@@ -4655,10 +4427,6 @@ function hasCancelledContract(
 
 }
 
-
-/* =====================================================
-   حفظ العقد
-===================================================== */
 
 window.saveAndArchiveContract =
 async function(){
@@ -4847,10 +4615,6 @@ async function(){
 };
 
 
-/* =====================================================
-   إرفاق عقد خارجي
-===================================================== */
-
 window.handleFileUpload =
 async function(e){
 
@@ -4997,10 +4761,6 @@ async function(e){
 
 };
 
-
-/* =====================================================
-   تجديد العقد
-===================================================== */
 
 window.renewContract =
 async function(
@@ -5161,10 +4921,6 @@ async function(
 };
 
 
-/* =====================================================
-   فسخ العقد
-===================================================== */
-
 window.cancelContract =
 async function(docId){
 
@@ -5300,10 +5056,6 @@ async function(docId){
 };
 
 
-/* =====================================================
-   حذف عقد
-===================================================== */
-
 window.deleteContract =
 async function(docId){
 
@@ -5386,10 +5138,6 @@ async function(docId){
 };
 
 
-/* =====================================================
-   عرض المستخدمين
-===================================================== */
-
 function renderUsers(){
 
     const tbody =
@@ -5457,7 +5205,6 @@ function renderUsers(){
 
                     </td>
 
-
                     <td>
 
                         <code>
@@ -5468,7 +5215,6 @@ function renderUsers(){
 
                     </td>
 
-
                     <td>
 
                         <code>
@@ -5478,7 +5224,6 @@ function renderUsers(){
                         </code>
 
                     </td>
-
 
                     <td>
 
@@ -5495,7 +5240,6 @@ function renderUsers(){
                         </span>
 
                     </td>
-
 
                     <td>
 
@@ -5527,7 +5271,6 @@ function renderUsers(){
 
                             </button>
 
-
                             <button
                                 onclick="changeUserPassword(
                                     '${u.id}',
@@ -5546,7 +5289,6 @@ function renderUsers(){
                                 تغيير كلمة المرور
 
                             </button>
-
 
                             <button
                                 onclick="deleteUser(
@@ -5580,10 +5322,6 @@ function renderUsers(){
 
 }
 
-
-/* =====================================================
-   Dashboard
-===================================================== */
 
 function updateDashboard(){
 
@@ -5691,10 +5429,6 @@ function updateDashboard(){
 
 }
 
-
-/* =====================================================
-   الأرشيف
-===================================================== */
 
 function renderArchive(){
 
@@ -6006,7 +5740,6 @@ function renderArchive(){
 
                     </button>
 
-
                     <button
                         onclick="cancelContract(
                             '${c.id}'
@@ -6044,20 +5777,17 @@ function renderArchive(){
 
                     </td>
 
-
                     <td>
                         ${escapeHtml(
                             c.nationalId || ''
                         )}
                     </td>
 
-
                     <td>
                         ${escapeHtml(
                             c.dept || ''
                         )}
                     </td>
-
 
                     <td>
                         ${escapeHtml(
@@ -6066,14 +5796,12 @@ function renderArchive(){
                         )}
                     </td>
 
-
                     <td>
                         ${escapeHtml(
                             c.endDate ||
                             'غير محدد'
                         )}
                     </td>
-
 
                     <td>
 
@@ -6092,11 +5820,9 @@ function renderArchive(){
 
                     </td>
 
-
                     <td>
                         ${statusBadge}
                     </td>
-
 
                     <td>
 
@@ -6109,7 +5835,6 @@ function renderArchive(){
                         >
 
                             ${actionButtons}
-
 
                             <button
                                 onclick="deleteContract(
@@ -6143,17 +5868,8 @@ function renderArchive(){
 }
 
 
-/* =====================================================
-   تبديل الصفحات
-===================================================== */
-
 window.switchTab =
 function(tabId){
-
-    /*
-       منع أي مستخدم غير مدير النظام
-       من فتح لوحة التحكم أو السجل
-    */
 
     if(
 
@@ -6308,14 +6024,10 @@ function(tabId){
         'logsTab'
     ){
 
-        renderLogs();
+        loadLogs();
 
     }
 
-
-    /*
-       تسجيل فتح الأقسام
-    */
 
     if(
         window.currentUsername &&
@@ -6331,10 +6043,6 @@ function(tabId){
 
 };
 
-
-/* =====================================================
-   معاينة العقد
-===================================================== */
 
 window.updateContractPreview =
 function(){
@@ -6491,10 +6199,6 @@ function(){
 };
 
 
-/* =====================================================
-   طباعة العقد
-===================================================== */
-
 window.printContract =
 function(){
 
@@ -6508,10 +6212,6 @@ function(){
 
 };
 
-
-/* =====================================================
-   PDF
-===================================================== */
 
 window.downloadContractPDF =
 function(){
@@ -6627,17 +6327,8 @@ function(){
 };
 
 
-/* =====================================================
-   تسجيل الخروج
-===================================================== */
-
 window.logoutSystem =
 async function(){
-
-    /*
-       نحفظ معلومات المستخدم قبل تصفير المتغيرات
-       حتى لا يضيع سجل الخروج
-    */
 
     const logoutName =
         window.currentUsername;
@@ -6701,21 +6392,27 @@ async function(){
         '—';
 
 
-    document.getElementById(
-        'btn-users'
-    ).style.display =
-        'none';
+    const usersButton =
+        document.getElementById(
+            'btn-users'
+        );
 
 
-    document.getElementById(
-        'btn-logs'
-    ).style.display =
-        'none';
+    const logsButton =
+        document.getElementById(
+            'btn-logs'
+        );
 
 
-    /*
-       إعادة صفحة البداية
-    */
+    if(usersButton)
+        usersButton.style.display =
+            'none';
+
+
+    if(logsButton)
+        logsButton.style.display =
+            'none';
+
 
     const tabs = [
 
@@ -6783,10 +6480,6 @@ async function(){
 };
 
 
-/* =====================================================
-   حماية النص
-===================================================== */
-
 function escapeHtml(value){
 
     return String(value)
@@ -6850,10 +6543,6 @@ function escapeJs(value){
 
 }
 
-
-/* =====================================================
-   التاريخ
-===================================================== */
 
 document.addEventListener(
     'DOMContentLoaded',
