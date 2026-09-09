@@ -33,6 +33,9 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 
+
+
+
 <style>
 
 :root{
@@ -1166,6 +1169,14 @@ code{
     font-weight:700;
 }
 
+
+
+
+
+/* =========================================================
+   تحسين عقد A4 - منع تداخل الكلام
+\========================================================= */
+
 .contract-container{
     padding:25px;
 
@@ -1211,14 +1222,21 @@ code{
     border-radius:20px;
 }
 
+
+
+
+
+/* ورقة العقد */
+
 .contract-paper{
-    background:white;
 
-    width:794px;
+    background:#fff;
 
-    min-height:1120px;
+    width:210mm;
 
-    padding:25px 40px;
+    min-height:297mm;
+
+    padding:12mm 14mm;
 
     margin:0 auto;
 
@@ -1227,125 +1245,458 @@ code{
     box-shadow:
         0 20px 55px
         rgba(0,0,0,.13);
-}
-
-.contract-title{
-    text-align:center;
-
-    font-size:16px;
-
-    font-weight:900;
-
-    color:#000;
-
-    margin:5px 0 10px;
-}
-
-.contract-row{
-    font-size:11.5px;
-
-    line-height:1.45;
-
-    font-weight:600;
 
     color:#111;
 
-    margin-bottom:2px;
+    direction:rtl;
+
+    text-align:right;
+
+    overflow:hidden;
+
+    position:relative;
+
 }
 
-.fill-val{
-    border-bottom:1px dashed #555;
 
-    padding:0 5px;
 
-    font-weight:800;
 
-    color:#000;
 
-    display:inline-block;
+/* كل عناصر العقد */
+
+.contract-paper *{
+    max-width:100%;
 }
 
-.section-h{
-    font-size:12px;
+
+
+
+
+/* الشعار */
+
+.contract-logo{
+    width:85px;
+
+    height:auto;
+
+    object-fit:contain;
+
+    display:block;
+
+    margin-right:0;
+
+    margin-left:auto;
+
+    margin-bottom:5px;
+}
+
+
+
+
+
+/* عنوان العقد */
+
+.contract-title{
+
+    text-align:center;
+
+    font-size:17px;
 
     font-weight:900;
 
     color:#000;
 
-    margin:8px 0 2px;
+    line-height:1.8;
 
-    border-right:3px solid var(--orange);
+    margin:6px 0 16px;
 
-    padding-right:6px;
+    white-space:normal;
+
 }
+
+
+
+
+
+/* بيانات العقد - تخطيط ثابت لمنع تداخل العربي مع الأرقام */
+.contract-row{
+    display:flex;
+    align-items:baseline;
+    justify-content:flex-start;
+    gap:6px;
+    width:100%;
+    min-height:30px;
+    font-size:12px;
+    line-height:1.9;
+    font-weight:600;
+    color:#111;
+    margin-bottom:5px;
+    text-align:right;
+    direction:rtl;
+    unicode-bidi:plaintext;
+}
+
+.contract-label{
+    flex:0 0 auto;
+    white-space:nowrap;
+    direction:rtl;
+    unicode-bidi:isolate;
+}
+
+.contract-value-wrap{
+    display:inline-flex;
+    align-items:baseline;
+    gap:4px;
+    min-width:0;
+    flex:0 1 auto;
+    direction:rtl;
+    unicode-bidi:isolate;
+}
+
+.contract-value-wrap .paren{
+    flex:0 0 auto;
+    direction:rtl;
+}
+
+/* البيانات المتغيرة: الأرقام/التواريخ لاتينيًا من اليسار لليمين */
+.fill-val{
+    border-bottom:1px dashed #555;
+    padding:0 5px 1px;
+    font-weight:800;
+    color:#000;
+    display:inline-block;
+    white-space:nowrap;
+    vertical-align:baseline;
+    direction:ltr;
+    unicode-bidi:isolate;
+    text-align:left;
+    min-width:24px;
+}
+
+.fill-val.text-value{
+    direction:rtl;
+    unicode-bidi:isolate;
+    text-align:right;
+    white-space:normal;
+}
+
+.contract-dates-row{
+    flex-wrap:wrap;
+    column-gap:6px;
+    row-gap:2px;
+}
+
+.contract-dates-row .contract-label:nth-of-type(2){
+    margin-right:8px;
+}
+
+/* =========================================================
+   PDF EXPORT - Arabic / RTL safe rendering
+   ========================================================= */
+.pdf-export {
+    width: 210mm !important;
+    min-width: 210mm !important;
+    max-width: 210mm !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    padding: 12mm 14mm !important;
+    background: #fff !important;
+    direction: rtl !important;
+    text-align: right !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+    font-family: "Tajawal", Arial, sans-serif !important;
+    unicode-bidi: normal !important;
+}
+
+.pdf-export .contract-row {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: baseline !important;
+    justify-content: flex-start !important;
+    width: 100% !important;
+    direction: rtl !important;
+    unicode-bidi: normal !important;
+    text-align: right !important;
+    white-space: normal !important;
+    font-family: "Tajawal", Arial, sans-serif !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.pdf-export .contract-label {
+    direction: rtl !important;
+    unicode-bidi: isolate !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    font-family: "Tajawal", Arial, sans-serif !important;
+}
+
+.pdf-export .contract-value-wrap {
+    direction: rtl !important;
+    unicode-bidi: isolate !important;
+    text-align: right !important;
+    font-family: "Tajawal", Arial, sans-serif !important;
+}
+
+.pdf-export .fill-val.text-value {
+    direction: rtl !important;
+    unicode-bidi: isolate !important;
+    text-align: right !important;
+    white-space: normal !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+    font-family: "Tajawal", Arial, sans-serif !important;
+}
+
+.pdf-export .fill-val:not(.text-value) {
+    direction: ltr !important;
+    unicode-bidi: isolate !important;
+    text-align: left !important;
+    white-space: nowrap !important;
+    font-family: "Tajawal", Arial, sans-serif !important;
+}
+
+.pdf-export .section-h,
+.pdf-export .contract-row,
+.pdf-export .signature-box,
+.pdf-export .contract-header {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.pdf-export .section-h {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+}
+
+.pdf-export img {
+    max-width: 100% !important;
+    image-rendering: auto !important;
+}
+
+.pdf-export,
+.pdf-export * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+}
+
+
+
+
+
+
+/* عناوين الأقسام */
+
+.section-h{
+
+    font-size:13px;
+
+    font-weight:900;
+
+    color:#000;
+
+    margin:16px 0 8px;
+
+    border-right:4px solid var(--orange);
+
+    padding-right:8px;
+
+    line-height:1.8;
+
+    page-break-after:avoid;
+
+}
+
+
+
+
+
+/* القوائم */
 
 .contract-ul{
+
     list-style:none;
 
-    padding-right:0;
+    padding:0;
+
+    margin:0 0 7px;
+
 }
 
-.contract-ul li{
-    font-size:11px;
 
-    line-height:1.35;
+
+
+
+/* بنود العقد */
+
+.contract-ul li{
+
+    display:block;
+
+    width:100%;
+
+    font-size:11.5px;
+
+    line-height:1.85;
 
     color:#222;
 
     font-weight:500;
 
-    margin-bottom:1px;
+    margin-bottom:3px;
+
+    padding:0;
+
+    page-break-inside:avoid;
+
+    overflow-wrap:break-word;
+
 }
 
+
+
+
+
+/* فقرات العقد */
+
+.contract-paper p{
+
+    font-size:11.5px;
+
+    line-height:1.9;
+
+    font-weight:500;
+
+    color:#222;
+
+    margin:5px 0 9px;
+
+}
+
+
+
+
+
+/* شبكة التوقيعات */
+
 .sig-grid{
+
     display:flex;
 
     justify-content:space-between;
 
     align-items:flex-end;
 
-    margin-top:15px;
+    gap:12px;
 
-    padding-top:10px;
+    margin-top:28px;
+
+    padding-top:14px;
 
     border-top:1px solid #e2e8f0;
+
+    page-break-inside:avoid;
+
 }
 
+
+
+
+
 .sig-box{
+
     text-align:center;
 
     flex:1;
 
+    min-width:0;
+
     padding:0 5px;
+
 }
 
+
+
+
+
 .sig-box .title{
+
     color:#000;
 
-    font-size:10.5px;
+    font-size:11px;
 
     font-weight:800;
 
-    margin-bottom:3px;
+    margin-bottom:7px;
+
+    line-height:1.6;
+
 }
 
+
+
+
+
 .sig-line{
+
     border-bottom:1px dashed #777;
 
     width:85%;
 
     margin:0 auto;
+
+    height:1px;
+
 }
 
+
+
+
+
 .sig-img{
-    height:38px;
+
+    height:43px;
+
+    width:auto;
+
+    max-width:100%;
 
     object-fit:contain;
 
     display:block;
 
-    margin:0 auto 2px;
+    margin:0 auto 4px;
 }
+
+
+
+
+
+/* منع تكسير بعض أجزاء العقد */
+
+.contract-title,
+.contract-row,
+.section-h,
+.contract-ul,
+.contract-ul li,
+.sig-grid{
+    break-inside:avoid;
+
+    page-break-inside:avoid;
+}
+
+
+
+
+
+/* =========================================================
+   نهاية تحسين العقد
+\========================================================= */
+
+
+
+
 
 .toast-container{
     position:fixed;
@@ -1576,6 +1927,16 @@ code{
         padding:10px;
     }
 
+    .contract-paper{
+        width:210mm;
+
+        min-height:297mm;
+
+        padding:12mm 14mm;
+
+        margin:0;
+    }
+
     .auth-card{
         padding:35px 22px;
     }
@@ -1590,10 +1951,35 @@ code{
 
 }
 
+
+
+
+
+/* =========================================================
+   الطباعة
+\========================================================= */
+
+@page{
+    size:A4;
+
+    margin:0;
+}
+
 @media print{
 
+    html,
     body{
+        width:210mm;
+
+        min-height:297mm;
+
         background:white !important;
+    }
+
+    body{
+        margin:0 !important;
+
+        padding:0 !important;
     }
 
     .auth-overlay,
@@ -1607,9 +1993,9 @@ code{
     }
 
     .main-container{
-        width:100% !important;
+        width:210mm !important;
 
-        max-width:100% !important;
+        max-width:210mm !important;
 
         margin:0 !important;
 
@@ -1618,26 +2004,92 @@ code{
 
     #createTab{
         display:block !important;
+
+        width:210mm !important;
     }
 
     .contract-container{
         padding:0 !important;
 
+        margin:0 !important;
+
+        width:210mm !important;
+
         background:white !important;
 
         border:0 !important;
+
+        border-radius:0 !important;
     }
 
     .contract-paper{
-        box-shadow:none !important;
+
+        width:210mm !important;
+
+        min-height:297mm !important;
 
         margin:0 !important;
 
-        width:100% !important;
+        padding:12mm 14mm !important;
+
+        box-shadow:none !important;
+
+        border-radius:0 !important;
+
+        overflow:hidden !important;
+
+        page-break-after:avoid !important;
+
     }
 
 }
 
+
+
+
+
+/* تحسين عرض العقد على الشاشات الصغيرة */
+
+@media screen and (max-width:850px){
+
+    .contract-paper{
+
+        transform-origin:top right;
+
+    }
+
+}
+
+</style>
+
+
+<style id="pdf-export-fix">
+.contract-paper.pdf-export,
+.contract-paper.pdf-export *{
+    font-family:'Tajawal', Arial, sans-serif !important;
+}
+.contract-paper.pdf-export{
+    direction:rtl !important;
+    text-align:right !important;
+    width:210mm !important;
+    min-height:297mm !important;
+    box-sizing:border-box !important;
+    overflow:visible !important;
+    background:#fff !important;
+}
+.contract-paper.pdf-export .contract-row{
+    display:flex !important;
+    flex-direction:row !important;
+    direction:rtl !important;
+    align-items:flex-start !important;
+}
+.contract-paper.pdf-export .contract-label,
+.contract-paper.pdf-export .contract-value-wrap,
+.contract-paper.pdf-export .text-value{
+    direction:rtl !important;
+    unicode-bidi:plaintext !important;
+    text-align:right !important;
+}
 </style>
 
 </head>
@@ -1814,7 +2266,6 @@ code{
             لوحة التحكم
         </button>
 
-        <!-- LOG فقط -->
         <button
             id="btn-logs"
             onclick="switchTab('logsTab')"
@@ -2114,104 +2565,85 @@ code{
                 id="contractPaper"
             >
 
-                <div style="text-align:right;">
-
-                    <img
-                        src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
-                        alt="شعار فريق شمس"
-                        style="width:85px;height:auto;object-fit:contain;"
-                        onerror="this.style.display='none'"
-                    >
-
-                </div>
+                <img
+                    class="contract-logo"
+                    src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
+                    alt="شعار فريق شمس"
+                    onerror="this.style.display='none'"
+                >
 
                 <div class="contract-title">
                     عقد اتفاقية انضمام لإدارة "شمس" التطوعي
                 </div>
 
                 <div class="contract-row">
-
-                    تم الاتفاق في تاريخ:
-
-                    (
-                    <span class="fill-val" id="p_today">
-                        ..../../....
+                    <span class="contract-label">تم الاتفاق في تاريخ:</span>
+                    <span class="contract-value-wrap">
+                        <span class="paren">(</span>
+                        <span class="fill-val" id="p_today" dir="ltr">..../../....</span>
+                        <span class="paren">)</span>
                     </span>
-                    )
-
-                    بين كل من:
-
                 </div>
 
                 <div class="contract-row">
-                    الطرف الأول : إدارة فريق (شمس) التطوّعي
+                    <span class="contract-label">بين كل من:</span>
                 </div>
 
                 <div class="contract-row">
-
-                    الطرف الثاني : المتطوع/ـة
-
-                    (
-                    <span class="fill-val" id="p_name">
-                        ...................
-                    </span>
-                    )
-
+                    <span class="contract-label">الطرف الأول:</span>
+                    <span class="contract-label">إدارة فريق (شمس) التطوّعي</span>
                 </div>
 
                 <div class="contract-row">
-
-                    رقم الهوية / الإقامة:
-
-                    (
-                    <span class="fill-val" id="p_id">
-                        ...................
+                    <span class="contract-label">الطرف الثاني: المتطوع/ـة</span>
+                    <span class="contract-value-wrap">
+                        <span class="paren">(</span>
+                        <span class="fill-val text-value" id="p_name" dir="rtl">...................</span>
+                        <span class="paren">)</span>
                     </span>
-                    )
-
                 </div>
 
                 <div class="contract-row">
-
-                    رقم الجوال:
-
-                    (
-                    <span class="fill-val" id="p_phone">
-                        ...................
+                    <span class="contract-label">رقم الهوية / الإقامة:</span>
+                    <span class="contract-value-wrap">
+                        <span class="paren">(</span>
+                        <span class="fill-val" id="p_id" dir="ltr">...................</span>
+                        <span class="paren">)</span>
                     </span>
-                    )
-
                 </div>
 
                 <div class="contract-row">
-
-                    تاريخ الميلاد:
-
-                    (
-                    <span class="fill-val" id="p_dob">
-                        ...................
+                    <span class="contract-label">رقم الجوال:</span>
+                    <span class="contract-value-wrap">
+                        <span class="paren">(</span>
+                        <span class="fill-val" id="p_phone" dir="ltr">...................</span>
+                        <span class="paren">)</span>
                     </span>
-                    )
-
                 </div>
 
                 <div class="contract-row">
-
-                    القسم / الإدارة:
-
-                    (
-                    <span class="fill-val" id="p_dept">
-                        ...................
+                    <span class="contract-label">تاريخ الميلاد:</span>
+                    <span class="contract-value-wrap">
+                        <span class="paren">(</span>
+                        <span class="fill-val" id="p_dob" dir="ltr">...................</span>
+                        <span class="paren">)</span>
                     </span>
-                    )
+                </div>
 
+                <div class="contract-row">
+                    <span class="contract-label">القسم / الإدارة:</span>
+                    <span class="contract-value-wrap">
+                        <span class="paren">(</span>
+                        <span class="fill-val text-value" id="p_dept" dir="rtl">...................</span>
+                        <span class="paren">)</span>
+                    </span>
                 </div>
 
                 <div class="section-h">
                     أولاً : موضوع العقد
                 </div>
 
-                <p style="font-size:11px;line-height:1.4;font-weight:500;">
+                <p>
 
                     انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس)
                     وفق الأنظمة والتعليمات المعتمدة.
@@ -2224,17 +2656,29 @@ code{
 
                 <ul class="contract-ul">
 
-                    <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
+                    <li>
+                        1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.
+                    </li>
 
-                    <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
+                    <li>
+                        2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.
+                    </li>
 
-                    <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
+                    <li>
+                        3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.
+                    </li>
 
-                    <li>4. الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
+                    <li>
+                        4. الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.
+                    </li>
 
-                    <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
+                    <li>
+                        5. عدم طلب الإعفاء خلال الشهر الأول.
+                    </li>
 
-                    <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
+                    <li>
+                        6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.
+                    </li>
 
                 </ul>
 
@@ -2244,15 +2688,25 @@ code{
 
                 <ul class="contract-ul">
 
-                    <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
+                    <li>
+                        1. التعامل مع المتطوع باحترام وتقدير.
+                    </li>
 
-                    <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
+                    <li>
+                        2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.
+                    </li>
 
-                    <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
+                    <li>
+                        3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.
+                    </li>
 
-                    <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
+                    <li>
+                        4. توضيح أسباب إنهاء العقد عند حدوثه.
+                    </li>
 
-                    <li>5. حفظ بيانات وسجلات المتطوع.</li>
+                    <li>
+                        5. حفظ بيانات وسجلات المتطوع.
+                    </li>
 
                 </ul>
 
@@ -2261,38 +2715,30 @@ code{
                 </div>
 
                 <div class="contract-row">
-
-                    مدة العقد:
-
-                    (
-                    <span class="fill-val" id="p_duration">
-                        1 شهر
+                    <span class="contract-label">مدة العقد:</span>
+                    <span class="contract-value-wrap">
+                        <span class="paren">(</span>
+                        <span class="fill-val text-value" id="p_duration" dir="rtl">1 شهر</span>
+                        <span class="paren">)</span>
                     </span>
-                    )
-
                 </div>
 
-                <div class="contract-row">
-
-                    تبدأ من تاريخ:
-
-                    (
-                    <span class="fill-val" id="p_startDate">
-                        ..../../....
+                <div class="contract-row contract-dates-row">
+                    <span class="contract-label">تبدأ من تاريخ:</span>
+                    <span class="contract-value-wrap">
+                        <span class="paren">(</span>
+                        <span class="fill-val" id="p_startDate" dir="ltr">..../../....</span>
+                        <span class="paren">)</span>
                     </span>
-                    )
-
-                    وتنتهي في:
-
-                    (
-                    <span class="fill-val" id="p_endDate">
-                        ..../../....
+                    <span class="contract-label">وتنتهي في:</span>
+                    <span class="contract-value-wrap">
+                        <span class="paren">(</span>
+                        <span class="fill-val" id="p_endDate" dir="ltr">..../../....</span>
+                        <span class="paren">)</span>
                     </span>
-                    )
-
                 </div>
 
-                <p style="font-size:11px;line-height:1.4;font-weight:500;margin-top:2px;">
+                <p>
 
                     يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام
                     أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد
@@ -2310,7 +2756,7 @@ code{
 
                         <div
                             class="sig-line"
-                            style="margin-top:38px;"
+                            style="margin-top:43px;"
                         ></div>
 
                     </div>
@@ -2602,9 +3048,13 @@ code{
 
 </div>
 
+
+
+
+
 <!-- ================================
      LOG
-================================ -->
+\================================ -->
 
 <div id="logsTab" style="display:none;">
 
@@ -2703,6 +3153,10 @@ code{
 
 </div>
 
+
+
+
+
 <div id="usersTab" style="display:none;">
 
     <div class="page-header">
@@ -2787,6 +3241,10 @@ code{
 
             </div>
 
+
+
+
+
             <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
@@ -2814,6 +3272,10 @@ code{
                 </div>
 
             </div>
+
+
+
+
 
             <div class="dashboard-stat">
 
@@ -2843,6 +3305,10 @@ code{
 
             </div>
 
+
+
+
+
             <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
@@ -2870,6 +3336,10 @@ code{
                 </div>
 
             </div>
+
+
+
+
 
             <div class="dashboard-stat">
 
@@ -2902,6 +3372,10 @@ code{
         </div>
 
     </div>
+
+
+
+
 
     <div class="card-box">
 
@@ -3020,6 +3494,10 @@ code{
 
     </div>
 
+
+
+
+
     <div class="card-box">
 
         <div class="card-header">
@@ -3077,12 +3555,18 @@ code{
 </div>
 
 
+
+
+
 <script type="module">
 
 import {
     initializeApp
 }
 from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+
+
+
 
 
 import {
@@ -3097,6 +3581,9 @@ import {
     doc
 }
 from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+
+
 
 
 const firebaseConfig = {
@@ -3125,11 +3612,17 @@ const firebaseConfig = {
 };
 
 
+
+
+
 const app =
     initializeApp(firebaseConfig);
 
 const db =
     getFirestore(app);
+
+
+
 
 
 window.usersList = [];
@@ -3143,6 +3636,9 @@ window.currentUserRole = '';
 window.currentUsername = '';
 
 window.currentUserId = '';
+
+
+
 
 
 function showLoading(title='جاري تنفيذ العملية...'){
@@ -3162,6 +3658,9 @@ function showLoading(title='جاري تنفيذ العملية...'){
 }
 
 
+
+
+
 function hideLoading(){
 
     const overlay =
@@ -3171,6 +3670,9 @@ function hideLoading(){
         overlay.style.display = 'none';
 
 }
+
+
+
 
 
 window.showToast =
@@ -3226,6 +3728,9 @@ function(message,type='info'){
 };
 
 
+
+
+
 async function loadLogs(){
 
     if(
@@ -3233,6 +3738,9 @@ async function loadLogs(){
         'مدير النظام'
     )
         return;
+
+
+
 
 
     try{
@@ -3249,7 +3757,13 @@ async function loadLogs(){
             );
 
 
+
+
+
         window.logsList = [];
+
+
+
 
 
         logsSnap.forEach(
@@ -3265,6 +3779,9 @@ async function loadLogs(){
 
             }
         );
+
+
+
 
 
         renderLogs();
@@ -3290,6 +3807,9 @@ async function loadLogs(){
 }
 
 
+
+
+
 async function loadCloudData(){
 
     try{
@@ -3299,13 +3819,22 @@ async function loadCloudData(){
         );
 
 
+
+
+
         const usersSnap =
             await getDocs(
                 collection(db,'users')
             );
 
 
+
+
+
         window.usersList = [];
+
+
+
 
 
         usersSnap.forEach(
@@ -3323,11 +3852,17 @@ async function loadCloudData(){
         );
 
 
+
+
+
         const hasAdmin =
             window.usersList.some(
                 u =>
                     u.username === 'admin'
             );
+
+
+
 
 
         if(!hasAdmin){
@@ -3348,13 +3883,22 @@ async function loadCloudData(){
             );
 
 
+
+
+
             const updatedUsers =
                 await getDocs(
                     collection(db,'users')
                 );
 
 
+
+
+
             window.usersList = [];
+
+
+
 
 
             updatedUsers.forEach(
@@ -3374,13 +3918,22 @@ async function loadCloudData(){
         }
 
 
+
+
+
         const contractsSnap =
             await getDocs(
                 collection(db,'contracts')
             );
 
 
+
+
+
         window.contractsArchive = [];
+
+
+
 
 
         contractsSnap.forEach(
@@ -3398,9 +3951,8 @@ async function loadCloudData(){
         );
 
 
-        /*
-           تحميل LOG فقط للمدير
-        */
+
+
 
         if(
             window.currentUserRole ===
@@ -3410,6 +3962,9 @@ async function loadCloudData(){
             await loadLogs();
 
         }
+
+
+
 
 
         renderUsers();
@@ -3432,6 +3987,10 @@ async function loadCloudData(){
             'error'
         );
 
+    
+        // Do not swallow Firestore errors.
+        // handleLogin must receive the error instead of checking an empty usersList.
+        throw err;
     }
 
     finally{
@@ -3443,7 +4002,13 @@ async function loadCloudData(){
 }
 
 
+
+
+
 loadCloudData();
+
+
+
 
 
 async function logAction(
@@ -3462,6 +4027,9 @@ async function logAction(
             'غير معروف';
 
 
+
+
+
         const username =
             actorUsername ||
             (
@@ -3475,14 +4043,23 @@ async function logAction(
             'غير معروف';
 
 
+
+
+
         const role =
             actorRole ||
             window.currentUserRole ||
             '';
 
 
+
+
+
         const logTimestamp =
             Date.now();
+
+
+
 
 
         await addDoc(
@@ -3503,6 +4080,9 @@ async function logAction(
 
             }
         );
+
+
+
 
 
         if(
@@ -3527,6 +4107,9 @@ async function logAction(
             });
 
 
+
+
+
             renderLogs();
 
         }
@@ -3545,6 +4128,9 @@ async function logAction(
 }
 
 
+
+
+
 function renderLogs(){
 
     const tbody =
@@ -3553,8 +4139,14 @@ function renderLogs(){
         );
 
 
+
+
+
     if(!tbody)
         return;
+
+
+
 
 
     if(
@@ -3582,16 +4174,25 @@ function renderLogs(){
     }
 
 
+
+
+
     const input =
         document.getElementById(
             'logSearch'
         );
 
 
+
+
+
     const search =
         input
             ? input.value.trim().toLowerCase()
             : '';
+
+
+
 
 
     const logs =
@@ -3627,7 +4228,13 @@ function renderLogs(){
         );
 
 
+
+
+
     tbody.innerHTML = '';
+
+
+
 
 
     if(logs.length === 0){
@@ -3652,6 +4259,9 @@ function renderLogs(){
     }
 
 
+
+
+
     logs.forEach(
         log => {
 
@@ -3664,6 +4274,9 @@ function renderLogs(){
                     .toLocaleString('ar-SA')
                     :
                     'غير محدد';
+
+
+
 
 
             tbody.innerHTML += `
@@ -3737,189 +4350,108 @@ function renderLogs(){
 }
 
 
-window.handleLogin =
-async function(e){
 
+
+
+window.handleLogin = async function(e){
     e.preventDefault();
 
+    const userEl = document.getElementById('login_user');
+    const passEl = document.getElementById('login_pass');
 
-    const uInput =
-        document
-            .getElementById('login_user')
-            .value
-            .trim();
+    const uInput = userEl ? userEl.value.trim() : '';
+    const pInput = passEl ? passEl.value.trim() : '';
 
+    if(!uInput || !pInput){
+        if(typeof hideLoading === 'function') hideLoading();
+        if(typeof window.showToast === 'function'){
+            window.showToast('أدخل اسم المستخدم وكلمة المرور.', 'error');
+        } else {
+            alert('أدخل اسم المستخدم وكلمة المرور.');
+        }
+        return;
+    }
 
-    const pInput =
-        document
-            .getElementById('login_pass')
-            .value
-            .trim();
-
-
-    showLoading(
-        'جاري التحقق من بيانات الدخول...'
-    );
-
+    if(typeof showLoading === 'function'){
+        showLoading('جاري التحقق من بيانات الدخول...');
+    }
 
     try{
-
         await loadCloudData();
 
+        const foundUser = Array.isArray(window.usersList)
+            ? window.usersList.find(u =>
+                String(u.username ?? '').trim() === uInput &&
+                String(u.password ?? '').trim() === pInput
+              )
+            : null;
 
-        const foundUser =
-            window.usersList.find(
-                u =>
-                    u.username === uInput &&
-                    u.password === pInput
-            );
-
-
-        if(foundUser){
-
-            window.currentUserRole =
-                foundUser.role;
-
-            window.currentUserId =
-                foundUser.id;
-
-            window.currentUsername =
-                foundUser.name ||
-                foundUser.username;
-
-
-            const usersButton =
-                document.getElementById(
-                    'btn-users'
-                );
-
-
-            const logsButton =
-                document.getElementById(
-                    'btn-logs'
-                );
-
-
-            const isAdmin =
-                window.currentUserRole ===
-                'مدير النظام';
-
-
-            if(isAdmin){
-
-                if(usersButton)
-                    usersButton.style.display =
-                        'inline-flex';
-
-                if(logsButton)
-                    logsButton.style.display =
-                        'inline-flex';
-
+        if(!foundUser){
+            if(typeof hideLoading === 'function') hideLoading();
+            if(typeof window.showToast === 'function'){
+                window.showToast('اسم المستخدم أو كلمة المرور غير صحيحة.', 'error');
+            } else {
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة.');
             }
-
-            else{
-
-                if(usersButton)
-                    usersButton.style.display =
-                        'none';
-
-                if(logsButton)
-                    logsButton.style.display =
-                        'none';
-
-            }
-
-
-            const currentUserDisplay =
-                document.getElementById(
-                    'currentUserDisplay'
-                );
-
-
-            if(currentUserDisplay){
-
-                currentUserDisplay.innerText =
-                    window.currentUsername;
-
-            }
-
-
-            document.getElementById(
-                'authSection'
-            ).style.display =
-                'none';
-
-
-            document.getElementById(
-                'appContent'
-            ).style.display =
-                'block';
-
-
-            renderUsers();
-
-            renderArchive();
-
-            updateDashboard();
-
-
-            await logAction(
-                'تسجيل دخول',
-                `تم تسجيل دخول المستخدم ${window.currentUsername}`
-            );
-
-
-            showToast(
-                `مرحباً ${window.currentUsername}`,
-                'success'
-            );
-
+            return;
         }
 
-        else{
+        window.currentUserRole = foundUser.role || '';
+        window.currentUserId = foundUser.id || '';
+        window.currentUsername = foundUser.name || foundUser.username || '';
 
-            await logAction(
-                'محاولة دخول فاشلة',
-                `محاولة تسجيل دخول فاشلة باسم المستخدم ${uInput}`,
-                uInput,
-                uInput,
-                ''
-            );
+        const usersButton = document.getElementById('btn-users');
+        const logsButton = document.getElementById('btn-logs');
+        const isAdmin = window.currentUserRole === 'مدير النظام';
 
+        if(usersButton) usersButton.style.display = isAdmin ? 'inline-flex' : 'none';
+        if(logsButton) logsButton.style.display = isAdmin ? 'inline-flex' : 'none';
 
-            showToast(
-                'اسم المستخدم أو كلمة المرور غير صحيحة.',
-                'error'
-            );
+        const currentUserDisplay = document.getElementById('currentUserDisplay');
+        if(currentUserDisplay) currentUserDisplay.innerText = window.currentUsername;
 
+        const authSection = document.getElementById('authSection');
+        const appContent = document.getElementById('appContent');
+
+        if(authSection) authSection.style.display = 'none';
+        if(appContent) appContent.style.display = 'block';
+
+        try{
+            if(typeof loadAllData === 'function') await loadAllData();
+        }catch(_){}
+
+        if(typeof hideLoading === 'function') hideLoading();
+
+        if(typeof window.showToast === 'function'){
+            window.showToast('تم تسجيل الدخول بنجاح.', 'success');
         }
+    }catch(err){
+        console.error('Login Error:', err);
+        if(typeof hideLoading === 'function') hideLoading();
 
+        const msg = (err && (err.code || err.message))
+            ? 'تعذر الاتصال بقاعدة البيانات. تأكد من اتصال الإنترنت وإعدادات Firebase.'
+            : 'حدث خطأ أثناء تسجيل الدخول.';
+
+        if(typeof window.showToast === 'function'){
+            window.showToast(msg, 'error');
+        } else {
+            alert(msg);
+        }
     }
-
-    catch(err){
-
-        console.error(err);
-
-        showToast(
-            'حدث خطأ أثناء تسجيل الدخول.',
-            'error'
-        );
-
-    }
-
-    finally{
-
-        hideLoading();
-
-    }
-
 };
+
+
+
 
 
 window.addUser =
 async function(e){
 
     e.preventDefault();
+
+
+
 
 
     if(
@@ -3937,11 +4469,17 @@ async function(e){
     }
 
 
+
+
+
     const name =
         document
             .getElementById('u_name')
             .value
             .trim();
+
+
+
 
 
     const username =
@@ -3951,6 +4489,9 @@ async function(e){
             .trim();
 
 
+
+
+
     const password =
         document
             .getElementById('u_password')
@@ -3958,10 +4499,16 @@ async function(e){
             .trim();
 
 
+
+
+
     const role =
         document
             .getElementById('u_role')
             .value;
+
+
+
 
 
     if(
@@ -3981,6 +4528,9 @@ async function(e){
     }
 
 
+
+
+
     if(
         role !== 'مدير النظام' &&
         role !== 'مسؤول موارد بشرية'
@@ -3996,11 +4546,17 @@ async function(e){
     }
 
 
+
+
+
     try{
 
         showLoading(
             'جاري إنشاء حساب المستخدم...'
         );
+
+
+
 
 
         await addDoc(
@@ -4019,10 +4575,16 @@ async function(e){
         );
 
 
+
+
+
         await logAction(
             'إضافة مستخدم',
             `تم إنشاء المستخدم ${username} (${name}) بصلاحية ${role}`
         );
+
+
+
 
 
         document.getElementById(
@@ -4030,9 +4592,15 @@ async function(e){
         ).value = '';
 
 
+
+
+
         document.getElementById(
             'u_username'
         ).value = '';
+
+
+
 
 
         document.getElementById(
@@ -4040,7 +4608,13 @@ async function(e){
         ).value = '';
 
 
+
+
+
         await loadCloudData();
+
+
+
 
 
         showToast(
@@ -4070,6 +4644,9 @@ async function(e){
 };
 
 
+
+
+
 window.changeUserRole =
 async function(
     docId,
@@ -4092,6 +4669,9 @@ async function(
     }
 
 
+
+
+
     const choice =
         prompt(
             `الصلاحية الحالية: ${currentRole}
@@ -4107,8 +4687,14 @@ async function(
         );
 
 
+
+
+
     if(choice === null)
         return;
+
+
+
 
 
     const roleMap = {
@@ -4120,10 +4706,16 @@ async function(
     };
 
 
+
+
+
     const newRole =
         roleMap[
             String(choice).trim()
         ];
+
+
+
 
 
     if(!newRole){
@@ -4136,6 +4728,9 @@ async function(
         return;
 
     }
+
+
+
 
 
     if(
@@ -4153,11 +4748,17 @@ async function(
     }
 
 
+
+
+
     try{
 
         showLoading(
             'جاري تحديث صلاحية المستخدم...'
         );
+
+
+
 
 
         await updateDoc(
@@ -4172,13 +4773,22 @@ async function(
         );
 
 
+
+
+
         await logAction(
             'تغيير صلاحية',
             `تم تغيير صلاحية المستخدم ${username} من ${currentRole} إلى ${newRole}`
         );
 
 
+
+
+
         await loadCloudData();
+
+
+
 
 
         showToast(
@@ -4208,6 +4818,9 @@ async function(
 };
 
 
+
+
+
 window.changeUserPassword =
 async function(
     docId,
@@ -4229,14 +4842,23 @@ async function(
     }
 
 
+
+
+
     const newPass =
         prompt(
             `أدخل كلمة المرور الجديدة للمستخدم (${username}):`
         );
 
 
+
+
+
     if(newPass === null)
         return;
+
+
+
 
 
     if(
@@ -4253,11 +4875,17 @@ async function(
     }
 
 
+
+
+
     try{
 
         showLoading(
             'جاري تحديث كلمة المرور...'
         );
+
+
+
 
 
         await updateDoc(
@@ -4275,13 +4903,22 @@ async function(
         );
 
 
+
+
+
         await logAction(
             'تغيير كلمة المرور',
             `تم تغيير كلمة مرور المستخدم ${username}`
         );
 
 
+
+
+
         await loadCloudData();
+
+
+
 
 
         showToast(
@@ -4311,6 +4948,9 @@ async function(
 };
 
 
+
+
+
 window.deleteUser =
 async function(
     docId,
@@ -4332,6 +4972,9 @@ async function(
     }
 
 
+
+
+
     if(username === 'admin'){
 
         showToast(
@@ -4344,6 +4987,9 @@ async function(
     }
 
 
+
+
+
     if(
         !confirm(
             'هل أنت متأكد من حذف هذا المستخدم نهائياً؟'
@@ -4352,11 +4998,17 @@ async function(
         return;
 
 
+
+
+
     try{
 
         showLoading(
             'جاري حذف المستخدم...'
         );
+
+
+
 
 
         await deleteDoc(
@@ -4368,13 +5020,22 @@ async function(
         );
 
 
+
+
+
         await logAction(
             'حذف مستخدم',
             `تم حذف المستخدم ${username}`
         );
 
 
+
+
+
         await loadCloudData();
+
+
+
 
 
         showToast(
@@ -4404,6 +5065,9 @@ async function(
 };
 
 
+
+
+
 function hasCancelledContract(
     nationalId
 ){
@@ -4412,6 +5076,9 @@ function hasCancelledContract(
         String(
             nationalId || ''
         ).trim();
+
+
+
 
 
     return window.contractsArchive.some(
@@ -4428,6 +5095,9 @@ function hasCancelledContract(
 }
 
 
+
+
+
 window.saveAndArchiveContract =
 async function(){
 
@@ -4438,11 +5108,17 @@ async function(){
             .trim();
 
 
+
+
+
     const id =
         document
             .getElementById('in_id')
             .value
             .trim();
+
+
+
 
 
     if(!name || !id){
@@ -4455,6 +5131,9 @@ async function(){
         return;
 
     }
+
+
+
 
 
     if(
@@ -4471,6 +5150,9 @@ async function(){
     }
 
 
+
+
+
     const todayVal =
         document
             .getElementById('in_today')
@@ -4480,11 +5162,17 @@ async function(){
             .split('T')[0];
 
 
+
+
+
     const startDateVal =
         document
             .getElementById('in_startDate')
             .value ||
         todayVal;
+
+
+
 
 
     const durationVal =
@@ -4495,18 +5183,30 @@ async function(){
         );
 
 
+
+
+
     let startDate =
         new Date(startDateVal);
+
+
+
 
 
     let endDate =
         new Date(startDate);
 
 
+
+
+
     endDate.setMonth(
         endDate.getMonth() +
         durationVal
     );
+
+
+
 
 
     const newContract = {
@@ -4561,11 +5261,17 @@ async function(){
     };
 
 
+
+
+
     try{
 
         showLoading(
             'جاري حفظ العقد في الأرشيف...'
         );
+
+
+
 
 
         await addDoc(
@@ -4574,18 +5280,30 @@ async function(){
         );
 
 
+
+
+
         await logAction(
             'إضافة عقد',
             `تم إضافة عقد للمتطوع ${name} - الهوية ${id}`
         );
 
 
+
+
+
         await loadCloudData();
+
+
+
 
 
         switchTab(
             'archiveTab'
         );
+
+
+
 
 
         showToast(
@@ -4615,10 +5333,16 @@ async function(){
 };
 
 
+
+
+
 window.handleFileUpload =
 async function(e){
 
     e.preventDefault();
+
+
+
 
 
     const name =
@@ -4628,11 +5352,17 @@ async function(e){
             .trim();
 
 
+
+
+
     const id =
         document
             .getElementById('up_id')
             .value
             .trim();
+
+
+
 
 
     const dept =
@@ -4642,10 +5372,16 @@ async function(e){
             .trim();
 
 
+
+
+
     const startDate =
         document
             .getElementById('up_startDate')
             .value;
+
+
+
 
 
     const endDate =
@@ -4654,16 +5390,25 @@ async function(e){
             .value;
 
 
+
+
+
     const fileInput =
         document.getElementById(
             'up_file'
         );
 
 
+
+
+
     if(
         !fileInput.files.length
     )
         return;
+
+
+
 
 
     if(
@@ -4680,8 +5425,14 @@ async function(e){
     }
 
 
+
+
+
     const fileName =
         fileInput.files[0].name;
+
+
+
 
 
     const newContract = {
@@ -4708,11 +5459,17 @@ async function(e){
     };
 
 
+
+
+
     try{
 
         showLoading(
             'جاري حفظ العقد الخارجي...'
         );
+
+
+
 
 
         await addDoc(
@@ -4721,18 +5478,30 @@ async function(e){
         );
 
 
+
+
+
         await logAction(
             'إرفاق عقد',
             `تم إرفاق عقد خارجي للمتطوع ${name} - الهوية ${id} - الملف ${fileName}`
         );
 
 
+
+
+
         await loadCloudData();
+
+
+
 
 
         switchTab(
             'archiveTab'
         );
+
+
+
 
 
         showToast(
@@ -4762,6 +5531,9 @@ async function(e){
 };
 
 
+
+
+
 window.renewContract =
 async function(
     docId,
@@ -4773,6 +5545,9 @@ async function(
             c =>
                 c.id === docId
         );
+
+
+
 
 
     if(
@@ -4791,6 +5566,9 @@ async function(
     }
 
 
+
+
+
     const monthsToAdd =
         prompt(
             'أدخل مدة التجديد بالأشهر:',
@@ -4798,12 +5576,21 @@ async function(
         );
 
 
+
+
+
     if(monthsToAdd === null)
         return;
 
 
+
+
+
     const mNum =
         parseInt(monthsToAdd);
+
+
+
 
 
     if(
@@ -4821,12 +5608,21 @@ async function(
     }
 
 
+
+
+
     let baseDate =
         new Date(currentEndDate);
 
 
+
+
+
     let today =
         new Date();
+
+
+
 
 
     today.setHours(
@@ -4837,12 +5633,21 @@ async function(
     );
 
 
+
+
+
     if(baseDate < today)
         baseDate = today;
 
 
+
+
+
     let newEnd =
         new Date(baseDate);
+
+
+
 
 
     newEnd.setMonth(
@@ -4851,10 +5656,16 @@ async function(
     );
 
 
+
+
+
     const newEndStr =
         newEnd
             .toISOString()
             .split('T')[0];
+
+
+
 
 
     try{
@@ -4862,6 +5673,9 @@ async function(
         showLoading(
             'جاري تجديد العقد...'
         );
+
+
+
 
 
         await updateDoc(
@@ -4885,13 +5699,22 @@ async function(
         );
 
 
+
+
+
         await logAction(
             'تجديد عقد',
             `تم تجديد عقد ${contract?.name || ''} حتى ${newEndStr} لمدة ${mNum} شهر`
         );
 
 
+
+
+
         await loadCloudData();
+
+
+
 
 
         showToast(
@@ -4921,6 +5744,9 @@ async function(
 };
 
 
+
+
+
 window.cancelContract =
 async function(docId){
 
@@ -4929,6 +5755,9 @@ async function(docId){
             c =>
                 c.id === docId
         );
+
+
+
 
 
     if(!contract){
@@ -4941,6 +5770,9 @@ async function(docId){
         return;
 
     }
+
+
+
 
 
     if(
@@ -4958,6 +5790,9 @@ async function(docId){
     }
 
 
+
+
+
     const reason =
         prompt(
             'اكتب سبب فسخ العقد:',
@@ -4965,8 +5800,14 @@ async function(docId){
         );
 
 
+
+
+
     if(reason === null)
         return;
+
+
+
 
 
     if(
@@ -4983,6 +5824,9 @@ async function(docId){
     }
 
 
+
+
+
     if(
         !confirm(
             'هل أنت متأكد من فسخ هذا العقد؟'
@@ -4991,11 +5835,17 @@ async function(docId){
         return;
 
 
+
+
+
     try{
 
         showLoading(
             'جاري فسخ العقد...'
         );
+
+
+
 
 
         await updateDoc(
@@ -5020,13 +5870,22 @@ async function(docId){
         );
 
 
+
+
+
         await logAction(
             'فسخ عقد',
             `تم فسخ عقد ${contract.name} - الهوية ${contract.nationalId} - السبب: ${reason.trim()}`
         );
 
 
+
+
+
         await loadCloudData();
+
+
+
 
 
         showToast(
@@ -5056,6 +5915,9 @@ async function(docId){
 };
 
 
+
+
+
 window.deleteContract =
 async function(docId){
 
@@ -5064,6 +5926,9 @@ async function(docId){
             c =>
                 c.id === docId
         );
+
+
+
 
 
     if(!contract){
@@ -5078,6 +5943,9 @@ async function(docId){
     }
 
 
+
+
+
     if(
         !confirm(
             'هل أنت متأكد من حذف هذا العقد من الأرشيف؟'
@@ -5086,11 +5954,17 @@ async function(docId){
         return;
 
 
+
+
+
     try{
 
         showLoading(
             'جاري حذف العقد...'
         );
+
+
+
 
 
         await deleteDoc(
@@ -5102,13 +5976,22 @@ async function(docId){
         );
 
 
+
+
+
         await logAction(
             'حذف عقد',
             `تم حذف عقد ${contract.name} - الهوية ${contract.nationalId}`
         );
 
 
+
+
+
         await loadCloudData();
+
+
+
 
 
         showToast(
@@ -5138,6 +6021,9 @@ async function(docId){
 };
 
 
+
+
+
 function renderUsers(){
 
     const tbody =
@@ -5146,10 +6032,16 @@ function renderUsers(){
         );
 
 
+
+
+
     const count =
         document.getElementById(
             'dashboardUsers'
         );
+
+
+
 
 
     if(count)
@@ -5157,11 +6049,20 @@ function renderUsers(){
             window.usersList.length;
 
 
+
+
+
     if(!tbody)
         return;
 
 
+
+
+
     tbody.innerHTML = '';
+
+
+
 
 
     if(
@@ -5186,6 +6087,9 @@ function renderUsers(){
         return;
 
     }
+
+
+
 
 
     window.usersList.forEach(
@@ -5323,10 +6227,16 @@ function renderUsers(){
 }
 
 
+
+
+
 function updateDashboard(){
 
     const total =
         window.contractsArchive.length;
+
+
+
 
 
     let active = 0;
@@ -5336,8 +6246,14 @@ function updateDashboard(){
     let cancelled = 0;
 
 
+
+
+
     const today =
         new Date();
+
+
+
 
 
     today.setHours(
@@ -5346,6 +6262,9 @@ function updateDashboard(){
         0,
         0
     );
+
+
+
 
 
     window.contractsArchive.forEach(
@@ -5363,8 +6282,14 @@ function updateDashboard(){
             }
 
 
+
+
+
             const endDate =
                 new Date(c.endDate);
+
+
+
 
 
             if(
@@ -5380,12 +6305,18 @@ function updateDashboard(){
             }
 
 
+
+
+
             endDate.setHours(
                 0,
                 0,
                 0,
                 0
             );
+
+
+
 
 
             if(endDate >= today)
@@ -5398,10 +6329,16 @@ function updateDashboard(){
     );
 
 
+
+
+
     document.getElementById(
         'dashboardTotalContracts'
     ).innerText =
         total;
+
+
+
 
 
     document.getElementById(
@@ -5410,16 +6347,25 @@ function updateDashboard(){
         active;
 
 
+
+
+
     document.getElementById(
         'dashboardExpiredContracts'
     ).innerText =
         expired;
 
 
+
+
+
     document.getElementById(
         'dashboardCancelledContracts'
     ).innerText =
         cancelled;
+
+
+
 
 
     document.getElementById(
@@ -5430,6 +6376,9 @@ function updateDashboard(){
 }
 
 
+
+
+
 function renderArchive(){
 
     const tbody =
@@ -5438,8 +6387,14 @@ function renderArchive(){
         );
 
 
+
+
+
     if(!tbody)
         return;
+
+
+
 
 
     document.getElementById(
@@ -5448,10 +6403,16 @@ function renderArchive(){
         window.contractsArchive.length;
 
 
+
+
+
     const searchInput =
         document.getElementById(
             'archiveSearch'
         );
+
+
+
 
 
     const search =
@@ -5464,12 +6425,18 @@ function renderArchive(){
             '';
 
 
+
+
+
     const filteredContracts =
         window.contractsArchive.filter(
             c => {
 
                 if(!search)
                     return true;
+
+
+
 
 
                 return [
@@ -5494,7 +6461,13 @@ function renderArchive(){
         );
 
 
+
+
+
     tbody.innerHTML = '';
+
+
+
 
 
     if(
@@ -5529,8 +6502,14 @@ function renderArchive(){
     }
 
 
+
+
+
     const today =
         new Date();
+
+
+
 
 
     today.setHours(
@@ -5541,10 +6520,16 @@ function renderArchive(){
     );
 
 
+
+
+
     filteredContracts.forEach(
         c => {
 
             let statusBadge = '';
+
+
+
 
 
             if(
@@ -5599,12 +6584,18 @@ function renderArchive(){
                     );
 
 
+
+
+
                 endD.setHours(
                     0,
                     0,
                     0,
                     0
                 );
+
+
+
 
 
                 const diffDays =
@@ -5620,6 +6611,9 @@ function renderArchive(){
                             24
                         )
                     );
+
+
+
 
 
                 if(
@@ -5699,7 +6693,13 @@ function renderArchive(){
             }
 
 
+
+
+
             let actionButtons = '';
+
+
+
 
 
             if(
@@ -5761,6 +6761,9 @@ function renderArchive(){
                 `;
 
             }
+
+
+
 
 
             tbody.innerHTML += `
@@ -5868,6 +6871,9 @@ function renderArchive(){
 }
 
 
+
+
+
 window.switchTab =
 function(tabId){
 
@@ -5895,6 +6901,9 @@ function(tabId){
     }
 
 
+
+
+
     const tabs = [
 
         'createTab',
@@ -5910,6 +6919,9 @@ function(tabId){
     ];
 
 
+
+
+
     tabs.forEach(
         id => {
 
@@ -5922,6 +6934,9 @@ function(tabId){
 
         }
     );
+
+
+
 
 
     const buttons = [
@@ -5939,6 +6954,9 @@ function(tabId){
     ];
 
 
+
+
+
     buttons.forEach(
         id => {
 
@@ -5954,13 +6972,22 @@ function(tabId){
     );
 
 
+
+
+
     const target =
         document.getElementById(tabId);
+
+
+
 
 
     if(target)
         target.style.display =
             'block';
+
+
+
 
 
     const map = {
@@ -5978,8 +7005,14 @@ function(tabId){
     };
 
 
+
+
+
     const buttonId =
         map[tabId];
+
+
+
 
 
     if(buttonId){
@@ -5997,6 +7030,9 @@ function(tabId){
     }
 
 
+
+
+
     if(
         tabId ===
         'archiveTab'
@@ -6005,6 +7041,9 @@ function(tabId){
         renderArchive();
 
     }
+
+
+
 
 
     if(
@@ -6019,6 +7058,9 @@ function(tabId){
     }
 
 
+
+
+
     if(
         tabId ===
         'logsTab'
@@ -6027,6 +7069,9 @@ function(tabId){
         loadLogs();
 
     }
+
+
+
 
 
     if(
@@ -6044,6 +7089,9 @@ function(tabId){
 };
 
 
+
+
+
 window.updateContractPreview =
 function(){
 
@@ -6054,11 +7102,17 @@ function(){
         '...................';
 
 
+
+
+
     const id =
         document
             .getElementById('in_id')
             .value ||
         '...................';
+
+
+
 
 
     const phone =
@@ -6068,11 +7122,17 @@ function(){
         '...................';
 
 
+
+
+
     const dob =
         document
             .getElementById('in_dob')
             .value ||
         '...................';
+
+
+
 
 
     const dept =
@@ -6082,16 +7142,25 @@ function(){
         '...................';
 
 
+
+
+
     const todayVal =
         document
             .getElementById('in_today')
             .value;
 
 
+
+
+
     const startDateVal =
         document
             .getElementById('in_startDate')
             .value;
+
+
+
 
 
     const durationVal =
@@ -6104,10 +7173,16 @@ function(){
         );
 
 
+
+
+
     document.getElementById(
         'p_name'
     ).innerText =
         name;
+
+
+
 
 
     document.getElementById(
@@ -6116,10 +7191,16 @@ function(){
         id;
 
 
+
+
+
     document.getElementById(
         'p_phone'
     ).innerText =
         phone;
+
+
+
 
 
     document.getElementById(
@@ -6128,10 +7209,16 @@ function(){
         dob;
 
 
+
+
+
     document.getElementById(
         'p_dept'
     ).innerText =
         dept;
+
+
+
 
 
     document.getElementById(
@@ -6141,10 +7228,16 @@ function(){
         '..../../....';
 
 
+
+
+
     if(startDateVal){
 
         const startDate =
             new Date(startDateVal);
+
+
+
 
 
         document.getElementById(
@@ -6155,14 +7248,23 @@ function(){
                 .split('T')[0];
 
 
+
+
+
         const endDate =
             new Date(startDate);
+
+
+
 
 
         endDate.setMonth(
             endDate.getMonth() +
             durationVal
         );
+
+
+
 
 
         document.getElementById(
@@ -6182,12 +7284,18 @@ function(){
             '..../../....';
 
 
+
+
+
         document.getElementById(
             'p_endDate'
         ).innerText =
             '..../../....';
 
     }
+
+
+
 
 
     document.getElementById(
@@ -6199,6 +7307,9 @@ function(){
 };
 
 
+
+
+
 window.printContract =
 function(){
 
@@ -6208,124 +7319,65 @@ function(){
     );
 
 
+
+
+
     window.print();
 
 };
 
 
-window.downloadContractPDF =
-function(){
-
-    const name =
-        document
-            .getElementById('in_name')
-            .value ||
-        'عقد_متطوع';
 
 
-    logAction(
-        'تنزيل PDF',
-        `تم طلب تنزيل PDF للعقد ${name}`
-    );
 
+window.downloadContractPDF = async function(){
+    const element = document.getElementById('contractPaper');
+    if(!element){
+        if(typeof window.showToast === 'function') window.showToast('تعذر العثور على العقد.', 'error');
+        return;
+    }
 
-    const element =
-        document.getElementById(
-            'contractPaper'
-        );
+    if(typeof html2pdf !== 'function'){
+        if(typeof window.showToast === 'function') window.showToast('مكتبة PDF لم تُحمّل. تحقق من اتصال الإنترنت.', 'error');
+        return;
+    }
 
+    const originalClass = element.className;
+    element.classList.add('pdf-export');
 
-    const opt = {
+    try{
+        const opt = {
+            margin: 0,
+            filename: 'عقد-تطوعي.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff',
+                logging: false
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a4',
+                orientation: 'portrait'
+            },
+            pagebreak: { mode: ['css', 'legacy'] }
+        };
 
-        margin:
-            [2,2,2,2],
+        await html2pdf().set(opt).from(element).save();
 
-        filename:
-            `عقد_${name}.pdf`,
-
-        image:{
-
-            type:'jpeg',
-
-            quality:.98
-
-        },
-
-        html2canvas:{
-
-            scale:2,
-
-            useCORS:true,
-
-            allowTaint:true,
-
-            letterRendering:true
-
-        },
-
-        jsPDF:{
-
-            unit:'mm',
-
-            format:'a4',
-
-            orientation:'portrait'
-
+        if(typeof window.showToast === 'function'){
+            window.showToast('تم تنزيل العقد بصيغة PDF.', 'success');
         }
-
-    };
-
-
-    showLoading(
-        'جاري تجهيز ملف PDF...'
-    );
-
-
-    setTimeout(
-        () => {
-
-            html2pdf()
-
-                .from(element)
-
-                .set(opt)
-
-                .save()
-
-                .then(
-                    () => {
-
-                        hideLoading();
-
-                        showToast(
-                            'تم تجهيز ملف PDF.',
-                            'success'
-                        );
-
-                    }
-                )
-
-                .catch(
-                    err => {
-
-                        console.error(err);
-
-                        hideLoading();
-
-                        showToast(
-                            'حدث خطأ أثناء إنشاء PDF.',
-                            'error'
-                        );
-
-                    }
-                );
-
-        },
-        250
-    );
-
+    }catch(err){
+        console.error('PDF Error:', err);
+        if(typeof window.showToast === 'function'){
+            window.showToast('تعذر إنشاء ملف PDF.', 'error');
+        }
+    }finally{
+        element.className = originalClass;
+    }
 };
-
 
 window.logoutSystem =
 async function(){
@@ -6337,11 +7389,17 @@ async function(){
         window.currentUserId;
 
 
+
+
+
     const logoutUser =
         window.usersList.find(
             u =>
                 u.id === logoutId
         );
+
+
+
 
 
     if(logoutName){
@@ -6357,14 +7415,23 @@ async function(){
     }
 
 
+
+
+
     document.getElementById(
         'login_user'
     ).value = '';
 
 
+
+
+
     document.getElementById(
         'login_pass'
     ).value = '';
+
+
+
 
 
     document.getElementById(
@@ -6373,10 +7440,16 @@ async function(){
         'flex';
 
 
+
+
+
     document.getElementById(
         'appContent'
     ).style.display =
         'none';
+
+
+
 
 
     window.currentUserRole = '';
@@ -6386,10 +7459,16 @@ async function(){
     window.currentUserId = '';
 
 
+
+
+
     document.getElementById(
         'currentUserDisplay'
     ).innerText =
         '—';
+
+
+
 
 
     const usersButton =
@@ -6398,10 +7477,16 @@ async function(){
         );
 
 
+
+
+
     const logsButton =
         document.getElementById(
             'btn-logs'
         );
+
+
+
 
 
     if(usersButton)
@@ -6409,9 +7494,15 @@ async function(){
             'none';
 
 
+
+
+
     if(logsButton)
         logsButton.style.display =
             'none';
+
+
+
 
 
     const tabs = [
@@ -6423,6 +7514,9 @@ async function(){
         'logsTab'
 
     ];
+
+
+
 
 
     tabs.forEach(
@@ -6439,10 +7533,16 @@ async function(){
     );
 
 
+
+
+
     document.getElementById(
         'createTab'
     ).style.display =
         'block';
+
+
+
 
 
     const buttons = [
@@ -6454,6 +7554,9 @@ async function(){
         'btn-logs'
 
     ];
+
+
+
 
 
     buttons.forEach(
@@ -6471,6 +7574,9 @@ async function(){
     );
 
 
+
+
+
     document.getElementById(
         'btn-create'
     ).classList.add(
@@ -6478,6 +7584,9 @@ async function(){
     );
 
 };
+
+
+
 
 
 function escapeHtml(value){
@@ -6512,36 +7621,42 @@ function escapeHtml(value){
 }
 
 
+
+
+
 function escapeJs(value){
 
     return String(value)
 
         .replace(
-            /\\/g,
-            '\\\\'
+            /\/g,
+            '\'
         )
 
         .replace(
             /'/g,
-            "\\'"
+            "\'"
         )
 
         .replace(
             /"/g,
-            '\\"'
+            '\"'
         )
 
         .replace(
             /\n/g,
-            '\\n'
+            '\n'
         )
 
         .replace(
             /\r/g,
-            '\\r'
+            '\r'
         );
 
 }
+
+
+
 
 
 document.addEventListener(
@@ -6554,16 +7669,25 @@ document.addEventListener(
                 .split('T')[0];
 
 
+
+
+
         const todayInput =
             document.getElementById(
                 'in_today'
             );
 
 
+
+
+
         const startInput =
             document.getElementById(
                 'in_startDate'
             );
+
+
+
 
 
         if(
@@ -6577,6 +7701,9 @@ document.addEventListener(
         }
 
 
+
+
+
         if(
             startInput &&
             !startInput.value
@@ -6586,6 +7713,9 @@ document.addEventListener(
                 today;
 
         }
+
+
+
 
 
         updateContractPreview();
