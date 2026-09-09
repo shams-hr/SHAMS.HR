@@ -1297,11 +1297,17 @@ code{
 }
 
 
-/* بيانات العقد */
+/* بيانات العقد - تنسيق ثابت يمنع تداخل النصوص */
 
 .contract-row{
 
-    display:block;
+    display:grid;
+
+    grid-template-columns:max-content minmax(0,1fr);
+
+    align-items:baseline;
+
+    column-gap:8px;
 
     width:100%;
 
@@ -1313,13 +1319,75 @@ code{
 
     color:#111;
 
-    margin-bottom:6px;
+    margin-bottom:8px;
 
     text-align:right;
 
     word-break:normal;
 
     overflow-wrap:break-word;
+
+}
+
+.contract-row.full-row{
+
+    display:block;
+
+}
+
+.contract-row .row-label{
+
+    min-width:0;
+
+    white-space:nowrap;
+
+}
+
+.contract-row .row-value{
+
+    min-width:0;
+
+    overflow-wrap:anywhere;
+
+}
+
+.contract-dates-row{
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:14px;
+
+    width:100%;
+
+    margin-bottom:8px;
+
+}
+
+.contract-dates-row .date-item{
+
+    display:flex;
+
+    align-items:baseline;
+
+    gap:7px;
+
+    min-width:0;
+
+}
+
+.contract-dates-row .date-item .row-label{
+
+    white-space:nowrap;
+
+}
+
+.contract-dates-row .date-item .fill-val{
+
+    flex:1;
+
+    min-width:0;
 
 }
 
@@ -1330,17 +1398,49 @@ code{
 
     border-bottom:1px dashed #555;
 
-    padding:0 6px 1px;
+    padding:1px 7px 2px;
 
     font-weight:800;
 
     color:#000;
 
-    display:inline-block;
+    display:block;
 
-    white-space:nowrap;
+    width:max-content;
+
+    max-width:100%;
+
+    min-width:0;
+
+    white-space:normal;
+
+    overflow-wrap:anywhere;
+
+    word-break:break-word;
 
     vertical-align:baseline;
+
+    unicode-bidi:isolate;
+
+    direction:rtl;
+
+}
+
+.fill-val.ltr-val{
+
+    direction:ltr;
+
+    unicode-bidi:isolate;
+
+    text-align:right;
+
+    font-variant-numeric:tabular-nums;
+
+}
+
+.contract-row.full-row{
+
+    grid-template-columns:none;
 
 }
 
@@ -1777,6 +1877,39 @@ code{
 
 }
 
+
+/* منع ضغط بيانات العقد على الشاشات الصغيرة */
+
+@media screen and (max-width:700px){
+
+    .contract-row{
+        grid-template-columns:1fr;
+        row-gap:3px;
+    }
+
+    .contract-row .row-label{
+        white-space:normal;
+    }
+
+    .contract-row .fill-val{
+        width:100%;
+        max-width:100%;
+    }
+
+    .contract-dates-row{
+        grid-template-columns:1fr;
+        gap:8px;
+    }
+
+    .contract-dates-row .date-item{
+        width:100%;
+    }
+
+    .contract-dates-row .date-item .fill-val{
+        width:auto;
+    }
+
+}
 
 /* =========================================================
    الطباعة
@@ -2368,79 +2501,75 @@ code{
 
                 <div class="contract-row">
 
-                    تم الاتفاق في تاريخ:
+                    <span class="row-label">تم الاتفاق في تاريخ:</span>
 
-                    (
-                    <span class="fill-val" id="p_today">
+                    <span class="fill-val ltr-val" id="p_today">
                         ..../../....
                     </span>
-                    )
 
+                </div>
+
+                <div class="contract-row full-row">
                     بين كل من:
-
-                </div>
-
-                <div class="contract-row">
-                    الطرف الأول : إدارة فريق (شمس) التطوّعي
                 </div>
 
                 <div class="contract-row">
 
-                    الطرف الثاني : المتطوع/ـة
+                    <span class="row-label">الطرف الأول:</span>
 
-                    (
+                    <span class="row-value">
+                        إدارة فريق (شمس) التطوّعي
+                    </span>
+
+                </div>
+
+                <div class="contract-row">
+
+                    <span class="row-label">الطرف الثاني: المتطوع/ـة</span>
+
                     <span class="fill-val" id="p_name">
                         ...................
                     </span>
-                    )
 
                 </div>
 
                 <div class="contract-row">
 
-                    رقم الهوية / الإقامة:
+                    <span class="row-label">رقم الهوية / الإقامة:</span>
 
-                    (
-                    <span class="fill-val" id="p_id">
+                    <span class="fill-val ltr-val" id="p_id">
                         ...................
                     </span>
-                    )
 
                 </div>
 
                 <div class="contract-row">
 
-                    رقم الجوال:
+                    <span class="row-label">رقم الجوال:</span>
 
-                    (
-                    <span class="fill-val" id="p_phone">
+                    <span class="fill-val ltr-val" id="p_phone">
                         ...................
                     </span>
-                    )
 
                 </div>
 
                 <div class="contract-row">
 
-                    تاريخ الميلاد:
+                    <span class="row-label">تاريخ الميلاد:</span>
 
-                    (
-                    <span class="fill-val" id="p_dob">
+                    <span class="fill-val ltr-val" id="p_dob">
                         ...................
                     </span>
-                    )
 
                 </div>
 
                 <div class="contract-row">
 
-                    القسم / الإدارة:
+                    <span class="row-label">القسم / الإدارة:</span>
 
-                    (
                     <span class="fill-val" id="p_dept">
                         ...................
                     </span>
-                    )
 
                 </div>
 
@@ -2531,23 +2660,27 @@ code{
 
                 </div>
 
-                <div class="contract-row">
+                <div class="contract-dates-row">
 
-                    تبدأ من تاريخ:
+                    <div class="date-item">
 
-                    (
-                    <span class="fill-val" id="p_startDate">
-                        ..../../....
-                    </span>
-                    )
+                        <span class="row-label">تبدأ من تاريخ:</span>
 
-                    وتنتهي في:
+                        <span class="fill-val ltr-val" id="p_startDate">
+                            ..../../....
+                        </span>
 
-                    (
-                    <span class="fill-val" id="p_endDate">
-                        ..../../....
-                    </span>
-                    )
+                    </div>
+
+                    <div class="date-item">
+
+                        <span class="row-label">وتنتهي في:</span>
+
+                        <span class="fill-val ltr-val" id="p_endDate">
+                            ..../../....
+                        </span>
+
+                    </div>
 
                 </div>
 
