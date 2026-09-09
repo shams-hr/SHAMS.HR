@@ -1166,6 +1166,11 @@ code{
     font-weight:700;
 }
 
+
+/* =========================================================
+   تحسين عقد A4 - منع تداخل الكلام
+========================================================= */
+
 .contract-container{
     padding:25px;
 
@@ -1211,14 +1216,18 @@ code{
     border-radius:20px;
 }
 
+
+/* ورقة العقد */
+
 .contract-paper{
-    background:white;
 
-    width:794px;
+    background:#fff;
 
-    min-height:1120px;
+    width:210mm;
 
-    padding:25px 40px;
+    min-height:297mm;
+
+    padding:12mm 14mm;
 
     margin:0 auto;
 
@@ -1227,125 +1236,293 @@ code{
     box-shadow:
         0 20px 55px
         rgba(0,0,0,.13);
+
+    color:#111;
+
+    direction:rtl;
+
+    text-align:right;
+
+    overflow:hidden;
+
+    position:relative;
+
 }
 
+
+/* كل عناصر العقد */
+
+.contract-paper *{
+    max-width:100%;
+}
+
+
+/* الشعار */
+
+.contract-logo{
+    width:85px;
+
+    height:auto;
+
+    object-fit:contain;
+
+    display:block;
+
+    margin-right:0;
+
+    margin-left:auto;
+
+    margin-bottom:5px;
+}
+
+
+/* عنوان العقد */
+
 .contract-title{
+
     text-align:center;
 
-    font-size:16px;
+    font-size:17px;
 
     font-weight:900;
 
     color:#000;
 
-    margin:5px 0 10px;
+    line-height:1.8;
+
+    margin:6px 0 16px;
+
+    white-space:normal;
+
 }
 
-.contract-row{
-    font-size:11.5px;
 
-    line-height:1.45;
+/* بيانات العقد */
+
+.contract-row{
+
+    display:block;
+
+    width:100%;
+
+    font-size:12px;
+
+    line-height:1.9;
 
     font-weight:600;
 
     color:#111;
 
-    margin-bottom:2px;
+    margin-bottom:6px;
+
+    text-align:right;
+
+    word-break:normal;
+
+    overflow-wrap:break-word;
+
 }
 
+
+/* البيانات المتغيرة */
+
 .fill-val{
+
     border-bottom:1px dashed #555;
 
-    padding:0 5px;
+    padding:0 6px 1px;
 
     font-weight:800;
 
     color:#000;
 
     display:inline-block;
+
+    white-space:nowrap;
+
+    vertical-align:baseline;
+
 }
 
+
+/* عناوين الأقسام */
+
 .section-h{
-    font-size:12px;
+
+    font-size:13px;
 
     font-weight:900;
 
     color:#000;
 
-    margin:8px 0 2px;
+    margin:16px 0 8px;
 
-    border-right:3px solid var(--orange);
+    border-right:4px solid var(--orange);
 
-    padding-right:6px;
+    padding-right:8px;
+
+    line-height:1.8;
+
+    page-break-after:avoid;
+
 }
+
+
+/* القوائم */
 
 .contract-ul{
+
     list-style:none;
 
-    padding-right:0;
+    padding:0;
+
+    margin:0 0 7px;
+
 }
 
-.contract-ul li{
-    font-size:11px;
 
-    line-height:1.35;
+/* بنود العقد */
+
+.contract-ul li{
+
+    display:block;
+
+    width:100%;
+
+    font-size:11.5px;
+
+    line-height:1.85;
 
     color:#222;
 
     font-weight:500;
 
-    margin-bottom:1px;
+    margin-bottom:3px;
+
+    padding:0;
+
+    page-break-inside:avoid;
+
+    overflow-wrap:break-word;
+
 }
 
+
+/* فقرات العقد */
+
+.contract-paper p{
+
+    font-size:11.5px;
+
+    line-height:1.9;
+
+    font-weight:500;
+
+    color:#222;
+
+    margin:5px 0 9px;
+
+}
+
+
+/* شبكة التوقيعات */
+
 .sig-grid{
+
     display:flex;
 
     justify-content:space-between;
 
     align-items:flex-end;
 
-    margin-top:15px;
+    gap:12px;
 
-    padding-top:10px;
+    margin-top:28px;
+
+    padding-top:14px;
 
     border-top:1px solid #e2e8f0;
+
+    page-break-inside:avoid;
+
 }
 
+
 .sig-box{
+
     text-align:center;
 
     flex:1;
 
+    min-width:0;
+
     padding:0 5px;
+
 }
 
+
 .sig-box .title{
+
     color:#000;
 
-    font-size:10.5px;
+    font-size:11px;
 
     font-weight:800;
 
-    margin-bottom:3px;
+    margin-bottom:7px;
+
+    line-height:1.6;
+
 }
 
+
 .sig-line{
+
     border-bottom:1px dashed #777;
 
     width:85%;
 
     margin:0 auto;
+
+    height:1px;
+
 }
 
+
 .sig-img{
-    height:38px;
+
+    height:43px;
+
+    width:auto;
+
+    max-width:100%;
 
     object-fit:contain;
 
     display:block;
 
-    margin:0 auto 2px;
+    margin:0 auto 4px;
 }
+
+
+/* منع تكسير بعض أجزاء العقد */
+
+.contract-title,
+.contract-row,
+.section-h,
+.contract-ul,
+.contract-ul li,
+.sig-grid{
+    break-inside:avoid;
+
+    page-break-inside:avoid;
+}
+
+
+/* =========================================================
+   نهاية تحسين العقد
+========================================================= */
+
 
 .toast-container{
     position:fixed;
@@ -1576,6 +1753,16 @@ code{
         padding:10px;
     }
 
+    .contract-paper{
+        width:210mm;
+
+        min-height:297mm;
+
+        padding:12mm 14mm;
+
+        margin:0;
+    }
+
     .auth-card{
         padding:35px 22px;
     }
@@ -1590,10 +1777,32 @@ code{
 
 }
 
+
+/* =========================================================
+   الطباعة
+========================================================= */
+
+@page{
+    size:A4;
+
+    margin:0;
+}
+
 @media print{
 
+    html,
     body{
+        width:210mm;
+
+        min-height:297mm;
+
         background:white !important;
+    }
+
+    body{
+        margin:0 !important;
+
+        padding:0 !important;
     }
 
     .auth-overlay,
@@ -1607,9 +1816,9 @@ code{
     }
 
     .main-container{
-        width:100% !important;
+        width:210mm !important;
 
-        max-width:100% !important;
+        max-width:210mm !important;
 
         margin:0 !important;
 
@@ -1618,22 +1827,55 @@ code{
 
     #createTab{
         display:block !important;
+
+        width:210mm !important;
     }
 
     .contract-container{
         padding:0 !important;
 
+        margin:0 !important;
+
+        width:210mm !important;
+
         background:white !important;
 
         border:0 !important;
+
+        border-radius:0 !important;
     }
 
     .contract-paper{
-        box-shadow:none !important;
+
+        width:210mm !important;
+
+        min-height:297mm !important;
 
         margin:0 !important;
 
-        width:100% !important;
+        padding:12mm 14mm !important;
+
+        box-shadow:none !important;
+
+        border-radius:0 !important;
+
+        overflow:hidden !important;
+
+        page-break-after:avoid !important;
+
+    }
+
+}
+
+
+/* تحسين عرض العقد على الشاشات الصغيرة */
+
+@media screen and (max-width:850px){
+
+    .contract-paper{
+
+        transform-origin:top right;
+
     }
 
 }
@@ -1814,7 +2056,6 @@ code{
             لوحة التحكم
         </button>
 
-        <!-- LOG فقط -->
         <button
             id="btn-logs"
             onclick="switchTab('logsTab')"
@@ -2114,16 +2355,12 @@ code{
                 id="contractPaper"
             >
 
-                <div style="text-align:right;">
-
-                    <img
-                        src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
-                        alt="شعار فريق شمس"
-                        style="width:85px;height:auto;object-fit:contain;"
-                        onerror="this.style.display='none'"
-                    >
-
-                </div>
+                <img
+                    class="contract-logo"
+                    src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
+                    alt="شعار فريق شمس"
+                    onerror="this.style.display='none'"
+                >
 
                 <div class="contract-title">
                     عقد اتفاقية انضمام لإدارة "شمس" التطوعي
@@ -2211,7 +2448,7 @@ code{
                     أولاً : موضوع العقد
                 </div>
 
-                <p style="font-size:11px;line-height:1.4;font-weight:500;">
+                <p>
 
                     انضمام الطرف الثاني للعمل التطوعي ضمن فريق (شمس)
                     وفق الأنظمة والتعليمات المعتمدة.
@@ -2224,17 +2461,29 @@ code{
 
                 <ul class="contract-ul">
 
-                    <li>1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</li>
+                    <li>
+                        1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.
+                    </li>
 
-                    <li>2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</li>
+                    <li>
+                        2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.
+                    </li>
 
-                    <li>3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.</li>
+                    <li>
+                        3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.
+                    </li>
 
-                    <li>4. الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</li>
+                    <li>
+                        4. الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.
+                    </li>
 
-                    <li>5. عدم طلب الإعفاء خلال الشهر الأول.</li>
+                    <li>
+                        5. عدم طلب الإعفاء خلال الشهر الأول.
+                    </li>
 
-                    <li>6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</li>
+                    <li>
+                        6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.
+                    </li>
 
                 </ul>
 
@@ -2244,15 +2493,25 @@ code{
 
                 <ul class="contract-ul">
 
-                    <li>1. التعامل مع المتطوع باحترام وتقدير.</li>
+                    <li>
+                        1. التعامل مع المتطوع باحترام وتقدير.
+                    </li>
 
-                    <li>2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</li>
+                    <li>
+                        2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.
+                    </li>
 
-                    <li>3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</li>
+                    <li>
+                        3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.
+                    </li>
 
-                    <li>4. توضيح أسباب إنهاء العقد عند حدوثه.</li>
+                    <li>
+                        4. توضيح أسباب إنهاء العقد عند حدوثه.
+                    </li>
 
-                    <li>5. حفظ بيانات وسجلات المتطوع.</li>
+                    <li>
+                        5. حفظ بيانات وسجلات المتطوع.
+                    </li>
 
                 </ul>
 
@@ -2292,7 +2551,7 @@ code{
 
                 </div>
 
-                <p style="font-size:11px;line-height:1.4;font-weight:500;margin-top:2px;">
+                <p>
 
                     يحق للإدارة إنهاء العقد في حال التقصير أو عدم الالتزام
                     أو السلوك غير اللائق، كما يحق للمتطوع الانسحاب بعد
@@ -2310,7 +2569,7 @@ code{
 
                         <div
                             class="sig-line"
-                            style="margin-top:38px;"
+                            style="margin-top:43px;"
                         ></div>
 
                     </div>
@@ -2602,6 +2861,7 @@ code{
 
 </div>
 
+
 <!-- ================================
      LOG
 ================================ -->
@@ -2703,6 +2963,7 @@ code{
 
 </div>
 
+
 <div id="usersTab" style="display:none;">
 
     <div class="page-header">
@@ -2787,6 +3048,7 @@ code{
 
             </div>
 
+
             <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
@@ -2814,6 +3076,7 @@ code{
                 </div>
 
             </div>
+
 
             <div class="dashboard-stat">
 
@@ -2843,6 +3106,7 @@ code{
 
             </div>
 
+
             <div class="dashboard-stat">
 
                 <div class="dashboard-stat-top">
@@ -2870,6 +3134,7 @@ code{
                 </div>
 
             </div>
+
 
             <div class="dashboard-stat">
 
@@ -2902,6 +3167,7 @@ code{
         </div>
 
     </div>
+
 
     <div class="card-box">
 
@@ -3019,6 +3285,7 @@ code{
         </form>
 
     </div>
+
 
     <div class="card-box">
 
@@ -3397,10 +3664,6 @@ async function loadCloudData(){
             }
         );
 
-
-        /*
-           تحميل LOG فقط للمدير
-        */
 
         if(
             window.currentUserRole ===
@@ -6238,7 +6501,7 @@ function(){
     const opt = {
 
         margin:
-            [2,2,2,2],
+            [0,0,0,0],
 
         filename:
             `عقد_${name}.pdf`,
@@ -6259,7 +6522,11 @@ function(){
 
             allowTaint:true,
 
-            letterRendering:true
+            letterRendering:true,
+
+            scrollX:0,
+
+            scrollY:0
 
         },
 
