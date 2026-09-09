@@ -17,20 +17,20 @@
 
 <link
 rel="apple-touch-icon"
-href="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png](https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png)"
+href="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
 >
 
 <link
-href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap](https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900\&display=swap](https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap))"
+href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap"
 rel="stylesheet"
 >
 
 <link
 rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css)"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
 >
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js](https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js)"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
 
 
@@ -39,28 +39,28 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css]
 <style>
 
 :root{
-    \--navy:#000a30;
-    \--navy-2:#071542;
-    \--orange:#f37021;
-    \--orange-light:#ff984d;
+    --navy:#000a30;
+    --navy-2:#071542;
+    --orange:#f37021;
+    --orange-light:#ff984d;
 
-    \--bg:#f5f7fb;
-    \--card:#ffffff;
+    --bg:#f5f7fb;
+    --card:#ffffff;
 
-    \--text:#172033;
-    \--muted:#718096;
+    --text:#172033;
+    --muted:#718096;
 
-    \--green:#10b981;
-    \--blue:#3b82f6;
-    \--purple:#8b5cf6;
-    \--red:#ef4444;
-    \--yellow:#f59e0b;
+    --green:#10b981;
+    --blue:#3b82f6;
+    --purple:#8b5cf6;
+    --red:#ef4444;
+    --yellow:#f59e0b;
 
-    \--border:#e8edf5;
+    --border:#e8edf5;
 
-    \--shadow:0 15px 45px rgba(0,10,48,.07);
+    --shadow:0 15px 45px rgba(0,10,48,.07);
 
-    \--radius:20px;
+    --radius:20px;
 }
 
 *{
@@ -330,7 +330,7 @@ body{
     transform:translateY(-2px);
 }
 
-\#appContent{
+#appContent{
     min-height:100vh;
 }
 
@@ -349,7 +349,7 @@ body{
         linear-gradient(
             110deg,
             var(--navy),
-            \#071640
+            #071640
         );
 
     color:white;
@@ -594,8 +594,8 @@ body{
     background:
         linear-gradient(
             135deg,
-            \#fff2e8,
-            \#fff8f3
+            #fff2e8,
+            #fff8f3
         );
 
     color:var(--orange);
@@ -892,7 +892,7 @@ textarea.form-control{
         linear-gradient(
             115deg,
             var(--navy),
-            \#071a50
+            #071a50
         );
 
     border-radius:22px;
@@ -1183,8 +1183,8 @@ code{
     background:
         linear-gradient(
             135deg,
-            \#e9eef7,
-            \#f8fafc
+            #e9eef7,
+            #f8fafc
         );
 
     border-radius:22px;
@@ -2002,7 +2002,7 @@ code{
         padding:0 !important;
     }
 
-    \#createTab{
+    #createTab{
         display:block !important;
 
         width:210mm !important;
@@ -2062,6 +2062,36 @@ code{
 
 </style>
 
+
+<style id="pdf-export-fix">
+.contract-paper.pdf-export,
+.contract-paper.pdf-export *{
+    font-family:'Tajawal', Arial, sans-serif !important;
+}
+.contract-paper.pdf-export{
+    direction:rtl !important;
+    text-align:right !important;
+    width:210mm !important;
+    min-height:297mm !important;
+    box-sizing:border-box !important;
+    overflow:visible !important;
+    background:#fff !important;
+}
+.contract-paper.pdf-export .contract-row{
+    display:flex !important;
+    flex-direction:row !important;
+    direction:rtl !important;
+    align-items:flex-start !important;
+}
+.contract-paper.pdf-export .contract-label,
+.contract-paper.pdf-export .contract-value-wrap,
+.contract-paper.pdf-export .text-value{
+    direction:rtl !important;
+    unicode-bidi:plaintext !important;
+    text-align:right !important;
+}
+</style>
+
 </head>
 
 <body>
@@ -2082,7 +2112,7 @@ code{
 
         <img
             class="auth-logo"
-            src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png](https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png)"
+            src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
             alt="شعار فريق شمس"
             onerror="this.style.display='none'"
         >
@@ -2181,7 +2211,7 @@ code{
 
         <img
             class="brand-logo"
-            src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png](https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png)"
+            src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
             alt="شمس"
         >
 
@@ -2537,7 +2567,7 @@ code{
 
                 <img
                     class="contract-logo"
-                    src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png](https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png)"
+                    src="https://i.postimg.cc/MczxSRC6/a373f6e8-e93b-40df-a2b5-83c8caf5c7bb.png"
                     alt="شعار فريق شمس"
                     onerror="this.style.display='none'"
                 >
@@ -2738,7 +2768,7 @@ code{
                         </div>
 
                         <img
-                            src="https://i.postimg.cc/44VchM5g/lqtt-shasht-2026-09-04-230838.png](https://i.postimg.cc/44VchM5g/lqtt-shasht-2026-09-04-230838.png)"
+                            src="https://i.postimg.cc/44VchM5g/lqtt-shasht-2026-09-04-230838.png"
                             class="sig-img"
                             crossorigin="anonymous"
                             onerror="this.style.display='none'"
@@ -2755,7 +2785,7 @@ code{
                         </div>
 
                         <img
-                            src="https://i.postimg.cc/QxSHQrK2/582b00f0-9e4e-48c6-b0ca-c8766e322887.png](https://i.postimg.cc/QxSHQrK2/582b00f0-9e4e-48c6-b0ca-c8766e322887.png)"
+                            src="https://i.postimg.cc/QxSHQrK2/582b00f0-9e4e-48c6-b0ca-c8766e322887.png"
                             class="sig-img"
                             crossorigin="anonymous"
                             onerror="this.style.display='none'"
@@ -3533,7 +3563,7 @@ code{
 import {
     initializeApp
 }
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js](https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js)";
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
 
 
 
@@ -3550,7 +3580,7 @@ import {
     deleteDoc,
     doc
 }
-from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js](https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js)";
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
 
@@ -4319,236 +4349,92 @@ function renderLogs(){
 
 
 
-window.handleLogin =
-async function(e){
-
+window.handleLogin = async function(e){
     e.preventDefault();
 
+    const userEl = document.getElementById('login_user');
+    const passEl = document.getElementById('login_pass');
 
+    const uInput = userEl ? userEl.value.trim() : '';
+    const pInput = passEl ? passEl.value.trim() : '';
 
+    if(!uInput || !pInput){
+        if(typeof hideLoading === 'function') hideLoading();
+        if(typeof window.showToast === 'function'){
+            window.showToast('أدخل اسم المستخدم وكلمة المرور.', 'error');
+        } else {
+            alert('أدخل اسم المستخدم وكلمة المرور.');
+        }
+        return;
+    }
 
-
-    const uInput =
-        document
-            .getElementById('login_user')
-            .value
-            .trim();
-
-
-
-
-
-    const pInput =
-        document
-            .getElementById('login_pass')
-            .value
-            .trim();
-
-
-
-
-
-    showLoading(
-        'جاري التحقق من بيانات الدخول...'
-    );
-
-
-
-
+    if(typeof showLoading === 'function'){
+        showLoading('جاري التحقق من بيانات الدخول...');
+    }
 
     try{
-
         await loadCloudData();
 
+        const foundUser = Array.isArray(window.usersList)
+            ? window.usersList.find(u =>
+                String(u.username ?? '').trim() === uInput &&
+                String(u.password ?? '').trim() === pInput
+              )
+            : null;
 
-
-
-
-        const foundUser =
-            window.usersList.find(
-                u =>
-                    u.username === uInput &&
-                    u.password === pInput
-            );
-
-
-
-
-
-        if(foundUser){
-
-            window.currentUserRole =
-                foundUser.role;
-
-            window.currentUserId =
-                foundUser.id;
-
-            window.currentUsername =
-                foundUser.name ||
-                foundUser.username;
-
-
-
-
-
-            const usersButton =
-                document.getElementById(
-                    'btn-users'
-                );
-
-
-
-
-
-            const logsButton =
-                document.getElementById(
-                    'btn-logs'
-                );
-
-
-
-
-
-            const isAdmin =
-                window.currentUserRole ===
-                'مدير النظام';
-
-
-
-
-
-            if(isAdmin){
-
-                if(usersButton)
-                    usersButton.style.display =
-                        'inline-flex';
-
-                if(logsButton)
-                    logsButton.style.display =
-                        'inline-flex';
-
+        if(!foundUser){
+            if(typeof hideLoading === 'function') hideLoading();
+            if(typeof window.showToast === 'function'){
+                window.showToast('اسم المستخدم أو كلمة المرور غير صحيحة.', 'error');
+            } else {
+                alert('اسم المستخدم أو كلمة المرور غير صحيحة.');
             }
-
-            else{
-
-                if(usersButton)
-                    usersButton.style.display =
-                        'none';
-
-                if(logsButton)
-                    logsButton.style.display =
-                        'none';
-
-            }
-
-
-
-
-
-            const currentUserDisplay =
-                document.getElementById(
-                    'currentUserDisplay'
-                );
-
-
-
-
-
-            if(currentUserDisplay){
-
-                currentUserDisplay.innerText =
-                    window.currentUsername;
-
-            }
-
-
-
-
-
-            document.getElementById(
-                'authSection'
-            ).style.display =
-                'none';
-
-
-
-
-
-            document.getElementById(
-                'appContent'
-            ).style.display =
-                'block';
-
-
-
-
-
-            renderUsers();
-
-            renderArchive();
-
-            updateDashboard();
-
-
-
-
-
-            await logAction(
-                'تسجيل دخول',
-                `تم تسجيل دخول المستخدم ${window.currentUsername}`
-            );
-
-
-
-
-
-            showToast(
-                `مرحباً ${window.currentUsername}`,
-                'success'
-            );
-
+            return;
         }
 
-        else{
+        window.currentUserRole = foundUser.role || '';
+        window.currentUserId = foundUser.id || '';
+        window.currentUsername = foundUser.name || foundUser.username || '';
 
-            await logAction(
-                'محاولة دخول فاشلة',
-                `محاولة تسجيل دخول فاشلة باسم المستخدم ${uInput}`,
-                uInput,
-                uInput,
-                ''
-            );
+        const usersButton = document.getElementById('btn-users');
+        const logsButton = document.getElementById('btn-logs');
+        const isAdmin = window.currentUserRole === 'مدير النظام';
 
+        if(usersButton) usersButton.style.display = isAdmin ? 'inline-flex' : 'none';
+        if(logsButton) logsButton.style.display = isAdmin ? 'inline-flex' : 'none';
 
+        const currentUserDisplay = document.getElementById('currentUserDisplay');
+        if(currentUserDisplay) currentUserDisplay.innerText = window.currentUsername;
 
+        const authSection = document.getElementById('authSection');
+        const appContent = document.getElementById('appContent');
 
+        if(authSection) authSection.style.display = 'none';
+        if(appContent) appContent.style.display = 'block';
 
-            showToast(
-                'اسم المستخدم أو كلمة المرور غير صحيحة.',
-                'error'
-            );
+        try{
+            if(typeof loadAllData === 'function') await loadAllData();
+        }catch(_){}
 
+        if(typeof hideLoading === 'function') hideLoading();
+
+        if(typeof window.showToast === 'function'){
+            window.showToast('تم تسجيل الدخول بنجاح.', 'success');
         }
+    }catch(err){
+        console.error('Login Error:', err);
+        if(typeof hideLoading === 'function') hideLoading();
 
+        const msg = (err && (err.code || err.message))
+            ? 'تعذر الاتصال بقاعدة البيانات. تأكد من اتصال الإنترنت وإعدادات Firebase.'
+            : 'حدث خطأ أثناء تسجيل الدخول.';
+
+        if(typeof window.showToast === 'function'){
+            window.showToast(msg, 'error');
+        } else {
+            alert(msg);
+        }
     }
-
-    catch(err){
-
-        console.error(err);
-
-        showToast(
-            'حدث خطأ أثناء تسجيل الدخول.',
-            'error'
-        );
-
-    }
-
-    finally{
-
-        hideLoading();
-
-    }
-
 };
 
 
@@ -7440,77 +7326,52 @@ function(){
 
 
 
-window.downloadContractPDF = async function () {
-    const contract = document.getElementById('contractPaper');
-    if (!contract) {
-        alert('تعذر العثور على العقد');
+window.downloadContractPDF = async function(){
+    const element = document.getElementById('contractPaper');
+    if(!element){
+        if(typeof window.showToast === 'function') window.showToast('تعذر العثور على العقد.', 'error');
         return;
     }
 
-    const name = document.getElementById('in_name')?.value?.trim() || 'متطوع';
-    const safeName = name.replace(/[\\/:*?"<>|]/g, '').replace(/\s+/g, '_');
-    const button = document.querySelector('[onclick="downloadContractPDF()"]');
+    if(typeof html2pdf !== 'function'){
+        if(typeof window.showToast === 'function') window.showToast('مكتبة PDF لم تُحمّل. تحقق من اتصال الإنترنت.', 'error');
+        return;
+    }
 
-    try {
-        if (button) {
-            button.disabled = true;
-            button.style.opacity = '0.6';
-            button.style.pointerEvents = 'none';
-        }
+    const originalClass = element.className;
+    element.classList.add('pdf-export');
 
-        if (typeof showToast === 'function') showToast('جاري تجهيز ملف PDF...');
-        if (typeof html2pdf !== 'function') throw new Error('html2pdf غير محملة');
-
-        if (document.fonts?.ready) await document.fonts.ready;
-        await new Promise(r => setTimeout(r, 300));
-
-        contract.classList.add('pdf-export');
-        contract.setAttribute('dir', 'rtl');
-
-        await html2pdf().set({
+    try{
+        const opt = {
             margin: 0,
-            filename: `عقد_${safeName}.pdf`,
+            filename: 'عقد-تطوعي.pdf',
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: {
                 scale: 2,
                 useCORS: true,
-                allowTaint: false,
                 backgroundColor: '#ffffff',
-                logging: false,
-                foreignObjectRendering: false,
-                windowWidth: 794,
-                scrollX: 0,
-                scrollY: 0
+                logging: false
             },
             jsPDF: {
                 unit: 'mm',
                 format: 'a4',
-                orientation: 'portrait',
-                compress: true
+                orientation: 'portrait'
             },
-            pagebreak: {
-                mode: ['css', 'legacy'],
-                avoid: ['.contract-row', '.section-h', '.signature-box', '.contract-header']
-            }
-        }).from(contract).save();
+            pagebreak: { mode: ['css', 'legacy'] }
+        };
 
-        if (typeof logAction === 'function') {
-            logAction('تنزيل PDF', `تم تنزيل عقد ${name} بصيغة PDF`);
+        await html2pdf().set(opt).from(element).save();
+
+        if(typeof window.showToast === 'function'){
+            window.showToast('تم تنزيل العقد بصيغة PDF.', 'success');
         }
-        if (typeof showToast === 'function') showToast('تم تنزيل العقد بنجاح');
-
-    } catch (error) {
-        console.error('PDF Export Error:', error);
-        alert('حدث خطأ أثناء إنشاء ملف PDF.\nتأكد من اتصال الإنترنت ثم حاول مرة أخرى.');
-    } finally {
-        contract.classList.remove('pdf-export');
-        contract.removeAttribute('dir');
-
-        if (button) {
-            button.disabled = false;
-            button.style.opacity = '';
-            button.style.pointerEvents = '';
+    }catch(err){
+        console.error('PDF Error:', err);
+        if(typeof window.showToast === 'function'){
+            window.showToast('تعذر إنشاء ملف PDF.', 'error');
         }
+    }finally{
+        element.className = originalClass;
     }
 };
 
