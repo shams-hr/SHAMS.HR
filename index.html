@@ -4017,9 +4017,6 @@ async function loadCloudData(){
         );
 
     
-        // Do not swallow Firestore errors.
-        // handleLogin must receive the error instead of checking an empty usersList.
-        throw err;
     }
 
     finally{
@@ -4382,6 +4379,15 @@ function renderLogs(){
 
 
 
+async function loadUsersForLogin(){
+    const snap = await getDocs(collection(db,'users'));
+    return snap.docs.map(docSnap => ({
+        id: docSnap.id,
+        ...docSnap.data()
+    }));
+}
+
+
 window.handleLogin = async function(e){
     e.preventDefault();
 
@@ -4406,10 +4412,9 @@ window.handleLogin = async function(e){
     }
 
     try{
-        await loadCloudData();
+        const loginUsers = await loadUsersForLogin();
 
-        const foundUser = Array.isArray(window.usersList)
-            ? window.usersList.find(u =>
+        const foundUser = loginUsers.find(u =>
                 String(u.username ?? '').trim() === uInput &&
                 String(u.password ?? '').trim() === pInput
               )
@@ -4446,8 +4451,10 @@ window.handleLogin = async function(e){
         if(appContent) appContent.style.display = 'block';
 
         try{
-            if(typeof loadAllData === 'function') await loadAllData();
-        }catch(_){}
+            await loadCloudData();
+        }catch(err){
+            console.warn('Post-login data load:', err);
+        }
 
         if(typeof hideLoading === 'function') hideLoading();
 
@@ -4458,9 +4465,10 @@ window.handleLogin = async function(e){
         console.error('Login Error:', err);
         if(typeof hideLoading === 'function') hideLoading();
 
-        const msg = (err && (err.code || err.message))
-            ? 'تعذر الاتصال بقاعدة البيانات. تأكد من اتصال الإنترنت وإعدادات Firebase.'
-            : 'حدث خطأ أثناء تسجيل الدخول.';
+        let msg = 'حدث خطأ أثناء تسجيل الدخول.';
+        if(err?.code === 'permission-denied') msg = 'Firebase رفض الوصول إلى بيانات المستخدمين (permission-denied).';
+        else if(err?.code === 'unavailable') msg = 'تعذر الاتصال بـ Firebase. تحقق من الإنترنت.';
+        else if(err?.message) msg = 'خطأ Firebase: ' + err.message;
 
         if(typeof window.showToast === 'function'){
             window.showToast(msg, 'error');
