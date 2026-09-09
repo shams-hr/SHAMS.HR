@@ -1243,6 +1243,8 @@ code{
 
     text-align:right;
 
+    unicode-bidi:plaintext;
+
     overflow:hidden;
 
     position:relative;
@@ -1297,151 +1299,58 @@ code{
 }
 
 
-/* بيانات العقد - تنسيق ثابت يمنع تداخل النصوص */
+/* بيانات العقد */
 
 .contract-row{
-
-    display:grid;
-
-    grid-template-columns:max-content minmax(0,1fr);
-
-    align-items:baseline;
-
-    column-gap:8px;
-
-    width:100%;
-
-    font-size:12px;
-
-    line-height:1.9;
-
-    font-weight:600;
-
-    color:#111;
-
-    margin-bottom:8px;
-
-    text-align:right;
-
-    word-break:normal;
-
-    overflow-wrap:break-word;
-
-}
-
-.contract-row.full-row{
-
-    display:block;
-
-}
-
-.contract-row .row-label{
-
-    min-width:0;
-
-    white-space:nowrap;
-
-}
-
-.contract-row .row-value{
-
-    min-width:0;
-
-    overflow-wrap:anywhere;
-
-}
-
-.contract-dates-row{
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:14px;
-
-    width:100%;
-
-    margin-bottom:8px;
-
-}
-
-.contract-dates-row .date-item{
-
     display:flex;
-
     align-items:baseline;
-
-    gap:7px;
-
-    min-width:0;
-
-}
-
-.contract-dates-row .date-item .row-label{
-
-    white-space:nowrap;
-
-}
-
-.contract-dates-row .date-item .fill-val{
-
-    flex:1;
-
-    min-width:0;
-
-}
-
-
-/* البيانات المتغيرة */
-
-.fill-val{
-
-    border-bottom:1px dashed #555;
-
-    padding:1px 7px 2px;
-
-    font-weight:800;
-
-    color:#000;
-
-    display:block;
-
-    width:max-content;
-
-    max-width:100%;
-
-    min-width:0;
-
-    white-space:normal;
-
-    overflow-wrap:anywhere;
-
-    word-break:break-word;
-
-    vertical-align:baseline;
-
-    unicode-bidi:isolate;
-
-    direction:rtl;
-
-}
-
-.fill-val.ltr-val{
-
-    direction:ltr;
-
-    unicode-bidi:isolate;
-
+    flex-wrap:wrap;
+    width:100%;
+    min-height:28px;
+    font-size:12px;
+    line-height:1.8;
+    font-weight:600;
+    color:#111;
+    margin-bottom:5px;
     text-align:right;
-
-    font-variant-numeric:tabular-nums;
-
+    direction:rtl;
+    unicode-bidi:plaintext;
+    gap:0;
 }
 
-.contract-row.full-row{
+.contract-label{
+    display:inline;
+    direction:rtl;
+    unicode-bidi:isolate;
+}
 
-    grid-template-columns:none;
+/* قيمة الحقل - مع عزل اتجاه النص حتى لا تتداخل العربية مع الأرقام */
+.fill-val{
+    display:inline-block;
+    min-width:70px;
+    max-width:calc(100% - 10px);
+    margin:0 5px;
+    padding:1px 7px 2px;
+    border-bottom:1px dashed #555;
+    font-weight:800;
+    color:#000;
+    white-space:nowrap;
+    vertical-align:baseline;
+    unicode-bidi:isolate;
+    direction:rtl;
+}
 
+.fill-val.num{
+    direction:ltr;
+    unicode-bidi:isolate;
+    text-align:center;
+    letter-spacing:.2px;
+}
+
+.fill-val.text{
+    direction:rtl;
+    unicode-bidi:isolate;
+    text-align:right;
 }
 
 
@@ -1618,6 +1527,41 @@ code{
     page-break-inside:avoid;
 }
 
+
+/* إصلاح اتجاه النص المختلط في المعاينة والطباعة وPDF */
+.contract-paper,
+.contract-paper .contract-row,
+.contract-paper .contract-label,
+.contract-paper .fill-val{
+    unicode-bidi:plaintext;
+}
+
+.contract-paper .fill-val.num{
+    unicode-bidi:isolate;
+    direction:ltr;
+}
+
+.contract-paper .fill-val.text{
+    unicode-bidi:isolate;
+    direction:rtl;
+}
+
+@media print{
+    .contract-paper{
+        direction:rtl !important;
+        unicode-bidi:plaintext !important;
+    }
+
+    .contract-row{
+        display:flex !important;
+        flex-wrap:wrap !important;
+        align-items:baseline !important;
+    }
+
+    .fill-val{
+        display:inline-block !important;
+    }
+}
 
 /* =========================================================
    نهاية تحسين العقد
@@ -1877,39 +1821,6 @@ code{
 
 }
 
-
-/* منع ضغط بيانات العقد على الشاشات الصغيرة */
-
-@media screen and (max-width:700px){
-
-    .contract-row{
-        grid-template-columns:1fr;
-        row-gap:3px;
-    }
-
-    .contract-row .row-label{
-        white-space:normal;
-    }
-
-    .contract-row .fill-val{
-        width:100%;
-        max-width:100%;
-    }
-
-    .contract-dates-row{
-        grid-template-columns:1fr;
-        gap:8px;
-    }
-
-    .contract-dates-row .date-item{
-        width:100%;
-    }
-
-    .contract-dates-row .date-item .fill-val{
-        width:auto;
-    }
-
-}
 
 /* =========================================================
    الطباعة
@@ -2486,6 +2397,7 @@ code{
             <div
                 class="contract-paper"
                 id="contractPaper"
+                dir="rtl"
             >
 
                 <img
@@ -2495,82 +2407,43 @@ code{
                     onerror="this.style.display='none'"
                 >
 
-                <div class="contract-title">
+                <div class="contract-title" dir="rtl">
                     عقد اتفاقية انضمام لإدارة "شمس" التطوعي
                 </div>
 
-                <div class="contract-row">
-
-                    <span class="row-label">تم الاتفاق في تاريخ:</span>
-
-                    <span class="fill-val ltr-val" id="p_today">
-                        ..../../....
-                    </span>
-
+                <div class="contract-row" dir="rtl">
+                    <span class="contract-label">تم الاتفاق في تاريخ:</span>
+                    (<span class="fill-val num" id="p_today">..../../....</span>)
+                    <span class="contract-label">بين كل من:</span>
                 </div>
 
-                <div class="contract-row full-row">
-                    بين كل من:
+                <div class="contract-row" dir="rtl">
+                    <span class="contract-label">الطرف الأول: إدارة فريق (شمس) التطوّعي</span>
                 </div>
 
-                <div class="contract-row">
-
-                    <span class="row-label">الطرف الأول:</span>
-
-                    <span class="row-value">
-                        إدارة فريق (شمس) التطوّعي
-                    </span>
-
+                <div class="contract-row" dir="rtl">
+                    <span class="contract-label">الطرف الثاني: المتطوع/ـة</span>
+                    (<span class="fill-val text" id="p_name">...................</span>)
                 </div>
 
-                <div class="contract-row">
-
-                    <span class="row-label">الطرف الثاني: المتطوع/ـة</span>
-
-                    <span class="fill-val" id="p_name">
-                        ...................
-                    </span>
-
+                <div class="contract-row" dir="rtl">
+                    <span class="contract-label">رقم الهوية / الإقامة:</span>
+                    (<span class="fill-val num" id="p_id">...................</span>)
                 </div>
 
-                <div class="contract-row">
-
-                    <span class="row-label">رقم الهوية / الإقامة:</span>
-
-                    <span class="fill-val ltr-val" id="p_id">
-                        ...................
-                    </span>
-
+                <div class="contract-row" dir="rtl">
+                    <span class="contract-label">رقم الجوال:</span>
+                    (<span class="fill-val num" id="p_phone">...................</span>)
                 </div>
 
-                <div class="contract-row">
-
-                    <span class="row-label">رقم الجوال:</span>
-
-                    <span class="fill-val ltr-val" id="p_phone">
-                        ...................
-                    </span>
-
+                <div class="contract-row" dir="rtl">
+                    <span class="contract-label">تاريخ الميلاد:</span>
+                    (<span class="fill-val num" id="p_dob">...................</span>)
                 </div>
 
-                <div class="contract-row">
-
-                    <span class="row-label">تاريخ الميلاد:</span>
-
-                    <span class="fill-val ltr-val" id="p_dob">
-                        ...................
-                    </span>
-
-                </div>
-
-                <div class="contract-row">
-
-                    <span class="row-label">القسم / الإدارة:</span>
-
-                    <span class="fill-val" id="p_dept">
-                        ...................
-                    </span>
-
+                <div class="contract-row" dir="rtl">
+                    <span class="contract-label">القسم / الإدارة:</span>
+                    (<span class="fill-val text" id="p_dept">...................</span>)
                 </div>
 
                 <div class="section-h">
@@ -2648,40 +2521,16 @@ code{
                     رابعاً : مدة العقد وانهاؤه
                 </div>
 
-                <div class="contract-row">
-
-                    مدة العقد:
-
-                    (
-                    <span class="fill-val" id="p_duration">
-                        1 شهر
-                    </span>
-                    )
-
+                <div class="contract-row" dir="rtl">
+                    <span class="contract-label">مدة العقد:</span>
+                    (<span class="fill-val num" id="p_duration">1 شهر</span>)
                 </div>
 
-                <div class="contract-dates-row">
-
-                    <div class="date-item">
-
-                        <span class="row-label">تبدأ من تاريخ:</span>
-
-                        <span class="fill-val ltr-val" id="p_startDate">
-                            ..../../....
-                        </span>
-
-                    </div>
-
-                    <div class="date-item">
-
-                        <span class="row-label">وتنتهي في:</span>
-
-                        <span class="fill-val ltr-val" id="p_endDate">
-                            ..../../....
-                        </span>
-
-                    </div>
-
+                <div class="contract-row" dir="rtl">
+                    <span class="contract-label">تبدأ من تاريخ:</span>
+                    (<span class="fill-val num" id="p_startDate">..../../....</span>)
+                    <span class="contract-label">وتنتهي في:</span>
+                    (<span class="fill-val num" id="p_endDate">..../../....</span>)
                 </div>
 
                 <p>
@@ -6443,157 +6292,57 @@ function(tabId){
 window.updateContractPreview =
 function(){
 
-    const name =
-        document
-            .getElementById('in_name')
-            .value ||
-        '...................';
+    const getValue = id =>
+        document.getElementById(id)?.value || '';
 
+    const name = getValue('in_name') || '...................';
+    const id = getValue('in_id') || '...................';
+    const phone = getValue('in_phone') || '...................';
+    const dob = getValue('in_dob');
+    const dept = getValue('in_dept') || '...................';
+    const todayVal = getValue('in_today');
+    const startDateVal = getValue('in_startDate');
+    const durationVal = parseInt(getValue('in_duration') || '1', 10) || 1;
 
-    const id =
-        document
-            .getElementById('in_id')
-            .value ||
-        '...................';
+    const formatDate = value => {
+        if(!value) return '..../../....';
+        const parts = value.split('-');
+        if(parts.length !== 3) return value;
+        return `${parts[2]}-${parts[1]}-${parts[0]}`;
+    };
 
-
-    const phone =
-        document
-            .getElementById('in_phone')
-            .value ||
-        '...................';
-
-
-    const dob =
-        document
-            .getElementById('in_dob')
-            .value ||
-        '...................';
-
-
-    const dept =
-        document
-            .getElementById('in_dept')
-            .value ||
-        '...................';
-
-
-    const todayVal =
-        document
-            .getElementById('in_today')
-            .value;
-
-
-    const startDateVal =
-        document
-            .getElementById('in_startDate')
-            .value;
-
-
-    const durationVal =
-        parseInt(
-            document
-                .getElementById(
-                    'in_duration'
-                )
-                .value
-        );
-
-
-    document.getElementById(
-        'p_name'
-    ).innerText =
-        name;
-
-
-    document.getElementById(
-        'p_id'
-    ).innerText =
-        id;
-
-
-    document.getElementById(
-        'p_phone'
-    ).innerText =
-        phone;
-
-
-    document.getElementById(
-        'p_dob'
-    ).innerText =
-        dob;
-
-
-    document.getElementById(
-        'p_dept'
-    ).innerText =
-        dept;
-
-
-    document.getElementById(
-        'p_today'
-    ).innerText =
-        todayVal ||
-        '..../../....';
-
+    document.getElementById('p_name').innerText = name;
+    document.getElementById('p_id').innerText = id;
+    document.getElementById('p_phone').innerText = phone;
+    document.getElementById('p_dob').innerText = formatDate(dob);
+    document.getElementById('p_dept').innerText = dept;
+    document.getElementById('p_today').innerText = formatDate(todayVal);
 
     if(startDateVal){
+        const [year, month, day] = startDateVal.split('-').map(Number);
+        const startDate = new Date(year, month - 1, day);
 
-        const startDate =
-            new Date(startDateVal);
+        document.getElementById('p_startDate').innerText =
+            formatDate(startDateVal);
 
+        const endDate = new Date(startDate);
+        endDate.setMonth(endDate.getMonth() + durationVal);
 
-        document.getElementById(
-            'p_startDate'
-        ).innerText =
-            startDate
-                .toISOString()
-                .split('T')[0];
+        const endYear = endDate.getFullYear();
+        const endMonth = String(endDate.getMonth() + 1).padStart(2, '0');
+        const endDay = String(endDate.getDate()).padStart(2, '0');
 
-
-        const endDate =
-            new Date(startDate);
-
-
-        endDate.setMonth(
-            endDate.getMonth() +
-            durationVal
-        );
-
-
-        document.getElementById(
-            'p_endDate'
-        ).innerText =
-            endDate
-                .toISOString()
-                .split('T')[0];
-
+        document.getElementById('p_endDate').innerText =
+            `${endDay}-${endMonth}-${endYear}`;
     }
-
     else{
-
-        document.getElementById(
-            'p_startDate'
-        ).innerText =
-            '..../../....';
-
-
-        document.getElementById(
-            'p_endDate'
-        ).innerText =
-            '..../../....';
-
+        document.getElementById('p_startDate').innerText = '..../../....';
+        document.getElementById('p_endDate').innerText = '..../../....';
     }
 
-
-    document.getElementById(
-        'p_duration'
-    ).innerText =
-        durationVal +
-        ' شهر';
+    document.getElementById('p_duration').innerText = durationVal + ' شهر';
 
 };
-
 
 window.printContract =
 function(){
