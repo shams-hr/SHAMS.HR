@@ -1370,9 +1370,19 @@ code{
 }
 
 @media print{
+    @page{
+        size:A4 portrait;
+        margin:0;
+    }
+    .contract-paper,
+    .contract-paper *{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
     .contract-row{
-        display:flex !important;
+        display:block !important;
         direction:rtl !important;
+        unicode-bidi:embed !important;
     }
     .fill-val{
         direction:ltr !important;
@@ -1380,6 +1390,7 @@ code{
     }
     .text-value{
         direction:rtl !important;
+        unicode-bidi:isolate !important;
     }
 }
 
@@ -6501,114 +6512,30 @@ function(){
             .value ||
         'عقد_متطوع';
 
-
     logAction(
         'تنزيل PDF',
-        `تم طلب تنزيل PDF للعقد ${name}`
+        `تم فتح نافذة حفظ PDF للعقد ${name}`
     );
 
+    /*
+       مهم:
+       html2pdf/html2canvas يسبب مشكلة في ترتيب الحروف العربية
+       واتجاه النص عند تحويل العقد إلى Canvas.
+       لذلك يتم استخدام محرك الطباعة الأصلي للمتصفح،
+       وهو يحافظ على RTL والعربية بشكل صحيح.
+       من نافذة الطباعة اختر: Save as PDF / حفظ كملف PDF.
+    */
 
-    const element =
-        document.getElementById(
-            'contractPaper'
-        );
+    const oldTitle = document.title;
+    document.title = `عقد_${name}`;
 
+    window.print();
 
-    const opt = {
-
-        margin:
-            [0,0,0,0],
-
-        filename:
-            `عقد_${name}.pdf`,
-
-        image:{
-
-            type:'jpeg',
-
-            quality:.98
-
-        },
-
-        html2canvas:{
-
-            scale:2,
-
-            useCORS:true,
-
-            allowTaint:true,
-
-            letterRendering:true,
-
-            scrollX:0,
-
-            scrollY:0
-
-        },
-
-        jsPDF:{
-
-            unit:'mm',
-
-            format:'a4',
-
-            orientation:'portrait'
-
-        }
-
-    };
-
-
-    showLoading(
-        'جاري تجهيز ملف PDF...'
-    );
-
-
-    setTimeout(
-        () => {
-
-            html2pdf()
-
-                .from(element)
-
-                .set(opt)
-
-                .save()
-
-                .then(
-                    () => {
-
-                        hideLoading();
-
-                        showToast(
-                            'تم تجهيز ملف PDF.',
-                            'success'
-                        );
-
-                    }
-                )
-
-                .catch(
-                    err => {
-
-                        console.error(err);
-
-                        hideLoading();
-
-                        showToast(
-                            'حدث خطأ أثناء إنشاء PDF.',
-                            'error'
-                        );
-
-                    }
-                );
-
-        },
-        250
-    );
+    setTimeout(() => {
+        document.title = oldTitle;
+    }, 1000);
 
 };
-
 
 window.logoutSystem =
 async function(){
