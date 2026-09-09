@@ -4387,41 +4387,33 @@ window.handleLogin = async function(e){
 
     const userEl = document.getElementById('login_user');
     const passEl = document.getElementById('login_pass');
-
     const uInput = userEl ? userEl.value.trim() : '';
     const pInput = passEl ? passEl.value.trim() : '';
 
     if(!uInput || !pInput){
         if(typeof hideLoading === 'function') hideLoading();
-        if(typeof window.showToast === 'function'){
-            window.showToast('أدخل اسم المستخدم وكلمة المرور.', 'error');
-        } else {
-            alert('أدخل اسم المستخدم وكلمة المرور.');
-        }
+        if(typeof window.showToast === 'function') window.showToast('أدخل اسم المستخدم وكلمة المرور.', 'error');
+        else alert('أدخل اسم المستخدم وكلمة المرور.');
         return;
     }
 
-    if(typeof showLoading === 'function'){
-        showLoading('جاري التحقق من بيانات الدخول...');
-    }
+    if(typeof showLoading === 'function') showLoading('جاري التحقق من بيانات الدخول...');
 
     try{
-        await loadCloudData();
+        // IMPORTANT: authenticate against the users collection only.
+        // Loading contracts/logs must never prevent a valid user from entering the app.
+        const usersSnap = await getDocs(collection(db, 'users'));
+        window.usersList = usersSnap.docs.map(d => ({ id:d.id, ...d.data() }));
 
-        const foundUser = Array.isArray(window.usersList)
-            ? window.usersList.find(u =>
-                String(u.username ?? '').trim() === uInput &&
-                String(u.password ?? '').trim() === pInput
-              )
-            : null;
+        const foundUser = window.usersList.find(u =>
+            String(u.username ?? '').trim() === uInput &&
+            String(u.password ?? '').trim() === pInput
+        );
 
         if(!foundUser){
             if(typeof hideLoading === 'function') hideLoading();
-            if(typeof window.showToast === 'function'){
-                window.showToast('اسم المستخدم أو كلمة المرور غير صحيحة.', 'error');
-            } else {
-                alert('اسم المستخدم أو كلمة المرور غير صحيحة.');
-            }
+            if(typeof window.showToast === 'function') window.showToast('اسم المستخدم أو كلمة المرور غير صحيحة.', 'error');
+            else alert('اسم المستخدم أو كلمة المرور غير صحيحة.');
             return;
         }
 
@@ -4441,36 +4433,41 @@ window.handleLogin = async function(e){
 
         const authSection = document.getElementById('authSection');
         const appContent = document.getElementById('appContent');
-
         if(authSection) authSection.style.display = 'none';
         if(appContent) appContent.style.display = 'block';
 
+        if(typeof hideLoading === 'function') hideLoading();
+        if(typeof window.showToast === 'function') window.showToast('تم تسجيل الدخول بنجاح.', 'success');
+
+        // Load the rest of the cloud data AFTER login. A permissions problem in
+        // contracts/logs should not kick the user back out of the application.
+        try{
+            await loadCloudData();
+        }catch(cloudErr){
+            console.warn('Post-login cloud data load failed:', cloudErr);
+            if(typeof window.showToast === 'function'){
+                window.showToast('تم الدخول، لكن تعذر تحميل بعض بيانات السحابة.', 'error');
+            }
+        }
+
         try{
             if(typeof loadAllData === 'function') await loadAllData();
-        }catch(_){}
+        }catch(_){ }
 
-        if(typeof hideLoading === 'function') hideLoading();
-
-        if(typeof window.showToast === 'function'){
-            window.showToast('تم تسجيل الدخول بنجاح.', 'success');
-        }
     }catch(err){
         console.error('Login Error:', err);
         if(typeof hideLoading === 'function') hideLoading();
 
-        const msg = (err && (err.code || err.message))
-            ? 'تعذر الاتصال بقاعدة البيانات. تأكد من اتصال الإنترنت وإعدادات Firebase.'
-            : 'حدث خطأ أثناء تسجيل الدخول.';
+        let msg = 'حدث خطأ أثناء تسجيل الدخول.';
+        const code = err && err.code ? String(err.code) : '';
+        if(code.includes('permission-denied')) msg = 'Firebase رفض الوصول إلى بيانات المستخدمين (permission-denied).';
+        else if(code.includes('unavailable')) msg = 'تعذر الاتصال بـ Firebase. تحقق من الإنترنت.';
+        else if(err && err.message) msg = 'خطأ Firebase: ' + err.message;
 
-        if(typeof window.showToast === 'function'){
-            window.showToast(msg, 'error');
-        } else {
-            alert(msg);
-        }
+        if(typeof window.showToast === 'function') window.showToast(msg, 'error');
+        else alert(msg);
     }
 };
-
-
 
 
 
