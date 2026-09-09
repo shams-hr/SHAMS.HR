@@ -6551,9 +6551,33 @@ function(){
     setTimeout(
         () => {
 
+            // إصلاح اتجاه الأقواس في نسخة الـPDF فقط.
+            // لا يتم تعديل العقد الأصلي أو أي جزء من تسجيل الدخول.
+            const pdfElement = element.cloneNode(true);
+            const walker = document.createTreeWalker(
+                pdfElement,
+                NodeFilter.SHOW_TEXT
+            );
+
+            let node;
+            while(node = walker.nextNode()){
+                if(node.nodeValue && /[()]/.test(node.nodeValue)){
+                    node.nodeValue = node.nodeValue
+                        .replace(/\(/g, '\u200E(\u200E')
+                        .replace(/\)/g, '\u200E)\u200E');
+                }
+            }
+
+            pdfElement.style.position = 'fixed';
+            pdfElement.style.left = '-100000px';
+            pdfElement.style.top = '0';
+            pdfElement.style.width = element.offsetWidth + 'px';
+            pdfElement.style.margin = '0';
+            document.body.appendChild(pdfElement);
+
             html2pdf()
 
-                .from(element)
+                .from(pdfElement)
 
                 .set(opt)
 
@@ -6562,6 +6586,7 @@ function(){
                 .then(
                     () => {
 
+                        pdfElement.remove();
                         hideLoading();
 
                         showToast(
@@ -6576,6 +6601,7 @@ function(){
                     err => {
 
                         console.error(err);
+                        pdfElement.remove();
 
                         hideLoading();
 
