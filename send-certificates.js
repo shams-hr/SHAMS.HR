@@ -116,7 +116,7 @@ body {
   margin: 0;
   width: 210mm;
   min-height: 297mm;
-  font-family: Arial, "Tahoma", sans-serif;
+  font-family: "Noto Naskh Arabic", "Noto Sans Arabic", Arial, Tahoma, sans-serif;
   background: #ffffff;
   color: #111827;
   direction: rtl;
@@ -434,7 +434,7 @@ async function processContract(contractDoc, today) {
     const result = await resend.emails.send({
       from:
         process.env.MAIL_FROM ||
-        "onboarding@resend.dev",
+        "shamshr <onboarding@resend.dev>",
 
       to: [contract.email],
 
