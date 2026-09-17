@@ -3467,6 +3467,16 @@ window.currentUsername = '';
 window.currentUserId = '';
 
 
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 function showLoading(title='جاري تنفيذ العملية...'){
 
     const overlay =
@@ -4412,12 +4422,7 @@ async function(
 
     const choice =
         prompt(
-            `الصلاحية الحالية: ${currentRole}
-
-اختر الصلاحية الجديدة بكتابة رقم:
-
-1 - مدير النظام
-2 - مسؤول موارد بشرية`,
+            `الصلاحية الحالية: ${currentRole}\n\nاختر الصلاحية الجديدة بكتابة رقم:\n\n1 - مدير النظام\n2 - مسؤول موارد بشرية`,
             currentRole ===
             'مدير النظام'
                 ? '1'
@@ -5598,20 +5603,14 @@ function renderUsers(){
                     <td>
 
                         <code>
-                            ${escapeHtml(
-                                u.password || ''
-                            )}
+                            ••••••••
                         </code>
 
                     </td>
 
                     <td>
 
-                        <span
-                            class="badge badge-active"
-                        >
-
-                            <i class="fas fa-shield-halved"></i>
+                        <span class="badge badge-active">
 
                             ${escapeHtml(
                                 u.role || ''
@@ -5623,73 +5622,31 @@ function renderUsers(){
 
                     <td>
 
-                        <div
-                            style="
-                                display:flex;
-                                gap:4px;
-                                flex-wrap:wrap;
-                            "
+                        <button
+                            onclick="changeUserRole('${u.id}', '${escapeHtml(u.username)}', '${escapeHtml(u.role)}')"
+                            class="btn-action btn-blue"
+                            title="تغيير الصلاحية"
                         >
+                            <i class="fas fa-user-gear"></i>
+                            الصلاحية
+                        </button>
 
-                            <button
-                                onclick="changeUserRole(
-                                    '${u.id}',
-                                    '${escapeJs(u.username || '')}',
-                                    '${escapeJs(u.role || '')}'
-                                )"
-                                class="btn-action btn-purple"
-                                style="
-                                    padding:7px 10px;
-                                    font-size:10px;
-                                    width:auto;
-                                "
-                            >
+                        <button
+                            onclick="changeUserPassword('${u.id}', '${escapeHtml(u.username)}')"
+                            class="btn-action btn-purple"
+                            title="تغيير كلمة المرور"
+                        >
+                            <i class="fas fa-key"></i>
+                            كلمة المرور
+                        </button>
 
-                                <i class="fas fa-user-shield"></i>
-
-                                تغيير الصلاحية
-
-                            </button>
-
-                            <button
-                                onclick="changeUserPassword(
-                                    '${u.id}',
-                                    '${escapeJs(u.username || '')}'
-                                )"
-                                class="btn-action btn-blue"
-                                style="
-                                    padding:7px 10px;
-                                    font-size:10px;
-                                    width:auto;
-                                "
-                            >
-
-                                <i class="fas fa-key"></i>
-
-                                تغيير كلمة المرور
-
-                            </button>
-
-                            <button
-                                onclick="deleteUser(
-                                    '${u.id}',
-                                    '${escapeJs(u.username || '')}'
-                                )"
-                                class="btn-action btn-danger"
-                                style="
-                                    padding:7px 10px;
-                                    font-size:10px;
-                                    width:auto;
-                                "
-                            >
-
-                                <i class="fas fa-trash"></i>
-
-                                حذف
-
-                            </button>
-
-                        </div>
+                        <button
+                            onclick="deleteUser('${u.id}', '${escapeHtml(u.username)}')"
+                            class="btn-action btn-danger"
+                            title="حذف الحساب"
+                        >
+                            <i class="fas fa-trash"></i>
+                        </button>
 
                     </td>
 
@@ -5703,1195 +5660,221 @@ function renderUsers(){
 }
 
 
-function updateDashboard(){
-
-    const total =
-        window.contractsArchive.length;
-
-
-    let active = 0;
-
-    let expired = 0;
-
-    let cancelled = 0;
-
-
-    const today =
-        new Date();
-
-
-    today.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-
-    window.contractsArchive.forEach(
-        c => {
-
-            if(
-                c.status ===
-                'cancelled'
-            ){
-
-                cancelled++;
-
-                return;
-
-            }
-
-
-            const endDate =
-                new Date(c.endDate);
-
-
-            if(
-                isNaN(
-                    endDate.getTime()
-                )
-            ){
-
-                active++;
-
-                return;
-
-            }
-
-
-            endDate.setHours(
-                0,
-                0,
-                0,
-                0
-            );
-
-
-            if(endDate >= today)
-                active++;
-
-            else
-                expired++;
-
-        }
-    );
-
-
-    document.getElementById(
-        'dashboardTotalContracts'
-    ).innerText =
-        total;
-
-
-    document.getElementById(
-        'dashboardActiveContracts'
-    ).innerText =
-        active;
-
-
-    document.getElementById(
-        'dashboardExpiredContracts'
-    ).innerText =
-        expired;
-
-
-    document.getElementById(
-        'dashboardCancelledContracts'
-    ).innerText =
-        cancelled;
-
-
-    document.getElementById(
-        'dashboardUsers'
-    ).innerText =
-        window.usersList.length;
-
-}
-
-
-function renderArchive(){
+window.renderArchive = function(){
 
     const tbody =
-        document.getElementById(
-            'archiveTableBody'
-        );
+        document.getElementById('archiveTableBody');
 
+    const countEl =
+        document.getElementById('contractCount');
 
-    if(!tbody)
-        return;
+    if(countEl)
+        countEl.innerText = window.contractsArchive.length;
 
+    if(!tbody) return;
 
-    document.getElementById(
-        'contractCount'
-    ).innerText =
-        window.contractsArchive.length;
-
-
-    const searchInput =
-        document.getElementById(
-            'archiveSearch'
-        );
-
+    const input =
+        document.getElementById('archiveSearch');
 
     const search =
-        searchInput
-            ?
-            searchInput.value
-                .trim()
-                .toLowerCase()
-            :
-            '';
+        input ? input.value.trim().toLowerCase() : '';
 
+    const todayStr =
+        new Date().toISOString().split('T')[0];
 
-    const filteredContracts =
-        window.contractsArchive.filter(
-            c => {
-
-                if(!search)
-                    return true;
-
-
-                return [
-
-                    c.name,
-
-                    c.nationalId,
-
-                    c.dept
-
-                ]
-                .some(
-                    value =>
-                        String(
-                            value || ''
-                        )
-                        .toLowerCase()
-                        .includes(search)
-                );
-
-            }
-        );
-
+    const contracts = window.contractsArchive.filter(c => {
+        return !search ||
+            (c.name && c.name.toLowerCase().includes(search)) ||
+            (c.nationalId && c.nationalId.toLowerCase().includes(search));
+    });
 
     tbody.innerHTML = '';
 
-
-    if(
-        filteredContracts.length === 0
-    ){
-
+    if(contracts.length === 0){
         tbody.innerHTML = `
-
             <tr>
-
-                <td
-                    colspan="8"
-                    class="empty-message"
-                >
-
-                    ${
-                        window.contractsArchive.length === 0
-                        ?
-                        'لا توجد عقود محفوظة في الأرشيف حالياً.'
-                        :
-                        'لا توجد نتائج مطابقة للبحث.'
-                    }
-
+                <td colspan="8" class="empty-message">
+                    لا توجد عقود مسجلة.
                 </td>
-
             </tr>
-
         `;
-
         return;
-
     }
 
-
-    const today =
-        new Date();
-
-
-    today.setHours(
-        0,
-        0,
-        0,
-        0
-    );
-
-
-    filteredContracts.forEach(
-        c => {
-
-            let statusBadge = '';
-
-
-            if(
-                c.status ===
-                'cancelled'
-            ){
-
-                statusBadge = `
-
-                    <span
-                        class="badge badge-cancelled"
-                    >
-
-                        <i class="fas fa-ban"></i>
-
-                        تم فسخ العقد
-
-                    </span>
-
-                    ${
-                        c.cancellationReason
-                        ?
-                        `
-                        <div
-                            style="
-                                font-size:9px;
-                                margin-top:4px;
-                                color:#c2410c;
-                            "
-                        >
-
-                            السبب:
-                            ${escapeHtml(
-                                c.cancellationReason
-                            )}
-
-                        </div>
-                        `
-                        :
-                        ''
-                    }
-
-                `;
-
-            }
-
-            else{
-
-                const endD =
-                    new Date(
-                        c.endDate
-                    );
-
-
-                endD.setHours(
-                    0,
-                    0,
-                    0,
-                    0
-                );
-
-
-                const diffDays =
-                    Math.ceil(
-                        (
-                            endD -
-                            today
-                        ) /
-                        (
-                            1000 *
-                            60 *
-                            60 *
-                            24
-                        )
-                    );
-
-
-                if(
-                    isNaN(diffDays)
-                ){
-
-                    statusBadge = `
-
-                        <span class="badge badge-active">
-                            ساري
-                        </span>
-
-                    `;
-
-                }
-
-                else if(
-                    diffDays < 0
-                ){
-
-                    statusBadge = `
-
-                        <span class="badge badge-expired">
-
-                            <i class="fas fa-circle-xmark"></i>
-
-                            منتهي منذ
-                            ${Math.abs(diffDays)}
-                            يوم
-
-                        </span>
-
-                    `;
-
-                }
-
-                else if(
-                    diffDays <= 7
-                ){
-
-                    statusBadge = `
-
-                        <span class="badge badge-warning">
-
-                            <i class="fas fa-triangle-exclamation"></i>
-
-                            ينتهي خلال
-                            ${diffDays}
-                            أيام
-
-                        </span>
-
-                    `;
-
-                }
-
-                else{
-
-                    statusBadge = `
-
-                        <span class="badge badge-active">
-
-                            <i class="fas fa-circle-check"></i>
-
-                            ساري
-
-                            <span>
-                                ${diffDays} يوم
-                            </span>
-
-                        </span>
-
-                    `;
-
-                }
-
-            }
-
-
-            let actionButtons = '';
-
-
-            if(
-                c.status ===
-                'cancelled'
-            ){
-
-                actionButtons = `
-
-                    <span class="badge badge-cancelled">
-                        ملغى
-                    </span>
-
-                `;
-
-            }
-
-            else{
-
-                actionButtons = `
-
-                    <button
-                        onclick="renewContract(
-                            '${c.id}',
-                            '${escapeJs(c.endDate || '')}'
-                        )"
-                        class="btn-action btn-purple"
-                        style="
-                            padding:7px 9px;
-                            font-size:9px;
-                            width:auto;
-                        "
-                    >
-
-                        <i class="fas fa-rotate"></i>
-
-                        تجديد
-
+    contracts.forEach(c => {
+        let statusBadge = '';
+        if(c.status === 'cancelled'){
+            statusBadge = `<span class="badge badge-cancelled"><i class="fas fa-ban"></i> ملغى</span>`;
+        } else if(c.endDate < todayStr){
+            statusBadge = `<span class="badge badge-expired"><i class="fas fa-hourglass-end"></i> منتهي</span>`;
+        } else {
+            statusBadge = `<span class="badge badge-active"><i class="fas fa-check"></i> نشط</span>`;
+        }
+
+        tbody.innerHTML += `
+            <tr>
+                <td><b>${escapeHtml(c.name || '')}</b></td>
+                <td><code>${escapeHtml(c.nationalId || '')}</code></td>
+                <td>${escapeHtml(c.dept || '')}</td>
+                <td>${escapeHtml(c.startDate || '')}</td>
+                <td>${escapeHtml(c.endDate || '')}</td>
+                <td>${escapeHtml(c.type || '')}</td>
+                <td>${statusBadge}</td>
+                <td>
+                    <button onclick="renewContract('${c.id}', '${c.endDate}')" class="btn-action btn-green" title="تجديد العقد">
+                        <i class="fas fa-arrows-rotate"></i> تجديد
                     </button>
-
-                    <button
-                        onclick="cancelContract(
-                            '${c.id}'
-                        )"
-                        class="btn-action btn-cancel"
-                        style="
-                            padding:7px 9px;
-                            font-size:9px;
-                            width:auto;
-                        "
-                    >
-
-                        <i class="fas fa-ban"></i>
-
-                        فسخ
-
+                    <button onclick="cancelContract('${c.id}')" class="btn-action btn-cancel" title="فسخ العقد">
+                        <i class="fas fa-file-circle-xmark"></i> فسخ
                     </button>
+                    <button onclick="deleteContract('${c.id}')" class="btn-action btn-danger" title="حذف العقد">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+        `;
+    });
 
-                `;
-
-            }
+};
 
 
-            tbody.innerHTML += `
+window.updateDashboard = function(){
 
-                <tr>
+    const totalEl = document.getElementById('dashboardTotalContracts');
+    const activeEl = document.getElementById('dashboardActiveContracts');
+    const expiredEl = document.getElementById('dashboardExpiredContracts');
+    const cancelledEl = document.getElementById('dashboardCancelledContracts');
 
-                    <td>
+    const todayStr = new Date().toISOString().split('T')[0];
 
-                        <b>
-                            ${escapeHtml(
-                                c.name || ''
-                            )}
-                        </b>
+    let active = 0, expired = 0, cancelled = 0;
 
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            c.nationalId || ''
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            c.dept || ''
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            c.startDate ||
-                            'غير محدد'
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(
-                            c.endDate ||
-                            'غير محدد'
-                        )}
-                    </td>
-
-                    <td>
-
-                        <span
-                            style="
-                                font-size:10px;
-                                color:#64748b;
-                            "
-                        >
-
-                            ${escapeHtml(
-                                c.type || ''
-                            )}
-
-                        </span>
-
-                    </td>
-
-                    <td>
-                        ${statusBadge}
-                    </td>
-
-                    <td>
-
-                        <div
-                            style="
-                                display:flex;
-                                gap:4px;
-                                flex-wrap:wrap;
-                            "
-                        >
-
-                            ${actionButtons}
-
-                            <button
-                                onclick="deleteContract(
-                                    '${c.id}'
-                                )"
-                                class="btn-action btn-danger"
-                                style="
-                                    padding:7px 9px;
-                                    font-size:9px;
-                                    width:auto;
-                                "
-                            >
-
-                                <i class="fas fa-trash"></i>
-
-                                حذف
-
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-            `;
-
+    window.contractsArchive.forEach(c => {
+        if(c.status === 'cancelled'){
+            cancelled++;
+        } else if(c.endDate < todayStr){
+            expired++;
+        } else {
+            active++;
         }
-    );
+    });
 
-}
+    if(totalEl) totalEl.innerText = window.contractsArchive.length;
+    if(activeEl) activeEl.innerText = active;
+    if(expiredEl) expiredEl.innerText = expired;
+    if(cancelledEl) cancelledEl.innerText = cancelled;
 
-
-window.switchTab =
-function(tabId){
-
-    if(
-
-        (
-            tabId === 'usersTab' ||
-            tabId === 'logsTab'
-        )
-
-        &&
-
-        window.currentUserRole !==
-        'مدير النظام'
-
-    ){
-
-        showToast(
-            'غير مسموح لك بالدخول إلى هذا القسم.',
-            'error'
-        );
-
-        return;
-
-    }
+};
 
 
-    const tabs = [
+window.switchTab = function(tabId){
 
-        'createTab',
+    const tabs = ['createTab', 'uploadTab', 'archiveTab', 'usersTab', 'logsTab'];
+    tabs.forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = (id === tabId) ? 'block' : 'none';
+    });
 
-        'uploadTab',
-
-        'archiveTab',
-
-        'usersTab',
-
-        'logsTab'
-
-    ];
-
-
-    tabs.forEach(
-        id => {
-
-            const el =
-                document.getElementById(id);
-
-            if(el)
-                el.style.display =
-                    'none';
-
-        }
-    );
-
-
-    const buttons = [
-
-        'btn-create',
-
-        'btn-upload',
-
-        'btn-archive',
-
-        'btn-users',
-
-        'btn-logs'
-
-    ];
-
-
-    buttons.forEach(
-        id => {
-
-            const el =
-                document.getElementById(id);
-
-            if(el)
-                el.classList.remove(
-                    'active'
-                );
-
-        }
-    );
-
-
-    const target =
-        document.getElementById(tabId);
-
-
-    if(target)
-        target.style.display =
-            'block';
-
-
-    const map = {
-
-        createTab:'btn-create',
-
-        uploadTab:'btn-upload',
-
-        archiveTab:'btn-archive',
-
-        usersTab:'btn-users',
-
-        logsTab:'btn-logs'
-
+    const btnMap = {
+        'createTab': 'btn-create',
+        'uploadTab': 'btn-upload',
+        'archiveTab': 'btn-archive',
+        'usersTab': 'btn-users',
+        'logsTab': 'btn-logs'
     };
 
-
-    const buttonId =
-        map[tabId];
-
-
-    if(buttonId){
-
-        const btn =
-            document.getElementById(
-                buttonId
-            );
-
-        if(btn)
-            btn.classList.add(
-                'active'
-            );
-
-    }
-
-
-    if(
-        tabId ===
-        'archiveTab'
-    ){
-
-        renderArchive();
-
-    }
-
-
-    if(
-        tabId ===
-        'usersTab'
-    ){
-
-        renderUsers();
-
-        updateDashboard();
-
-    }
-
-
-    if(
-        tabId ===
-        'logsTab'
-    ){
-
-        loadLogs();
-
-    }
-
-
-    if(
-        window.currentUsername &&
-        tabId !== 'logsTab'
-    ){
-
-        logAction(
-            'فتح قسم',
-            `تم فتح القسم ${tabId}`
-        );
-
-    }
+    Object.keys(btnMap).forEach(key => {
+        const btn = document.getElementById(btnMap[key]);
+        if(btn){
+            if(key === tabId) btn.classList.add('active');
+            else btn.classList.remove('active');
+        }
+    });
 
 };
 
 
-window.updateContractPreview =
-function(){
+window.updateContractPreview = function(){
 
-    const name =
-        document
-            .getElementById('in_name')
-            .value ||
-        '...................';
+    const name = document.getElementById('in_name').value.trim();
+    const id = document.getElementById('in_id').value.trim();
+    const phone = document.getElementById('in_phone').value.trim();
+    const dob = document.getElementById('in_dob').value;
+    const dept = document.getElementById('in_dept').value.trim();
+    const today = document.getElementById('in_today').value;
+    const startDateVal = document.getElementById('in_startDate').value;
+    const durationVal = parseInt(document.getElementById('in_duration').value);
 
+    document.getElementById('p_name').innerText = name || '...................';
+    document.getElementById('p_id').innerText = id || '...................';
+    document.getElementById('p_phone').innerText = phone || '...................';
+    document.getElementById('p_dob').innerText = dob || '..../../....';
+    document.getElementById('p_dept').innerText = dept || '...................';
+    document.getElementById('p_today').innerText = today || '..../../....';
 
-    const id =
-        document
-            .getElementById('in_id')
-            .value ||
-        '...................';
+    const sDate = startDateVal ? new Date(startDateVal) : new Date();
+    document.getElementById('p_startDate').innerText = startDateVal || '..../../....';
 
+    let eDate = new Date(sDate);
+    eDate.setMonth(eDate.getMonth() + durationVal);
 
-    const phone =
-        document
-            .getElementById('in_phone')
-            .value ||
-        '...................';
-
-
-    const dob =
-        document
-            .getElementById('in_dob')
-            .value ||
-        '...................';
-
-
-    const dept =
-        document
-            .getElementById('in_dept')
-            .value ||
-        '...................';
-
-
-    const todayVal =
-        document
-            .getElementById('in_today')
-            .value;
-
-
-    const startDateVal =
-        document
-            .getElementById('in_startDate')
-            .value;
-
-
-    const durationVal =
-        parseInt(
-            document
-                .getElementById(
-                    'in_duration'
-                )
-                .value
-        );
-
-
-    document.getElementById(
-        'p_name'
-    ).innerText =
-        name;
-
-
-    document.getElementById(
-        'p_id'
-    ).innerText =
-        id;
-
-
-    document.getElementById(
-        'p_phone'
-    ).innerText =
-        phone;
-
-
-    document.getElementById(
-        'p_dob'
-    ).innerText =
-        dob;
-
-
-    document.getElementById(
-        'p_dept'
-    ).innerText =
-        dept;
-
-
-    document.getElementById(
-        'p_today'
-    ).innerText =
-        todayVal ||
-        '..../../....';
-
-
-    if(startDateVal){
-
-        const startDate =
-            new Date(startDateVal);
-
-
-        document.getElementById(
-            'p_startDate'
-        ).innerText =
-            startDate
-                .toISOString()
-                .split('T')[0];
-
-
-        const endDate =
-            new Date(startDate);
-
-
-        endDate.setMonth(
-            endDate.getMonth() +
-            durationVal
-        );
-
-
-        document.getElementById(
-            'p_endDate'
-        ).innerText =
-            endDate
-                .toISOString()
-                .split('T')[0];
-
-    }
-
-    else{
-
-        document.getElementById(
-            'p_startDate'
-        ).innerText =
-            '..../../....';
-
-
-        document.getElementById(
-            'p_endDate'
-        ).innerText =
-            '..../../....';
-
-    }
-
-
-    document.getElementById(
-        'p_duration'
-    ).innerText =
-        durationVal +
-        ' شهر';
+    document.getElementById('p_endDate').innerText = startDateVal ? eDate.toISOString().split('T')[0] : '..../../....';
+    document.getElementById('p_duration').innerText = durationVal + (durationVal === 1 ? ' شهر' : ' أشهر');
 
 };
 
 
-window.printContract =
-function(){
+window.downloadContractPDF = function(){
 
-    logAction(
-        'طباعة عقد',
-        `تمت طباعة عقد ${document.getElementById('in_name')?.value || 'غير محدد'}`
-    );
+    const element = document.getElementById('contractPaper');
+    if(!element) return;
 
+    showLoading('جاري تحضير ملف PDF...');
+
+    const opt = {
+        margin: 0,
+        filename: 'عقد_متطوع.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save().then(() => {
+        hideLoading();
+        showToast('تم تنزيل العقد بصيغة PDF.', 'success');
+    }).catch(err => {
+        console.error(err);
+        hideLoading();
+        showToast('حدث خطأ أثناء تنزيل PDF.', 'error');
+    });
+
+};
+
+
+window.printContract = function(){
 
     window.print();
 
 };
 
 
-window.downloadContractPDF =
-function(){
+window.logoutSystem = async function(){
 
-    const name =
-        document
-            .getElementById('in_name')
-            .value ||
-        'عقد_متطوع';
-
-    logAction(
-        'تنزيل PDF',
-        `تم فتح نافذة حفظ PDF للعقد ${name}`
+    await logAction(
+        'تسجيل خروج',
+        `تم تسجيل خروج المستخدم ${window.currentUsername}`
     );
-
-    /*
-       مهم:
-       html2pdf/html2canvas يسبب مشكلة في ترتيب الحروف العربية
-       واتجاه النص عند تحويل العقد إلى Canvas.
-       لذلك يتم استخدام محرك الطباعة الأصلي للمتصفح،
-       وهو يحافظ على RTL والعربية بشكل صحيح.
-       من نافذة الطباعة اختر: Save as PDF / حفظ كملف PDF.
-    */
-
-    const oldTitle = document.title;
-    document.title = `عقد_${name}`;
-
-    window.print();
-
-    setTimeout(() => {
-        document.title = oldTitle;
-    }, 1000);
-
-};
-
-window.logoutSystem =
-async function(){
-
-    const logoutName =
-        window.currentUsername;
-
-    const logoutId =
-        window.currentUserId;
-
-
-    const logoutUser =
-        window.usersList.find(
-            u =>
-                u.id === logoutId
-        );
-
-
-    if(logoutName){
-
-        await logAction(
-            'تسجيل خروج',
-            `تم تسجيل خروج المستخدم ${logoutName}`,
-            logoutName,
-            logoutUser?.username || '',
-            logoutUser?.role || window.currentUserRole
-        );
-
-    }
-
-
-    document.getElementById(
-        'login_user'
-    ).value = '';
-
-
-    document.getElementById(
-        'login_pass'
-    ).value = '';
-
-
-    document.getElementById(
-        'authSection'
-    ).style.display =
-        'flex';
-
-
-    document.getElementById(
-        'appContent'
-    ).style.display =
-        'none';
-
 
     window.currentUserRole = '';
-
     window.currentUsername = '';
-
     window.currentUserId = '';
 
+    document.getElementById('appContent').style.display = 'none';
+    document.getElementById('authSection').style.display = 'flex';
 
-    document.getElementById(
-        'currentUserDisplay'
-    ).innerText =
-        '—';
-
-
-    const usersButton =
-        document.getElementById(
-            'btn-users'
-        );
-
-
-    const logsButton =
-        document.getElementById(
-            'btn-logs'
-        );
-
-
-    if(usersButton)
-        usersButton.style.display =
-            'none';
-
-
-    if(logsButton)
-        logsButton.style.display =
-            'none';
-
-
-    const tabs = [
-
-        'createTab',
-        'uploadTab',
-        'archiveTab',
-        'usersTab',
-        'logsTab'
-
-    ];
-
-
-    tabs.forEach(
-        id => {
-
-            const el =
-                document.getElementById(id);
-
-            if(el)
-                el.style.display =
-                    'none';
-
-        }
-    );
-
-
-    document.getElementById(
-        'createTab'
-    ).style.display =
-        'block';
-
-
-    const buttons = [
-
-        'btn-create',
-        'btn-upload',
-        'btn-archive',
-        'btn-users',
-        'btn-logs'
-
-    ];
-
-
-    buttons.forEach(
-        id => {
-
-            const el =
-                document.getElementById(id);
-
-            if(el)
-                el.classList.remove(
-                    'active'
-                );
-
-        }
-    );
-
-
-    document.getElementById(
-        'btn-create'
-    ).classList.add(
-        'active'
-    );
+    showToast('تم تسجيل الخروج بنجاح.', 'info');
 
 };
-
-
-function escapeHtml(value){
-
-    return String(value)
-
-        .replace(
-            /&/g,
-            '&amp;'
-        )
-
-        .replace(
-            /</g,
-            '&lt;'
-        )
-
-        .replace(
-            />/g,
-            '&gt;'
-        )
-
-        .replace(
-            /"/g,
-            '&quot;'
-        )
-
-        .replace(
-            /'/g,
-            '&#039;'
-        );
-
-}
-
-
-function escapeJs(value){
-
-    return String(value)
-
-        .replace(
-            /\\/g,
-            '\\\\'
-        )
-
-        .replace(
-            /'/g,
-            "\\'"
-        )
-
-        .replace(
-            /"/g,
-            '\\"'
-        )
-
-        .replace(
-            /\n/g,
-            '\\n'
-        )
-
-        .replace(
-            /\r/g,
-            '\\r'
-        );
-
-}
-
-
-document.addEventListener(
-    'DOMContentLoaded',
-    function(){
-
-        const today =
-            new Date()
-                .toISOString()
-                .split('T')[0];
-
-
-        const todayInput =
-            document.getElementById(
-                'in_today'
-            );
-
-
-        const startInput =
-            document.getElementById(
-                'in_startDate'
-            );
-
-
-        if(
-            todayInput &&
-            !todayInput.value
-        ){
-
-            todayInput.value =
-                today;
-
-        }
-
-
-        if(
-            startInput &&
-            !startInput.value
-        ){
-
-            startInput.value =
-                today;
-
-        }
-
-
-        updateContractPreview();
-
-    }
-);
 
 </script>
 
