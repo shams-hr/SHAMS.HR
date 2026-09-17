@@ -383,7 +383,7 @@ async function processContract(contractDoc, today) {
     return;
   }
 
-  if (contract.endDate > today) {
+  if (contract.endDate >= today) {
     console.log(`تجاهل ${contract.id}: العقد لم ينتهِ.`);
     return;
   }
