@@ -3477,6 +3477,15 @@ function escapeHtml(str) {
         .replace(/'/g, "&#039;");
 }
 
+function escapeJs(value){
+    return String(value || '')
+        .replace(/\\/g, '\\\\')
+        .replace(/'/g, "\\'")
+        .replace(/"/g, '\\"')
+        .replace(/\n/g, '\\n')
+        .replace(/\r/g, '\\r');
+}
+
 function showLoading(title='جاري تنفيذ العملية...'){
 
     const overlay =
@@ -5662,25 +5671,19 @@ function renderUsers(){
 
 window.renderArchive = function(){
 
-    const tbody =
-        document.getElementById('archiveTableBody');
-
-    const countEl =
-        document.getElementById('contractCount');
+    const tbody = document.getElementById('archiveTableBody');
+    const countEl = document.getElementById('contractCount');
 
     if(countEl)
         countEl.innerText = window.contractsArchive.length;
 
     if(!tbody) return;
 
-    const input =
-        document.getElementById('archiveSearch');
+    const input = document.getElementById('archiveSearch');
+    const search = input ? input.value.trim().toLowerCase() : '';
 
-    const search =
-        input ? input.value.trim().toLowerCase() : '';
-
-    const todayStr =
-        new Date().toISOString().split('T')[0];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     const contracts = window.contractsArchive.filter(c => {
         return !search ||
@@ -5703,12 +5706,41 @@ window.renderArchive = function(){
 
     contracts.forEach(c => {
         let statusBadge = '';
+
         if(c.status === 'cancelled'){
-            statusBadge = `<span class="badge badge-cancelled"><i class="fas fa-ban"></i> ملغى</span>`;
-        } else if(c.endDate < todayStr){
-            statusBadge = `<span class="badge badge-expired"><i class="fas fa-hourglass-end"></i> منتهي</span>`;
+            statusBadge = `
+                <span class="badge badge-cancelled">
+                    <i class="fas fa-ban"></i> تم فسخ العقد
+                </span>
+                ${c.cancellationReason ? `<div style="font-size:9px;margin-top:4px;color:#c2410c;">السبب: ${escapeHtml(c.cancellationReason)}</div>` : ''}
+            `;
         } else {
-            statusBadge = `<span class="badge badge-active"><i class="fas fa-check"></i> نشط</span>`;
+            const endD = new Date(c.endDate);
+            endD.setHours(0, 0, 0, 0);
+
+            const diffDays = Math.ceil((endD - today) / (1000 * 60 * 60 * 24));
+
+            if(isNaN(diffDays)){
+                statusBadge = `<span class="badge badge-active">ساري</span>`;
+            } else if(diffDays < 0){
+                statusBadge = `
+                    <span class="badge badge-expired">
+                        <i class="fas fa-circle-xmark"></i> منتهي منذ ${Math.abs(diffDays)} يوم
+                    </span>
+                `;
+            } else if(diffDays <= 7){
+                statusBadge = `
+                    <span class="badge badge-warning">
+                        <i class="fas fa-triangle-exclamation"></i> ينتهي خلال ${diffDays} أيام
+                    </span>
+                `;
+            } else {
+                statusBadge = `
+                    <span class="badge badge-active">
+                        <i class="fas fa-circle-check"></i> ساري (${diffDays} يوم)
+                    </span>
+                `;
+            }
         }
 
         tbody.innerHTML += `
@@ -5716,20 +5748,22 @@ window.renderArchive = function(){
                 <td><b>${escapeHtml(c.name || '')}</b></td>
                 <td><code>${escapeHtml(c.nationalId || '')}</code></td>
                 <td>${escapeHtml(c.dept || '')}</td>
-                <td>${escapeHtml(c.startDate || '')}</td>
-                <td>${escapeHtml(c.endDate || '')}</td>
-                <td>${escapeHtml(c.type || '')}</td>
+                <td>${escapeHtml(c.startDate || 'غير محدد')}</td>
+                <td>${escapeHtml(c.endDate || 'غير محدد')}</td>
+                <td><span style="font-size:10px;color:#64748b;">${escapeHtml(c.type || '')}</span></td>
                 <td>${statusBadge}</td>
                 <td>
-                    <button onclick="renewContract('${c.id}', '${c.endDate}')" class="btn-action btn-green" title="تجديد العقد">
-                        <i class="fas fa-arrows-rotate"></i> تجديد
-                    </button>
-                    <button onclick="cancelContract('${c.id}')" class="btn-action btn-cancel" title="فسخ العقد">
-                        <i class="fas fa-file-circle-xmark"></i> فسخ
-                    </button>
-                    <button onclick="deleteContract('${c.id}')" class="btn-action btn-danger" title="حذف العقد">
-                        <i class="fas fa-trash"></i>
-                    </button>
+                    <div style="display:flex;gap:4px;flex-wrap:wrap;">
+                        <button onclick="renewContract('${c.id}', '${escapeJs(c.endDate || '')}')" class="btn-action btn-purple" style="padding:7px 9px;font-size:9px;width:auto;">
+                            <i class="fas fa-rotate"></i> تجديد
+                        </button>
+                        <button onclick="cancelContract('${c.id}')" class="btn-action btn-cancel" style="padding:7px 9px;font-size:9px;width:auto;">
+                            <i class="fas fa-ban"></i> فسخ
+                        </button>
+                        <button onclick="deleteContract('${c.id}')" class="btn-action btn-danger" style="padding:7px 9px;font-size:9px;width:auto;">
+                            <i class="fas fa-trash"></i> حذف
+                        </button>
+                    </div>
                 </td>
             </tr>
         `;
@@ -5745,17 +5779,23 @@ window.updateDashboard = function(){
     const expiredEl = document.getElementById('dashboardExpiredContracts');
     const cancelledEl = document.getElementById('dashboardCancelledContracts');
 
-    const todayStr = new Date().toISOString().split('T')[0];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     let active = 0, expired = 0, cancelled = 0;
 
     window.contractsArchive.forEach(c => {
         if(c.status === 'cancelled'){
             cancelled++;
-        } else if(c.endDate < todayStr){
-            expired++;
         } else {
-            active++;
+            const endDate = new Date(c.endDate);
+            if(isNaN(endDate.getTime())){
+                active++;
+            } else {
+                endDate.setHours(0, 0, 0, 0);
+                if(endDate >= today) active++;
+                else expired++;
+            }
         }
     });
 
@@ -5763,6 +5803,8 @@ window.updateDashboard = function(){
     if(activeEl) activeEl.innerText = active;
     if(expiredEl) expiredEl.innerText = expired;
     if(cancelledEl) cancelledEl.innerText = cancelled;
+    if(document.getElementById('dashboardUsers'))
+        document.getElementById('dashboardUsers').innerText = window.usersList.length;
 
 };
 
@@ -5790,6 +5832,10 @@ window.switchTab = function(tabId){
             else btn.classList.remove('active');
         }
     });
+
+    if(tabId === 'archiveTab') renderArchive();
+    if(tabId === 'usersTab'){ renderUsers(); updateDashboard(); }
+    if(tabId === 'logsTab') loadLogs();
 
 };
 
