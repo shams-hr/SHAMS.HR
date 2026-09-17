@@ -25,7 +25,7 @@ jobs:
 
       - name: تثبيت المتطلبات
         run: |
-          npm install firebase-admin resend puppeteer
+          npm install firebase-admin resend puppeteer@24
 
       - name: تشغيل إرسال الشهادات
         env:
