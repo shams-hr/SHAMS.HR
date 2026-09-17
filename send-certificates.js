@@ -473,7 +473,7 @@ async function processContract(contractDoc, today) {
       attachments: [
         {
           filename: fileName,
-          content: pdf,
+          content: pdf.toString("base64"),
         },
       ],
     });
