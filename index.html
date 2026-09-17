@@ -2258,6 +2258,20 @@ code{
 
             <div class="form-group">
 
+                <label>البريد الإلكتروني</label>
+
+                <input
+                    type="email"
+                    id="in_email"
+                    class="form-control"
+                    placeholder="example@email.com"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
                 <label>تاريخ الميلاد</label>
 
                 <input
@@ -2716,6 +2730,20 @@ code{
                         type="text"
                         id="up_id"
                         class="form-control"
+                        required
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>البريد الإلكتروني</label>
+
+                    <input
+                        type="email"
+                        id="up_email"
+                        class="form-control"
+                        placeholder="example@email.com"
                         required
                     >
 
@@ -4735,10 +4763,18 @@ async function(){
             .trim();
 
 
-    if(!name || !id){
+    const email =
+        document
+            .getElementById('in_email')
+            .value
+            .trim()
+            .toLowerCase();
+
+
+    if(!name || !id || !email){
 
         showToast(
-            'يرجى كتابة الاسم ورقم الهوية أولاً.',
+            'يرجى كتابة الاسم ورقم الهوية والبريد الإلكتروني أولاً.',
             'error'
         );
 
@@ -4805,6 +4841,8 @@ async function(){
 
         nationalId:id,
 
+        email,
+
         phone:
             document
                 .getElementById('in_phone')
@@ -4844,6 +4882,18 @@ async function(){
 
         status:
             'active',
+
+        certificateStatus:
+            'pending',
+
+        certificateSent:
+            false,
+
+        certificateSentAt:
+            null,
+
+        certificateError:
+            null,
 
         createdAt:
             Date.now()
@@ -4925,6 +4975,14 @@ async function(e){
             .trim();
 
 
+    const email =
+        document
+            .getElementById('up_email')
+            .value
+            .trim()
+            .toLowerCase();
+
+
     const dept =
         document
             .getElementById('up_dept')
@@ -4956,6 +5014,18 @@ async function(e){
         return;
 
 
+    if(!email){
+
+        showToast(
+            'يرجى كتابة البريد الإلكتروني.',
+            'error'
+        );
+
+        return;
+
+    }
+
+
     if(
         hasCancelledContract(id)
     ){
@@ -4980,6 +5050,8 @@ async function(e){
 
         nationalId:id,
 
+        email,
+
         dept,
 
         startDate,
@@ -4992,6 +5064,14 @@ async function(e){
             ')',
 
         status:'active',
+
+        certificateStatus:'pending',
+
+        certificateSent:false,
+
+        certificateSentAt:null,
+
+        certificateError:null,
 
         createdAt:Date.now()
 
@@ -5169,7 +5249,15 @@ async function(
                 renewedAt:
                     new Date()
                         .toISOString()
-                        .split('T')[0]
+                        .split('T')[0],
+
+                certificateStatus:'pending',
+
+                certificateSent:false,
+
+                certificateSentAt:null,
+
+                certificateError:null
 
             }
         );
@@ -5304,7 +5392,9 @@ async function(docId){
                 cancelledAt:
                     new Date()
                         .toISOString()
-                        .split('T')[0]
+                        .split('T')[0],
+
+                certificateStatus:'cancelled'
 
             }
         );
