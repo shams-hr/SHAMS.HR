@@ -1,6 +1,7 @@
 const admin = require("firebase-admin");
 const { Resend } = require("resend");
 const puppeteer = require("puppeteer");
+const CERT_ASSETS = require("./certificate-assets");
 
 const serviceAccount = JSON.parse(
   process.env.FIREBASE_SERVICE_ACCOUNT
@@ -31,33 +32,6 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
-function calculateDuration(start, end, storedDuration) {
-  if (storedDuration) {
-    return `${storedDuration} شهر`;
-  }
-
-  if (!start || !end) {
-    return "—";
-  }
-
-  const s = new Date(start);
-  const e = new Date(end);
-
-  if (isNaN(s) || isNaN(e)) {
-    return "—";
-  }
-
-  let months =
-    (e.getFullYear() - s.getFullYear()) * 12 +
-    (e.getMonth() - s.getMonth());
-
-  if (e.getDate() >= s.getDate()) {
-    months++;
-  }
-
-  return `${Math.max(1, months)} شهر`;
-}
-
 function formatDate(dateString) {
   if (!dateString) return "—";
 
@@ -85,15 +59,9 @@ async function createCertificatePdf(contract) {
 
     const name = escapeHtml(contract.name || "المتطوع");
     const nationalId = escapeHtml(contract.nationalId || "—");
-    const email = escapeHtml(contract.email || "—");
     const dept = escapeHtml(contract.dept || "غير محدد");
     const startDate = formatDate(contract.startDate);
     const endDate = formatDate(contract.endDate);
-    const duration = calculateDuration(
-      contract.startDate,
-      contract.endDate,
-      contract.duration
-    );
 
     const html = `
 <!DOCTYPE html>
@@ -104,7 +72,7 @@ async function createCertificatePdf(contract) {
 <style>
 
 @page {
-  size: A4;
+  size: A4 landscape;
   margin: 0;
 }
 
@@ -114,123 +82,172 @@ async function createCertificatePdf(contract) {
 
 body {
   margin: 0;
-  width: 210mm;
-  min-height: 297mm;
-  font-family: "Noto Naskh Arabic", "Noto Sans Arabic", Arial, Tahoma, sans-serif;
-  background: #ffffff;
-  color: #111827;
-  direction: rtl;
+  width: 297mm;
+  height: 210mm;
+  font-family: Arial, "Tahoma", sans-serif;
+  background: #f8f6f2;
+  color: #6d2041;
 }
 
 .page {
-  width: 210mm;
-  min-height: 297mm;
-  padding: 22mm;
+  width: 297mm;
+  height: 210mm;
   position: relative;
   overflow: hidden;
+  background: #f8f6f2;
 }
 
-.border {
+.watermark {
   position: absolute;
-  inset: 10mm;
-  border: 2px solid #111827;
-  pointer-events: none;
+  top: 38mm;
+  right: 30mm;
+  width: 190mm;
+  opacity: 0.22;
+  transform: rotate(-6deg);
+  z-index: 0;
 }
 
-.inner-border {
+.namaa-logo {
   position: absolute;
-  inset: 13mm;
-  border: 1px solid #9ca3af;
-  pointer-events: none;
+  top: 8mm;
+  right: 12mm;
+  width: 24mm;
+  z-index: 2;
 }
 
 .header {
+  position: relative;
+  z-index: 1;
   text-align: center;
-  margin-top: 15mm;
-}
-
-.logo {
-  font-size: 26px;
-  font-weight: bold;
-  margin-bottom: 6px;
-}
-
-.team {
-  font-size: 18px;
-  font-weight: bold;
+  margin-top: 11mm;
 }
 
 .title {
-  margin-top: 28mm;
-  text-align: center;
-  font-size: 30px;
+  font-size: 32px;
   font-weight: bold;
+  color: #6d2041;
 }
 
 .subtitle {
-  text-align: center;
-  font-size: 17px;
+  margin-top: 3mm;
+  font-size: 21px;
+  letter-spacing: 1px;
+  color: #6d2041;
+}
+
+.body-row {
+  position: relative;
+  z-index: 1;
+  margin-top: 13mm;
+  min-height: 95mm;
+}
+
+.col {
+  position: absolute;
+  top: 0;
+  width: 44%;
+  font-size: 14.5px;
+  line-height: 1.85;
+  color: #6d2041;
+}
+
+.col.en {
+  left: 16mm;
+  direction: ltr;
+  text-align: left;
+  padding-left: 4mm;
+}
+
+.col.ar {
+  right: 16mm;
+  direction: rtl;
+  text-align: right;
+  padding-right: 4mm;
+}
+
+.field-row {
+  margin-top: 5mm;
+}
+
+.field-label {
+  font-weight: bold;
+  color: #b08a39;
+}
+
+.field-value {
+  font-weight: bold;
+  color: #6d2041;
+}
+
+.plain-label {
+  color: #6d2041;
+}
+
+.dept-line {
   margin-top: 8mm;
-  color: #4b5563;
 }
 
-.content {
-  margin-top: 22mm;
-  font-size: 17px;
-  line-height: 2.2;
+.dates-line {
+  margin-top: 2mm;
+  font-weight: bold;
+  color: #b08a39;
+}
+
+.closing {
+  margin-top: 8mm;
   text-align: justify;
-}
-
-.name {
-  font-size: 23px;
-  font-weight: bold;
-  text-align: center;
-  margin: 10mm 0;
-}
-
-.info {
-  margin-top: 12mm;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  overflow: hidden;
-}
-
-.row {
-  display: flex;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.row:last-child {
-  border-bottom: none;
-}
-
-.label {
-  width: 35%;
-  padding: 9px;
-  background: #f3f4f6;
-  font-weight: bold;
-}
-
-.value {
-  width: 65%;
-  padding: 9px;
 }
 
 .footer {
   position: absolute;
-  bottom: 25mm;
-  right: 22mm;
-  left: 22mm;
-  text-align: center;
-  font-size: 13px;
-  color: #6b7280;
+  z-index: 1;
+  bottom: 12mm;
+  left: 16mm;
+  right: 16mm;
+  height: 40mm;
 }
 
-.signature {
-  margin-top: 25mm;
-  text-align: left;
-  padding-left: 15mm;
-  font-size: 15px;
+.seal-block {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  text-align: center;
+}
+
+.seal-label {
+  font-weight: bold;
+  font-size: 14px;
+  color: #6d2041;
+  margin-bottom: 2mm;
+}
+
+.seal-logo {
+  width: 55mm;
+}
+
+.sign-block {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  text-align: right;
+  direction: rtl;
+}
+
+.sign-title {
+  font-weight: bold;
+  font-size: 14px;
+  color: #6d2041;
+}
+
+.sign-name {
+  font-weight: bold;
+  font-size: 14px;
+  color: #6d2041;
+}
+
+.sign-image {
+  width: 42mm;
+  margin-top: 2mm;
 }
 
 </style>
@@ -240,78 +257,73 @@ body {
 
 <div class="page">
 
-<div class="border"></div>
-<div class="inner-border"></div>
+  <img class="watermark" src="${CERT_ASSETS.SUN_WATERMARK}" alt="" />
+  <img class="namaa-logo" src="${CERT_ASSETS.LOGO_NAMAA}" alt="" />
 
-<div class="header">
-  <div class="logo">شمس التطوعي</div>
-  <div class="team">فريق شمس التطوعي</div>
-</div>
-
-<div class="title">
-  شهادة خبرة تطوعية
-</div>
-
-<div class="subtitle">
-  يشهد فريق شمس التطوعي بأن
-</div>
-
-<div class="name">
-  ${name}
-</div>
-
-<div class="content">
-
-قد شارك في أعمال وأنشطة فريق شمس التطوعي خلال فترة التطوع الموضحة أدناه،
-وأدى المهام التطوعية الموكلة إليه خلال مدة مشاركته، وقد أتم فترة التطوع
-المسجلة في النظام بنجاح.
-
-</div>
-
-<div class="info">
-
-  <div class="row">
-    <div class="label">رقم الهوية</div>
-    <div class="value">${nationalId}</div>
+  <div class="header">
+    <div class="title">شهادة خبرة عمل تطوعي</div>
+    <div class="subtitle">VOLUNTEER WORK EXPERIENCE CIRTIFICATE</div>
   </div>
 
-  <div class="row">
-    <div class="label">البريد الإلكتروني</div>
-    <div class="value">${email}</div>
+  <div class="body-row">
+
+    <div class="col en">
+      <div>Witnessing the management of the SHAMS Volunteer Team affiliated with Makkah Association.</div>
+
+      <div class="field-row">
+        <span class="field-value">${name}</span>
+        <span class="field-label"> / Administrator</span>
+      </div>
+      <div class="field-row">
+        <span class="plain-label">ID number: </span>
+        <span class="field-value">${nationalId}</span>
+      </div>
+
+      <div class="dept-line">Administrator of the ${dept} Department</div>
+      <div class="dates-line">From ${startDate} To ${endDate}</div>
+
+      <div class="closing">
+        He demonstrated commitment and responsibility throughout his tenure, took initiative in carrying
+        out assigned tasks, maintained a strong focus on work quality, and demonstrated effective
+        collaboration and a strong team spirit.
+      </div>
+    </div>
+
+    <div class="col ar">
+      <div>تشهد إدارة فريق شمس التطوعي التابع إلى جمعية نماء المكية ان</div>
+
+      <div class="field-row">
+        <span class="field-label">الإداري : </span>
+        <span class="field-value">${name}</span>
+      </div>
+      <div class="field-row">
+        <span class="plain-label">رقم الهوية : </span>
+        <span class="field-value">${nationalId}</span>
+      </div>
+
+      <div class="dept-line">عمل بمنصب عضو في قسم ${dept}</div>
+      <div class="dates-line">بتاريخ ${startDate} إلى ${endDate}</div>
+
+      <div class="closing">
+        تميز خلال فترة عمله بالالتزام والمسؤولية، والمبادرة في أداء المهام الموكل إليها، والحرص على
+        جودة العمل، إلى جانب تعاونه الفعّال وتمتعه بروح الفريق
+      </div>
+    </div>
+
   </div>
 
-  <div class="row">
-    <div class="label">القسم / الإدارة</div>
-    <div class="value">${dept}</div>
+  <div class="footer">
+    <div class="seal-block">
+      <div class="seal-label">الختم</div>
+      <img class="seal-logo" src="${CERT_ASSETS.LOGO_SHAMS_SEAL}" alt="" />
+    </div>
+
+    <div class="sign-block">
+      <div class="sign-title">الرئيس التنفيذي</div>
+      <div class="sign-name">عبدالإله الشمراني</div>
+      <img class="sign-image" src="${CERT_ASSETS.SIGNATURE}" alt="" />
+    </div>
   </div>
-
-  <div class="row">
-    <div class="label">بداية التطوع</div>
-    <div class="value">${startDate}</div>
-  </div>
-
-  <div class="row">
-    <div class="label">نهاية التطوع</div>
-    <div class="value">${endDate}</div>
-  </div>
-
-  <div class="row">
-    <div class="label">مدة التطوع</div>
-    <div class="value">${duration}</div>
-  </div>
-
-</div>
-
-<div class="signature">
-  فريق شمس التطوعي
-  <br>
-  إدارة الموارد البشرية
-</div>
-
-<div class="footer">
-  تم إصدار هذه الشهادة إلكترونياً بواسطة نظام إدارة الموارد البشرية
-  لفريق شمس التطوعي.
-</div>
 
 </div>
 
@@ -325,6 +337,7 @@ body {
 
     return await page.pdf({
       format: "A4",
+      landscape: true,
       printBackground: true,
       margin: {
         top: "0",
@@ -383,7 +396,7 @@ async function processContract(contractDoc, today) {
     return;
   }
 
-  if (contract.endDate >= today) {
+  if (contract.endDate > today) {
     console.log(`تجاهل ${contract.id}: العقد لم ينتهِ.`);
     return;
   }
@@ -473,7 +486,7 @@ async function processContract(contractDoc, today) {
       attachments: [
         {
           filename: fileName,
-          content: Buffer.from(pdf).toString("base64"),
+          content: pdf,
         },
       ],
     });
