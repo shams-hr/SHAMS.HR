@@ -100,10 +100,9 @@ body {
 .watermark {
   position: absolute;
   top: 50%;
-  left: 50%;
-  width: 165mm;
-  max-height: 195mm;
-  opacity: 0.2;
+  left: 52%;
+  width: 210mm;
+  opacity: 1;
   transform: translate(-50%, -50%);
   z-index: 0;
 }
