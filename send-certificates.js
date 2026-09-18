@@ -99,11 +99,12 @@ body {
 
 .watermark {
   position: absolute;
-  top: 38mm;
-  right: 30mm;
-  width: 190mm;
-  opacity: 0.22;
-  transform: rotate(-6deg);
+  top: 50%;
+  left: 50%;
+  width: 165mm;
+  max-height: 195mm;
+  opacity: 0.2;
+  transform: translate(-50%, -50%);
   z-index: 0;
 }
 
@@ -123,14 +124,14 @@ body {
 }
 
 .title {
-  font-size: 32px;
+  font-size: 50px;
   font-weight: bold;
   color: #6d2041;
 }
 
 .subtitle {
-  margin-top: 3mm;
-  font-size: 21px;
+  margin-top: 4mm;
+  font-size: 29px;
   letter-spacing: 1px;
   color: #6d2041;
 }
@@ -146,8 +147,8 @@ body {
   position: absolute;
   top: 0;
   width: 44%;
-  font-size: 14.5px;
-  line-height: 1.85;
+  font-size: 19px;
+  line-height: 1.95;
   color: #6d2041;
 }
 
@@ -216,7 +217,7 @@ body {
 
 .seal-label {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   color: #6d2041;
   margin-bottom: 2mm;
 }
@@ -235,13 +236,13 @@ body {
 
 .sign-title {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   color: #6d2041;
 }
 
 .sign-name {
   font-weight: bold;
-  font-size: 14px;
+  font-size: 16px;
   color: #6d2041;
 }
 
