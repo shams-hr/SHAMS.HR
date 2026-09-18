@@ -58,8 +58,10 @@ async function createCertificatePdf(contract) {
     const page = await browser.newPage();
 
     const name = escapeHtml(contract.name || "المتطوع");
+    const nameEn = escapeHtml(contract.nameEn || contract.name || "Volunteer");
     const nationalId = escapeHtml(contract.nationalId || "—");
     const dept = escapeHtml(contract.dept || "غير محدد");
+    const deptEn = escapeHtml(contract.deptEn || contract.dept || "Not specified");
     const startDate = formatDate(contract.startDate);
     const endDate = formatDate(contract.endDate);
 
@@ -271,7 +273,7 @@ body {
       <div>Witnessing the management of the SHAMS Volunteer Team affiliated with Makkah Association.</div>
 
       <div class="field-row">
-        <span class="field-value">${name}</span>
+        <span class="field-value">${nameEn}</span>
         <span class="field-label"> / Administrator</span>
       </div>
       <div class="field-row">
@@ -279,7 +281,7 @@ body {
         <span class="field-value">${nationalId}</span>
       </div>
 
-      <div class="dept-line">Administrator of the ${dept} Department</div>
+      <div class="dept-line">Administrator of the ${deptEn} Department</div>
       <div class="dates-line">From ${startDate} To ${endDate}</div>
 
       <div class="closing">
