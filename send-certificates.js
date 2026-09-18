@@ -447,7 +447,7 @@ async function processContract(contractDoc, today) {
     const result = await resend.emails.send({
       from:
         process.env.MAIL_FROM ||
-        "shamshr <onboarding@resend.dev>",
+        "shamshr <certificates@shamshr.me>",
 
       to: [contract.email],
 
