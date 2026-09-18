@@ -120,18 +120,18 @@ body {
   position: relative;
   z-index: 1;
   text-align: center;
-  margin-top: 11mm;
+  margin-top: 9mm;
 }
 
 .title {
-  font-size: 50px;
+  font-size: 40px;
   font-weight: bold;
   color: #6d2041;
 }
 
 .subtitle {
-  margin-top: 4mm;
-  font-size: 29px;
+  margin-top: 3mm;
+  font-size: 23px;
   letter-spacing: 1px;
   color: #6d2041;
 }
@@ -139,7 +139,7 @@ body {
 .body-row {
   position: relative;
   z-index: 1;
-  margin-top: 13mm;
+  margin-top: 10mm;
   min-height: 95mm;
 }
 
@@ -147,8 +147,8 @@ body {
   position: absolute;
   top: 0;
   width: 44%;
-  font-size: 19px;
-  line-height: 1.95;
+  font-size: 17px;
+  line-height: 1.6;
   color: #6d2041;
 }
 
@@ -185,7 +185,7 @@ body {
 }
 
 .dept-line {
-  margin-top: 8mm;
+  margin-top: 6mm;
 }
 
 .dates-line {
@@ -195,17 +195,17 @@ body {
 }
 
 .closing {
-  margin-top: 8mm;
+  margin-top: 6mm;
   text-align: justify;
 }
 
 .footer {
   position: absolute;
   z-index: 1;
-  bottom: 12mm;
+  bottom: 10mm;
   left: 16mm;
   right: 16mm;
-  height: 40mm;
+  height: 38mm;
 }
 
 .seal-block {
