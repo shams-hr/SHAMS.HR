@@ -2157,11 +2157,292 @@ code{
 
 }
 
+/* =====================================================================
+   إضافات: تأثيرات بصرية، جداول تفاعلية، تحسينات تجربة الاستخدام، الجوال
+   ===================================================================== */
+
+/* ---------- Dark mode ---------- */
+:root[data-theme="dark"]{
+    --bg:#0e1420;
+    --card:#161d2c;
+    --text:#e6ebf5;
+    --muted:#94a1bd;
+    --border:#26304a;
+    --shadow:0 15px 45px rgba(0,0,0,.45);
+    --navy:#05070d;
+    --navy-2:#05070d;
+}
+
+:root[data-theme="dark"] body{
+    background:
+        radial-gradient(circle at 10% 10%, rgba(243,112,33,.06), transparent 30%),
+        var(--bg);
+}
+
+:root[data-theme="dark"] input,
+:root[data-theme="dark"] select,
+:root[data-theme="dark"] textarea,
+:root[data-theme="dark"] .form-control{
+    background:#1c2437 !important;
+    color:var(--text) !important;
+    border-color:var(--border) !important;
+}
+
+:root[data-theme="dark"] .toast{
+    background:#1c2437;
+    color:var(--text);
+}
+
+:root[data-theme="dark"] table tbody tr:hover{
+    background:#1c2437 !important;
+}
+
+.theme-toggle-btn{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:15px;
+    transition:.2s;
+}
+.theme-toggle-btn:hover{
+    background:rgba(255,255,255,.18);
+    transform:translateY(-2px);
+}
+
+/* ---------- Daily greeting ---------- */
+.daily-greeting{
+    position:fixed;
+    top:14px;
+    left:50%;
+    transform:translateX(-50%) translateY(-40px);
+    background:linear-gradient(110deg,var(--orange),var(--orange-light));
+    color:#fff;
+    padding:10px 22px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    box-shadow:0 15px 35px rgba(243,112,33,.35);
+    z-index:9999999;
+    opacity:0;
+    transition:opacity .5s ease, transform .5s ease;
+    pointer-events:none;
+}
+.daily-greeting.show{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+}
+.daily-greeting i{
+    animation:sunSpin 3s linear infinite;
+    font-size:14px;
+}
+@keyframes sunSpin{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+/* ---------- Top progress bar (Firebase load) ---------- */
+#topProgressBar{
+    position:fixed;
+    top:0;
+    right:0;
+    left:0;
+    height:3px;
+    z-index:99999999;
+    background:transparent;
+    pointer-events:none;
+}
+#topProgressBar span{
+    display:block;
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg,var(--orange),var(--orange-light));
+    box-shadow:0 0 10px rgba(243,112,33,.7);
+    transition:width .25s ease;
+}
+
+/* ---------- Custom cursor ---------- */
+body.custom-cursor-on,
+body.custom-cursor-on *{
+    cursor:none !important;
+}
+#customCursorDot{
+    position:fixed;
+    top:0;
+    left:0;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,var(--orange-light),var(--orange));
+    box-shadow:0 0 10px rgba(243,112,33,.7);
+    pointer-events:none;
+    z-index:999999999;
+    transform:translate(-50%,-50%);
+    display:none;
+    transition:width .15s,height .15s;
+}
+@media (hover:hover) and (pointer:fine){
+    #customCursorDot{display:block;}
+}
+
+/* ---------- Sortable table headers ---------- */
+#archiveTab table thead th.sortable-col{
+    cursor:pointer;
+    user-select:none;
+    white-space:nowrap;
+}
+#archiveTab table thead th.sortable-col .sort-arrow{
+    font-size:9px;
+    opacity:.5;
+    margin-inline-start:4px;
+}
+#archiveTab table thead th.sortable-col.sorted-asc .sort-arrow,
+#archiveTab table thead th.sortable-col.sorted-desc .sort-arrow{
+    opacity:1;
+    color:var(--orange);
+}
+
+/* ---------- Highlight rows near expiration ---------- */
+#archiveTableBody tr.row-soon-expire td{
+    background:rgba(245,158,11,.12) !important;
+}
+
+/* ---------- Quick filter chips ---------- */
+.quick-filter-chips{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin:2px 0 14px;
+}
+.quick-filter-chip{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--muted);
+    font-size:11px;
+    font-weight:800;
+    padding:7px 14px;
+    border-radius:999px;
+    cursor:pointer;
+    transition:.15s;
+}
+.quick-filter-chip:hover{
+    border-color:var(--orange);
+    color:var(--orange);
+}
+.quick-filter-chip.active{
+    background:linear-gradient(110deg,var(--orange),var(--orange-light));
+    border-color:transparent;
+    color:#fff;
+}
+
+/* ---------- Export buttons ---------- */
+.archive-toolbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+}
+.export-buttons{
+    display:flex;
+    gap:8px;
+}
+.export-btn{
+    border:1px solid var(--border);
+    background:var(--card);
+    color:var(--text);
+    font-size:11px;
+    font-weight:800;
+    padding:8px 14px;
+    border-radius:10px;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition:.15s;
+}
+.export-btn:hover{
+    border-color:var(--green);
+    color:var(--green);
+    transform:translateY(-2px);
+}
+.export-btn.pdf:hover{
+    border-color:var(--red);
+    color:var(--red);
+}
+
+/* ---------- Undo toast ---------- */
+.toast .undo-btn{
+    background:none;
+    border:1px solid currentColor;
+    color:inherit;
+    font-size:10px;
+    font-weight:800;
+    padding:4px 10px;
+    border-radius:8px;
+    cursor:pointer;
+    margin-inline-start:auto;
+    white-space:nowrap;
+}
+.toast .undo-btn:hover{
+    background:rgba(0,0,0,.06);
+}
+
+/* ---------- Swipe actions (mobile table rows) ---------- */
+@media (max-width:768px){
+    #archiveTableBody tr{
+        transition:transform .25s ease;
+    }
+    .swipe-hint{
+        font-size:9px;
+        color:var(--muted);
+        text-align:center;
+        margin-bottom:8px;
+    }
+
+    /* Mobile-first tweaks */
+    .auth-button,
+    .btn-action,
+    button{
+        min-height:40px;
+    }
+    input,select,textarea,.form-control{
+        min-height:44px;
+        font-size:14px !important;
+    }
+    .nav-links button{
+        padding:10px 12px !important;
+        font-size:11px !important;
+    }
+    .quick-filter-chip{
+        padding:9px 16px;
+        font-size:12px;
+    }
+    .export-btn{
+        padding:10px 16px;
+        font-size:12px;
+    }
+}
+
 </style>
 
 </head>
 
 <body>
+
+<div id="topProgressBar"><span id="topProgressBarFill"></span></div>
+<div id="customCursorDot"></div>
+<div id="dailyGreeting" class="daily-greeting"><i class="fas fa-sun"></i><span id="dailyGreetingText">صباح الخير</span></div>
 
 <div class="auth-overlay" id="authSection">
 
@@ -2370,6 +2651,15 @@ code{
             </div>
 
         </div>
+
+        <button
+            id="themeToggleBtn"
+            onclick="window.toggleDarkMode()"
+            class="theme-toggle-btn"
+            title="الوضع الليلي / النهاري"
+        >
+            <i class="fas fa-moon" id="themeToggleIcon"></i>
+        </button>
 
         <button
             onclick="logoutSystem()"
@@ -3123,9 +3413,34 @@ code{
 
         </div>
 
+        <div class="archive-toolbar">
+
+            <div class="quick-filter-chips" id="quickFilterChips">
+                <button type="button" class="quick-filter-chip active" data-filter="all">الكل</button>
+                <button type="button" class="quick-filter-chip" data-filter="active">نشط</button>
+                <button type="button" class="quick-filter-chip" data-filter="expired">منتهي</button>
+                <button type="button" class="quick-filter-chip" data-filter="soon">قريب الانتهاء</button>
+                <button type="button" class="quick-filter-chip" data-filter="cancelled">ملغي</button>
+            </div>
+
+            <div class="export-buttons">
+                <button type="button" class="export-btn excel" onclick="window.exportArchiveExcel()">
+                    <i class="fas fa-file-excel"></i> Excel
+                </button>
+                <button type="button" class="export-btn pdf" onclick="window.exportArchivePDF()">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </button>
+            </div>
+
+        </div>
+
+        <div class="swipe-hint">
+            <i class="fas fa-arrows-left-right"></i> اسحب الصف يميناً/يساراً لعرض إجراءات سريعة
+        </div>
+
         <div class="table-wrapper">
 
-            <table>
+            <table id="archiveTableEl">
 
                 <thead>
 
@@ -6220,6 +6535,598 @@ window.logoutSystem = function(){
     document.getElementById('login_user').value = '';
     document.getElementById('login_pass').value = '';
     showToast('تم تسجيل الخروج بنجاح.', 'info');
+};
+
+
+/* =====================================================================
+   إضافات جديدة: دارك مود / ترحيب يومي / شريط تقدم / مؤشر مخصص /
+   فرز وفلاتر الجدول / تصدير / تراجع عن الحذف / حفظ تلقائي / اختصارات /
+   سحب سريع بالجوال
+   ===================================================================== */
+
+/* ---------- 1) الوضع الليلي (Dark mode) ---------- */
+(function initDarkMode(){
+    const saved = localStorage.getItem('shams_theme');
+    if(saved === 'dark'){
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+    updateThemeIcon();
+})();
+
+function updateThemeIcon(){
+    const icon = document.getElementById('themeToggleIcon');
+    if(!icon) return;
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    icon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+window.toggleDarkMode = function(){
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if(isDark){
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('shams_theme', 'light');
+    } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('shams_theme', 'dark');
+    }
+    updateThemeIcon();
+};
+
+
+/* ---------- 2) ترحيب بسيط عند أول دخول باليوم ---------- */
+function showDailyGreetingIfNeeded(){
+    const todayKey = new Date().toISOString().split('T')[0];
+    const lastShown = localStorage.getItem('shams_last_greeting');
+    if(lastShown === todayKey) return;
+
+    const hour = new Date().getHours();
+    let text = 'صباح الخير';
+    let icon = 'fa-sun';
+    if(hour >= 12 && hour < 17){ text = 'نهارك سعيد'; icon = 'fa-sun'; }
+    else if(hour >= 17 && hour < 20){ text = 'مساء الخير'; icon = 'fa-cloud-sun'; }
+    else if(hour >= 20 || hour < 5){ text = 'مساء الخير'; icon = 'fa-moon'; }
+
+    const el = document.getElementById('dailyGreeting');
+    const textEl = document.getElementById('dailyGreetingText');
+    if(!el || !textEl) return;
+
+    textEl.innerText = (window.currentUsername ? (window.currentUsername + '، ') : '') + text;
+    el.querySelector('i').className = 'fas ' + icon;
+
+    setTimeout(() => {
+        el.classList.add('show');
+    }, 400);
+
+    setTimeout(() => {
+        el.classList.remove('show');
+    }, 4200);
+
+    localStorage.setItem('shams_last_greeting', todayKey);
+}
+
+
+/* ---------- 3) شريط تقدم علوي أثناء تحميل بيانات Firebase ---------- */
+let _progressTimer = null;
+
+function startTopProgress(){
+    const fill = document.getElementById('topProgressBarFill');
+    if(!fill) return;
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+    void fill.offsetWidth;
+    fill.style.transition = 'width .25s ease';
+    fill.style.width = '18%';
+
+    let current = 18;
+    clearInterval(_progressTimer);
+    _progressTimer = setInterval(() => {
+        current += Math.max(1, (90 - current) * 0.08);
+        if(current > 90) current = 90;
+        fill.style.width = current + '%';
+    }, 220);
+}
+
+function finishTopProgress(){
+    const fill = document.getElementById('topProgressBarFill');
+    clearInterval(_progressTimer);
+    if(!fill) return;
+    fill.style.width = '100%';
+    setTimeout(() => {
+        fill.style.transition = 'width .2s ease, opacity .2s ease';
+        fill.style.opacity = '0';
+        setTimeout(() => {
+            fill.style.width = '0%';
+            fill.style.opacity = '1';
+        }, 250);
+    }, 220);
+}
+
+/* ربط شريط التقدم مع نفس دوال التحميل الأصلية دون كسر وظيفتها */
+const _origShowLoading = showLoading;
+const _origHideLoading = hideLoading;
+
+showLoading = function(title){
+    _origShowLoading(title);
+    startTopProgress();
+};
+
+hideLoading = function(){
+    _origHideLoading();
+    finishTopProgress();
+};
+
+
+/* ---------- 4) مؤشر ماوس مخصص (نقطة شمس) ---------- */
+(function initCustomCursor(){
+    const dot = document.getElementById('customCursorDot');
+    if(!dot) return;
+    if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+
+    document.body.classList.add('custom-cursor-on');
+
+    window.addEventListener('mousemove', (e) => {
+        dot.style.left = e.clientX + 'px';
+        dot.style.top = e.clientY + 'px';
+    });
+
+    document.addEventListener('mousedown', () => {
+        dot.style.width = '11px';
+        dot.style.height = '11px';
+    });
+    document.addEventListener('mouseup', () => {
+        dot.style.width = '16px';
+        dot.style.height = '16px';
+    });
+})();
+
+
+/* ---------- 5) فرز تفاعلي لجدول الأرشيف ---------- */
+const _archiveSortState = { key: null, dir: 1 };
+
+const _archiveColumnKeys = [
+    'name', 'nationalId', 'email', 'dept',
+    'startDate', 'endDate', '__remaining', 'type', '__status', null
+];
+
+function initArchiveSorting(){
+    const table = document.getElementById('archiveTableEl');
+    if(!table) return;
+    const ths = table.querySelectorAll('thead th');
+
+    ths.forEach((th, idx) => {
+        const key = _archiveColumnKeys[idx];
+        if(!key) return;
+        th.classList.add('sortable-col');
+        if(!th.querySelector('.sort-arrow')){
+            const arrow = document.createElement('span');
+            arrow.className = 'sort-arrow';
+            arrow.innerHTML = '<i class="fas fa-sort"></i>';
+            th.appendChild(arrow);
+        }
+        th.onclick = () => {
+            if(_archiveSortState.key === key){
+                _archiveSortState.dir *= -1;
+            } else {
+                _archiveSortState.key = key;
+                _archiveSortState.dir = 1;
+            }
+            ths.forEach(t => t.classList.remove('sorted-asc', 'sorted-desc'));
+            th.classList.add(_archiveSortState.dir === 1 ? 'sorted-asc' : 'sorted-desc');
+            renderArchive();
+        };
+    });
+}
+
+function _remainingDaysFor(c){
+    if(!c.endDate || c.status === 'cancelled') return Infinity;
+    const today = new Date(new Date().toISOString().split('T')[0]);
+    const end = new Date(c.endDate);
+    return Math.ceil((end - today) / (1000 * 60 * 60 * 24));
+}
+
+function applyArchiveSort(list){
+    if(!_archiveSortState.key) return list;
+    const key = _archiveSortState.key;
+    const dir = _archiveSortState.dir;
+
+    const sorted = [...list].sort((a, b) => {
+        let va, vb;
+        if(key === '__remaining'){
+            va = _remainingDaysFor(a);
+            vb = _remainingDaysFor(b);
+        } else if(key === '__status'){
+            va = a.status === 'cancelled' ? 'ملغي' : (a.endDate && a.endDate < new Date().toISOString().split('T')[0] ? 'منتهي' : 'نشط');
+            vb = b.status === 'cancelled' ? 'ملغي' : (b.endDate && b.endDate < new Date().toISOString().split('T')[0] ? 'منتهي' : 'نشط');
+        } else {
+            va = (a[key] || '').toString().toLowerCase();
+            vb = (b[key] || '').toString().toLowerCase();
+        }
+        if(va < vb) return -1 * dir;
+        if(va > vb) return 1 * dir;
+        return 0;
+    });
+    return sorted;
+}
+
+
+/* ---------- 6) فلاتر سريعة + تمييز الصفوف القريبة من الانتهاء ---------- */
+let _activeQuickFilter = 'all';
+
+function initQuickFilterChips(){
+    const wrap = document.getElementById('quickFilterChips');
+    if(!wrap) return;
+    wrap.querySelectorAll('.quick-filter-chip').forEach(chip => {
+        chip.onclick = () => {
+            wrap.querySelectorAll('.quick-filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            _activeQuickFilter = chip.dataset.filter;
+            renderArchive();
+        };
+    });
+}
+
+function applyQuickFilterAndHighlight(){
+    const tbody = document.getElementById('archiveTableBody');
+    if(!tbody) return;
+
+    Array.from(tbody.querySelectorAll('tr')).forEach(tr => {
+        const cells = tr.querySelectorAll('td');
+        if(cells.length < 9){
+            tr.style.display = '';
+            return;
+        }
+
+        const statusCell = cells[8];
+        const remainingCell = cells[6];
+
+        const isCancelled = !!statusCell.querySelector('.badge-cancelled');
+        const isExpired = !!statusCell.querySelector('.badge-expired');
+        const isActiveStatus = !isCancelled && !isExpired;
+
+        const remainingHtml = remainingCell.innerHTML;
+        const isSoon =
+            isActiveStatus &&
+            (remainingHtml.includes('fa-hourglass-half') || remainingHtml.includes('fa-hourglass-end'));
+
+        tr.classList.toggle('row-soon-expire', isSoon);
+
+        let visible = true;
+        if(_activeQuickFilter === 'active') visible = isActiveStatus;
+        else if(_activeQuickFilter === 'expired') visible = isExpired;
+        else if(_activeQuickFilter === 'cancelled') visible = isCancelled;
+        else if(_activeQuickFilter === 'soon') visible = isSoon;
+
+        tr.style.display = visible ? '' : 'none';
+    });
+}
+
+
+/* ---------- تغليف renderArchive الأصلية دون كسرها ---------- */
+const _origRenderArchive = renderArchive;
+
+renderArchive = function(){
+    if(_archiveSortState.key){
+        window.contractsArchive = applyArchiveSort(window.contractsArchive);
+    }
+    _origRenderArchive();
+    initArchiveSorting();
+    applyQuickFilterAndHighlight();
+    initSwipeActions();
+};
+window.renderArchive = renderArchive;
+
+
+/* ---------- 7) تصدير سريع Excel / PDF ---------- */
+window.exportArchiveExcel = function(){
+    const rows = window.contractsArchive || [];
+    if(rows.length === 0){
+        showToast('لا توجد بيانات لتصديرها.', 'error');
+        return;
+    }
+
+    const headers = ['الاسم', 'الهوية', 'البريد الإلكتروني', 'القسم', 'البداية', 'النهاية', 'النوع', 'الحالة'];
+    const lines = [headers.join(',')];
+
+    rows.forEach(c => {
+        const statusText = c.status === 'cancelled' ? 'ملغي' :
+            (c.endDate && c.endDate < new Date().toISOString().split('T')[0] ? 'منتهي' : 'نشط');
+        const line = [
+            c.name || '', c.nationalId || '', c.email || '', c.dept || '',
+            c.startDate || '', c.endDate || '', c.type || '', statusText
+        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
+        lines.push(line);
+    });
+
+    const csvContent = '\uFEFF' + lines.join('\r\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ارشيف_العقود.csv';
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+
+    showToast('تم تصدير ملف Excel (CSV) بنجاح.', 'success');
+};
+
+window.exportArchivePDF = function(){
+    const tableEl = document.getElementById('archiveTableEl');
+    if(!tableEl){
+        showToast('تعذر العثور على الجدول.', 'error');
+        return;
+    }
+
+    if(typeof html2pdf === 'undefined'){
+        showToast('أداة تصدير PDF غير متاحة حالياً.', 'error');
+        return;
+    }
+
+    showLoading('جاري تجهيز وتنزيل ملف PDF...');
+
+    const wrapper = document.createElement('div');
+    wrapper.style.direction = 'rtl';
+    wrapper.style.padding = '10px';
+    wrapper.style.fontFamily = 'Tajawal, sans-serif';
+
+    const title = document.createElement('h3');
+    title.innerText = 'أرشيف عقود المتطوعين - فريق شمس';
+    title.style.marginBottom = '10px';
+    wrapper.appendChild(title);
+
+    const clone = tableEl.cloneNode(true);
+    clone.querySelectorAll('th:last-child, td:last-child').forEach(el => el.remove());
+    wrapper.appendChild(clone);
+
+    const opt = {
+        margin: 8,
+        filename: 'ارشيف_العقود.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+    };
+
+    html2pdf().from(wrapper).set(opt).save().then(() => {
+        hideLoading();
+        showToast('تم تنزيل ملف PDF بنجاح.', 'success');
+    }).catch(err => {
+        hideLoading();
+        console.error(err);
+        showToast('حدث خطأ أثناء إنشاء PDF.', 'error');
+    });
+};
+
+
+/* ---------- 8) تراجع عن الحذف (Undo) بدل رسالة تأكيد ---------- */
+function showUndoToast(message, onUndo, seconds = 5){
+    const container = document.getElementById('toastContainer');
+    if(!container) return;
+
+    const toast = document.createElement('div');
+    toast.className = 'toast info';
+
+    let remaining = seconds;
+    toast.innerHTML = `
+        <i class="fas fa-trash-can"></i>
+        <span>${escapeHtml(message)} (<span class="undo-seconds">${remaining}</span>ث)</span>
+        <button type="button" class="undo-btn">تراجع؟</button>
+    `;
+    container.appendChild(toast);
+
+    let undone = false;
+    const secondsEl = toast.querySelector('.undo-seconds');
+    const countdown = setInterval(() => {
+        remaining -= 1;
+        if(secondsEl) secondsEl.innerText = Math.max(remaining, 0);
+        if(remaining <= 0) clearInterval(countdown);
+    }, 1000);
+
+    const removeToast = () => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateX(-20px)';
+        setTimeout(() => toast.remove(), 300);
+    };
+
+    const timer = setTimeout(() => {
+        if(!undone) removeToast();
+    }, seconds * 1000);
+
+    toast.querySelector('.undo-btn').onclick = () => {
+        if(undone) return;
+        undone = true;
+        clearTimeout(timer);
+        clearInterval(countdown);
+        removeToast();
+        onUndo();
+    };
+}
+
+window.deleteContract = async function(docId){
+    if(window.currentUserRole !== 'مدير النظام'){
+        showToast('غير مسموح لك بحذف العقود نهائياً، يكتفى بفسخها.', 'error');
+        return;
+    }
+
+    const idx = window.contractsArchive.findIndex(c => c.id === docId);
+    if(idx === -1) return;
+
+    const removedContract = window.contractsArchive[idx];
+
+    /* حذف مبدئي من الواجهة فقط (تفاؤلي) */
+    window.contractsArchive.splice(idx, 1);
+    renderArchive();
+
+    let undone = false;
+
+    showUndoToast('تم الحذف', () => {
+        undone = true;
+        window.contractsArchive.splice(idx, 0, removedContract);
+        renderArchive();
+        showToast('تم التراجع عن الحذف.', 'info');
+    }, 5);
+
+    setTimeout(async () => {
+        if(undone) return;
+        try{
+            await deleteDoc(doc(db, 'contracts', docId));
+            await logAction('حذف عقد نهائياً', `تم حذف العقد رقم ${docId} نهائياً`);
+        } catch(err){
+            console.error(err);
+            showToast('فشل حذف العقد نهائياً من القاعدة، يرجى تحديث الصفحة.', 'error');
+            await loadCloudData();
+        }
+    }, 5200);
+};
+
+
+/* ---------- 9) حفظ تلقائي لمسودة عقد جديد ---------- */
+const DRAFT_KEY = 'shams_contract_draft';
+const DRAFT_FIELDS = ['in_name', 'in_id', 'in_phone', 'in_email', 'in_dob', 'in_dept', 'in_today', 'in_startDate', 'in_duration'];
+
+function saveDraftNow(){
+    const data = {};
+    let hasValue = false;
+    DRAFT_FIELDS.forEach(id => {
+        const el = document.getElementById(id);
+        if(el){
+            data[id] = el.value;
+            if(el.value) hasValue = true;
+        }
+    });
+    if(hasValue){
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
+    } else {
+        localStorage.removeItem(DRAFT_KEY);
+    }
+}
+
+function clearDraft(){
+    localStorage.removeItem(DRAFT_KEY);
+}
+
+function restoreDraftIfAny(){
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if(!raw) return;
+    try{
+        const data = JSON.parse(raw);
+        let restored = false;
+        DRAFT_FIELDS.forEach(id => {
+            const el = document.getElementById(id);
+            if(el && data[id]){
+                el.value = data[id];
+                restored = true;
+            }
+        });
+        if(restored){
+            showToast('تم استرجاع مسودة عقد سابقة لم يتم حفظها.', 'info');
+            if(typeof updateContractPreview === 'function'){
+                try{ updateContractPreview(); }catch(e){}
+            }
+        }
+    } catch(e){
+        localStorage.removeItem(DRAFT_KEY);
+    }
+}
+
+function initAutoSaveDraft(){
+    DRAFT_FIELDS.forEach(id => {
+        const el = document.getElementById(id);
+        if(el){
+            el.addEventListener('input', saveDraftNow);
+            el.addEventListener('change', saveDraftNow);
+        }
+    });
+    restoreDraftIfAny();
+}
+
+const _origSaveAndArchiveContract = window.saveAndArchiveContract;
+window.saveAndArchiveContract = async function(){
+    await _origSaveAndArchiveContract();
+    clearDraft();
+};
+
+
+/* ---------- 10) اختصارات لوحة المفاتيح ---------- */
+document.addEventListener('keydown', function(e){
+    const ctrlOrCmd = e.ctrlKey || e.metaKey;
+    if(!ctrlOrCmd) return;
+
+    if(e.key === 'n' || e.key === 'N'){
+        e.preventDefault();
+        if(typeof switchTab === 'function') switchTab('createTab');
+    }
+
+    if(e.key === 'f' || e.key === 'F'){
+        e.preventDefault();
+        if(typeof switchTab === 'function') switchTab('archiveTab');
+        setTimeout(() => {
+            const search = document.getElementById('archiveSearch');
+            if(search) search.focus();
+        }, 60);
+    }
+});
+
+
+/* ---------- 11) سحب سريع على صفوف جدول الأرشيف (Swipe actions - جوال) ---------- */
+function initSwipeActions(){
+    if(!window.matchMedia('(max-width:768px)').matches) return;
+
+    const wrapper = document.querySelector('#archiveTab .table-wrapper');
+    const rows = document.querySelectorAll('#archiveTableBody tr');
+
+    rows.forEach(row => {
+        if(row.dataset.swipeInit) return;
+        row.dataset.swipeInit = '1';
+
+        let startX = 0;
+        let startY = 0;
+
+        row.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        row.addEventListener('touchend', (e) => {
+            const endX = e.changedTouches[0].clientX;
+            const endY = e.changedTouches[0].clientY;
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+
+            if(Math.abs(deltaX) < 45 || Math.abs(deltaY) > 40 || !wrapper) return;
+
+            if(deltaX < 0){
+                /* سحب لليسار: إظهار عمود الإجراءات */
+                const lastCell = row.querySelector('td:last-child');
+                if(lastCell) lastCell.scrollIntoView({ behavior: 'smooth', inline: 'end', block: 'nearest' });
+            } else {
+                /* سحب لليمين: الرجوع لبداية الصف */
+                const firstCell = row.querySelector('td:first-child');
+                if(firstCell) firstCell.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+            }
+        }, { passive: true });
+    });
+}
+
+
+/* ---------- تهيئة عامة بعد تحميل الصفحة ---------- */
+document.addEventListener('DOMContentLoaded', function(){
+    initQuickFilterChips();
+    initAutoSaveDraft();
+});
+
+if(document.readyState === 'complete' || document.readyState === 'interactive'){
+    initQuickFilterChips();
+    initAutoSaveDraft();
+}
+
+/* عرض الترحيب اليومي عند نجاح تسجيل الدخول */
+const _origHandleLogin = window.handleLogin;
+window.handleLogin = async function(e){
+    await _origHandleLogin(e);
+    if(window.currentUserRole){
+        showDailyGreetingIfNeeded();
+    }
 };
 
 </script>
