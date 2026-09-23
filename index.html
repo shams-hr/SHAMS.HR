@@ -6942,11 +6942,16 @@ window.exportArchivePDF = function(){
 
     const wrapper = document.createElement('div');
     wrapper.id = '__pdfExportWrapper';
-    wrapper.style.position = 'fixed';
+    /* يجب أن يكون العنصر داخل مساحة العرض حتى يستطيع html2canvas رسمه.
+       إخفاؤه بـ left:-99999px أو z-index:-1 قد ينتج PDF أبيض. */
+    wrapper.style.position = 'absolute';
     wrapper.style.top = '0';
-    wrapper.style.left = '-99999px';
-    wrapper.style.zIndex = '-1';
+    wrapper.style.left = '0';
+    wrapper.style.zIndex = '999999';
     wrapper.style.background = '#ffffff';
+    wrapper.style.visibility = 'visible';
+    wrapper.style.opacity = '1';
+    wrapper.style.pointerEvents = 'none';
     wrapper.style.direction = 'rtl';
     wrapper.style.padding = '18px';
     wrapper.style.width = '1400px';
@@ -6979,7 +6984,14 @@ window.exportArchivePDF = function(){
         margin: 8,
         filename: 'ارشيف_العقود.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, windowWidth: 1400 },
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            backgroundColor: '#ffffff',
+            windowWidth: 1400,
+            scrollX: 0,
+            scrollY: 0
+        },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
         pagebreak: { mode: ['css', 'legacy'], avoid: 'tr' }
     };
