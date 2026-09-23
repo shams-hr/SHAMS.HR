@@ -2815,13 +2815,18 @@ body.custom-cursor-on *{
 
                 <label>القسم / الإدارة</label>
 
-                <input
-                    type="text"
+                <select
                     id="in_dept"
                     class="form-control"
-                    placeholder="مثال: الموارد البشرية"
-                    oninput="updateContractPreview()"
+                    onchange="updateContractPreview()"
                 >
+                    <option value="">اختر القسم</option>
+                    <option value="قسم الاعلام">قسم الاعلام</option>
+                    <option value="قسم شؤون المتطوعين">قسم شؤون المتطوعين</option>
+                    <option value="قسم ادارة المشاريع">قسم ادارة المشاريع</option>
+                    <option value="قسم الموارد البشرية">قسم الموارد البشرية</option>
+                    <option value="قسم العلاقات العامة">قسم العلاقات العامة</option>
+                </select>
 
             </div>
 
@@ -3274,14 +3279,32 @@ body.custom-cursor-on *{
 
                 <div class="form-group">
 
-                    <label>القسم</label>
+                    <label>رقم الجوال</label>
 
                     <input
                         type="text"
+                        id="up_phone"
+                        class="form-control"
+                    >
+
+                </div>
+
+                <div class="form-group">
+
+                    <label>القسم</label>
+
+                    <select
                         id="up_dept"
                         class="form-control"
                         required
                     >
+                        <option value="">اختر القسم</option>
+                        <option value="قسم الاعلام">قسم الاعلام</option>
+                        <option value="قسم شؤون المتطوعين">قسم شؤون المتطوعين</option>
+                        <option value="قسم ادارة المشاريع">قسم ادارة المشاريع</option>
+                        <option value="قسم الموارد البشرية">قسم الموارد البشرية</option>
+                        <option value="قسم العلاقات العامة">قسم العلاقات العامة</option>
+                    </select>
 
                 </div>
 
@@ -5727,6 +5750,13 @@ async function(e){
             .trim();
 
 
+    const phone =
+        document
+            .getElementById('up_phone')
+            .value
+            .trim();
+
+
     const startDate =
         document
             .getElementById('up_startDate')
@@ -5788,6 +5818,8 @@ async function(e){
         nationalId:id,
 
         email,
+
+        phone,
 
         dept,
 
