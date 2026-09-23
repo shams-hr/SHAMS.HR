@@ -2311,11 +2311,6 @@ body.custom-cursor-on *{
     color:var(--orange);
 }
 
-/* ---------- Highlight rows near expiration ---------- */
-#archiveTableBody tr.row-soon-expire td{
-    background:rgba(245,158,11,.12) !important;
-}
-
 /* ---------- Quick filter chips ---------- */
 .quick-filter-chips{
     display:flex;
@@ -6788,8 +6783,6 @@ function applyQuickFilterAndHighlight(){
             isActiveStatus &&
             (remainingHtml.includes('fa-hourglass-half') || remainingHtml.includes('fa-hourglass-end'));
 
-        tr.classList.toggle('row-soon-expire', isSoon);
-
         let visible = true;
         if(_activeQuickFilter === 'active') visible = isActiveStatus;
         else if(_activeQuickFilter === 'expired') visible = isExpired;
@@ -6824,19 +6817,77 @@ window.exportArchiveExcel = function(){
         return;
     }
 
-    const headers = ['الاسم', 'الهوية', 'البريد الإلكتروني', 'القسم', 'البداية', 'النهاية', 'النوع', 'الحالة'];
-    const lines = [headers.join(',')];
+    exportArchiveExcelReal(rows).catch(err => {
+        console.error(err);
+        exportArchiveExcelCsvFallback(rows);
+    });
+};
 
-    rows.forEach(c => {
+/* تحميل مكتبة خارجية بشكل آمن مرة واحدة فقط */
+function loadExternalScript(src){
+    return new Promise((resolve, reject) => {
+        if(document.querySelector(`script[data-ext-src="${src}"]`)){
+            resolve();
+            return;
+        }
+        const s = document.createElement('script');
+        s.src = src;
+        s.dataset.extSrc = src;
+        s.onload = () => resolve();
+        s.onerror = () => reject(new Error('تعذر تحميل المكتبة: ' + src));
+        document.head.appendChild(s);
+    });
+}
+
+function archiveRowsToAOA(rows){
+    const headers = ['الاسم', 'الهوية', 'البريد الإلكتروني', 'القسم', 'البداية', 'النهاية', 'النوع', 'الحالة'];
+    const todayStr = new Date().toISOString().split('T')[0];
+    const body = rows.map(c => {
         const statusText = c.status === 'cancelled' ? 'ملغي' :
-            (c.endDate && c.endDate < new Date().toISOString().split('T')[0] ? 'منتهي' : 'نشط');
-        const line = [
+            (c.endDate && c.endDate < todayStr ? 'منتهي' : 'نشط');
+        return [
             c.name || '', c.nationalId || '', c.email || '', c.dept || '',
             c.startDate || '', c.endDate || '', c.type || '', statusText
-        ].map(v => `"${String(v).replace(/"/g, '""')}"`).join(',');
-        lines.push(line);
+        ];
     });
+    return [headers, ...body];
+}
 
+/* تصدير Excel حقيقي (.xlsx) عبر مكتبة SheetJS، يفتح بشكل صحيح بأي إعدادات لغة */
+async function exportArchiveExcelReal(rows){
+    showLoading('جاري تجهيز ملف Excel...');
+    try{
+        await loadExternalScript('https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js');
+
+        if(typeof XLSX === 'undefined'){
+            throw new Error('XLSX غير متاح');
+        }
+
+        const aoa = archiveRowsToAOA(rows);
+        const ws = XLSX.utils.aoa_to_sheet(aoa);
+
+        ws['!cols'] = [
+            { wch: 22 }, { wch: 14 }, { wch: 26 }, { wch: 16 },
+            { wch: 12 }, { wch: 12 }, { wch: 24 }, { wch: 10 }
+        ];
+
+        const wb = XLSX.utils.book_new();
+        wb.Workbook = { Views: [{ RTL: true }] };
+        XLSX.utils.book_append_sheet(wb, ws, 'الأرشيف');
+
+        XLSX.writeFile(wb, 'ارشيف_العقود.xlsx');
+        showToast('تم تصدير ملف Excel بنجاح.', 'success');
+    } finally {
+        hideLoading();
+    }
+}
+
+/* بديل احتياطي CSV في حال تعذر تحميل مكتبة Excel (بدون إنترنت مثلاً) */
+function exportArchiveExcelCsvFallback(rows){
+    const aoa = archiveRowsToAOA(rows);
+    const lines = aoa.map(line =>
+        line.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')
+    );
     const csvContent = '\uFEFF' + lines.join('\r\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
@@ -6847,14 +6898,14 @@ window.exportArchiveExcel = function(){
     a.click();
     a.remove();
     URL.revokeObjectURL(url);
+    showToast('تعذر تحميل مكتبة Excel، تم التصدير كملف CSV بديل.', 'info');
+}
 
-    showToast('تم تصدير ملف Excel (CSV) بنجاح.', 'success');
-};
 
 window.exportArchivePDF = function(){
-    const tableEl = document.getElementById('archiveTableEl');
-    if(!tableEl){
-        showToast('تعذر العثور على الجدول.', 'error');
+    const rows = window.contractsArchive || [];
+    if(rows.length === 0){
+        showToast('لا توجد بيانات لتصديرها.', 'error');
         return;
     }
 
@@ -6865,33 +6916,81 @@ window.exportArchivePDF = function(){
 
     showLoading('جاري تجهيز وتنزيل ملف PDF...');
 
+    const todayStr = new Date().toISOString().split('T')[0];
+    const headers = ['المتطوع', 'الهوية', 'البريد الإلكتروني', 'القسم', 'البداية', 'النهاية', 'النوع', 'الحالة'];
+
+    let bodyRows = '';
+    rows.forEach(c => {
+        const statusText = c.status === 'cancelled' ? 'ملغي' :
+            (c.endDate && c.endDate < todayStr ? 'منتهي' : 'نشط');
+        const statusColor = c.status === 'cancelled' ? '#ef4444' :
+            (c.endDate && c.endDate < todayStr ? '#f59e0b' : '#10b981');
+
+        bodyRows += `
+            <tr>
+                <td style="font-weight:700;">${escapeHtml(c.name || '')}</td>
+                <td>${escapeHtml(c.nationalId || '')}</td>
+                <td style="direction:ltr;text-align:right;">${escapeHtml(c.email || '')}</td>
+                <td>${escapeHtml(c.dept || '')}</td>
+                <td>${escapeHtml(c.startDate || '')}</td>
+                <td>${escapeHtml(c.endDate || '')}</td>
+                <td>${escapeHtml(c.type || '')}</td>
+                <td><span style="color:${statusColor};font-weight:800;">${statusText}</span></td>
+            </tr>
+        `;
+    });
+
     const wrapper = document.createElement('div');
+    wrapper.id = '__pdfExportWrapper';
+    wrapper.style.position = 'fixed';
+    wrapper.style.top = '0';
+    wrapper.style.left = '-99999px';
+    wrapper.style.zIndex = '-1';
+    wrapper.style.background = '#ffffff';
     wrapper.style.direction = 'rtl';
-    wrapper.style.padding = '10px';
-    wrapper.style.fontFamily = 'Tajawal, sans-serif';
+    wrapper.style.padding = '18px';
+    wrapper.style.width = '1400px';
+    wrapper.style.fontFamily = 'Tajawal, Arial, sans-serif';
 
-    const title = document.createElement('h3');
-    title.innerText = 'أرشيف عقود المتطوعين - فريق شمس';
-    title.style.marginBottom = '10px';
-    wrapper.appendChild(title);
+    wrapper.innerHTML = `
+        <h2 style="margin:0 0 14px;color:#000a30;font-size:20px;">أرشيف عقود المتطوعين - فريق شمس التطوعي</h2>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed;">
+            <thead>
+                <tr>
+                    ${headers.map(h => `<th style="background:#000a30;color:#fff;padding:8px 6px;border:1px solid #ccc;text-align:center;">${h}</th>`).join('')}
+                </tr>
+            </thead>
+            <tbody>
+                ${bodyRows}
+            </tbody>
+        </table>
+    `;
 
-    const clone = tableEl.cloneNode(true);
-    clone.querySelectorAll('th:last-child, td:last-child').forEach(el => el.remove());
-    wrapper.appendChild(clone);
+    wrapper.querySelectorAll('tbody td').forEach(td => {
+        td.style.padding = '7px 6px';
+        td.style.border = '1px solid #ddd';
+        td.style.textAlign = 'center';
+        td.style.wordBreak = 'break-word';
+    });
+
+    document.body.appendChild(wrapper);
 
     const opt = {
         margin: 8,
         filename: 'ارشيف_العقود.pdf',
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+        html2canvas: { scale: 2, useCORS: true, windowWidth: 1400 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+        pagebreak: { mode: ['css', 'legacy'], avoid: 'tr' }
     };
 
     html2pdf().from(wrapper).set(opt).save().then(() => {
         hideLoading();
+        wrapper.remove();
         showToast('تم تنزيل ملف PDF بنجاح.', 'success');
     }).catch(err => {
         hideLoading();
+        wrapper.remove();
         console.error(err);
         showToast('حدث خطأ أثناء إنشاء PDF.', 'error');
     });
