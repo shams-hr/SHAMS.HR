@@ -6349,8 +6349,8 @@ window.sendContractWhatsApp = async function(){
         margin: 0,
         filename: fileName,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        html2canvas: { scale: 2, useCORS: true, letterRendering: true, scrollX: 0, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a3', orientation: 'portrait' }
     };
 
     try{
@@ -6362,13 +6362,11 @@ window.sendContractWhatsApp = async function(){
             .outputPdf('blob');
 
         const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
-        const message = `السلام عليكم، مرفق عقد الانضمام الخاص بـ ${name}`;
+        const message = '';
 
         // الأفضل على الجوال: مشاركة ملف PDF مباشرة ثم اختيار WhatsApp والقروب المطلوب
         if(navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))){
             await navigator.share({
-                title: `عقد ${name}`,
-                text: message,
                 files: [file]
             });
 
