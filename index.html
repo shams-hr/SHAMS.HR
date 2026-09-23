@@ -2902,6 +2902,16 @@ body.custom-cursor-on *{
             </button>
 
             <button
+                onclick="sendContractWhatsApp()"
+                class="btn-action btn-green"
+                type="button"
+                title="إرسال العقد PDF عبر واتساب"
+            >
+                <i class="fab fa-whatsapp"></i>
+                إرسال PDF للواتساب
+            </button>
+
+            <button
                 onclick="printContract()"
                 class="btn-action btn-navy"
             >
@@ -3421,6 +3431,9 @@ body.custom-cursor-on *{
             <div class="export-buttons">
                 <button type="button" class="export-btn excel" onclick="window.exportArchiveExcel()">
                     <i class="fas fa-file-excel"></i> Excel
+                </button>
+                <button type="button" class="export-btn pdf" onclick="window.exportArchivePDF()">
+                    <i class="fas fa-file-pdf"></i> PDF
                 </button>
             </div>
 
@@ -6315,6 +6328,99 @@ window.downloadContractPDF = function(){
 };
 
 
+window.sendContractWhatsApp = async function(){
+    const name = document.getElementById('in_name').value.trim();
+    const id = document.getElementById('in_id').value.trim();
+
+    if(!name || !id){
+        showToast('يرجى تعبئة اسم المتطوع ورقم الهوية أولاً.', 'error');
+        return;
+    }
+
+    let phone = prompt('اكتب رقم واتساب المستلم مع مفتاح الدولة، مثال: 9665XXXXXXXX');
+    if(phone === null) return;
+
+    phone = phone.replace(/[^0-9]/g, '');
+
+    if(phone.startsWith('00')) phone = phone.slice(2);
+    if(phone.startsWith('05')) phone = '966' + phone.slice(1);
+
+    if(phone.length < 10){
+        showToast('رقم واتساب غير صحيح. اكتب الرقم مع مفتاح الدولة.', 'error');
+        return;
+    }
+
+    if(typeof html2pdf === 'undefined'){
+        showToast('أداة إنشاء PDF غير متاحة حالياً.', 'error');
+        return;
+    }
+
+    const element = document.getElementById('contractPaper');
+    const safeName = name.replace(/[\\/:*?"<>|]/g, '_') || 'عقد_متطوع';
+    const fileName = `عقد_${safeName}.pdf`;
+    const opt = {
+        margin: 0,
+        filename: fileName,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    try{
+        showLoading('جاري تجهيز العقد لإرساله عبر واتساب...');
+
+        const pdfBlob = await html2pdf()
+            .from(element)
+            .set(opt)
+            .outputPdf('blob');
+
+        const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+        const message = `السلام عليكم، مرفق عقد الانضمام الخاص بـ ${name}`;
+
+        // على الجوال/المتصفحات الداعمة: يفتح قائمة المشاركة ويمكن اختيار WhatsApp
+        if(navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))){
+            await navigator.share({
+                title: `عقد ${name}`,
+                text: message,
+                files: [file]
+            });
+
+            hideLoading();
+            showToast('تم فتح المشاركة. اختر WhatsApp لإرسال العقد.', 'success');
+            return;
+        }
+
+        // fallback: تنزيل PDF وفتح محادثة WhatsApp بالرقم المحدد
+        const url = URL.createObjectURL(pdfBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+
+        window.open(
+            `https://wa.me/${phone}?text=${encodeURIComponent(message + '\n\nتم إرفاق العقد بصيغة PDF.')}`,
+            '_blank'
+        );
+
+        hideLoading();
+        showToast('تم تنزيل العقد وفتح محادثة WhatsApp. أرفق ملف PDF الذي تم تنزيله.', 'success');
+
+    }catch(err){
+        hideLoading();
+
+        // إلغاء المشاركة من المستخدم ليس خطأ يحتاج رسالة مزعجة
+        if(err && err.name === 'AbortError') return;
+
+        console.error('WhatsApp PDF error:', err);
+        showToast('تعذر تجهيز العقد للواتساب.', 'error');
+    }
+};
+
+
 window.printContract = function(){
     window.print();
 };
@@ -6897,6 +7003,101 @@ function exportArchiveExcelCsvFallback(rows){
     URL.revokeObjectURL(url);
     showToast('تعذر تحميل مكتبة Excel، تم التصدير كملف CSV بديل.', 'info');
 }
+
+
+window.exportArchivePDF = function(){
+    const rows = window.contractsArchive || [];
+    if(rows.length === 0){
+        showToast('لا توجد بيانات لتصديرها.', 'error');
+        return;
+    }
+
+    if(typeof html2pdf === 'undefined'){
+        showToast('أداة تصدير PDF غير متاحة حالياً.', 'error');
+        return;
+    }
+
+    showLoading('جاري تجهيز وتنزيل ملف PDF...');
+
+    const todayStr = new Date().toISOString().split('T')[0];
+    const headers = ['المتطوع', 'الهوية', 'البريد الإلكتروني', 'القسم', 'البداية', 'النهاية', 'النوع', 'الحالة'];
+
+    let bodyRows = '';
+    rows.forEach(c => {
+        const statusText = c.status === 'cancelled' ? 'ملغي' :
+            (c.endDate && c.endDate < todayStr ? 'منتهي' : 'نشط');
+        const statusColor = c.status === 'cancelled' ? '#ef4444' :
+            (c.endDate && c.endDate < todayStr ? '#f59e0b' : '#10b981');
+
+        bodyRows += `
+            <tr>
+                <td style="font-weight:700;">${escapeHtml(c.name || '')}</td>
+                <td>${escapeHtml(c.nationalId || '')}</td>
+                <td style="direction:ltr;text-align:right;">${escapeHtml(c.email || '')}</td>
+                <td>${escapeHtml(c.dept || '')}</td>
+                <td>${escapeHtml(c.startDate || '')}</td>
+                <td>${escapeHtml(c.endDate || '')}</td>
+                <td>${escapeHtml(c.type || '')}</td>
+                <td><span style="color:${statusColor};font-weight:800;">${statusText}</span></td>
+            </tr>
+        `;
+    });
+
+    const wrapper = document.createElement('div');
+    wrapper.id = '__pdfExportWrapper';
+    wrapper.style.position = 'fixed';
+    wrapper.style.top = '0';
+    wrapper.style.left = '-99999px';
+    wrapper.style.zIndex = '-1';
+    wrapper.style.background = '#ffffff';
+    wrapper.style.direction = 'rtl';
+    wrapper.style.padding = '18px';
+    wrapper.style.width = '1400px';
+    wrapper.style.fontFamily = 'Tajawal, Arial, sans-serif';
+
+    wrapper.innerHTML = `
+        <h2 style="margin:0 0 14px;color:#000a30;font-size:20px;">أرشيف عقود المتطوعين - فريق شمس التطوعي</h2>
+        <table style="width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed;">
+            <thead>
+                <tr>
+                    ${headers.map(h => `<th style="background:#000a30;color:#fff;padding:8px 6px;border:1px solid #ccc;text-align:center;">${h}</th>`).join('')}
+                </tr>
+            </thead>
+            <tbody>
+                ${bodyRows}
+            </tbody>
+        </table>
+    `;
+
+    wrapper.querySelectorAll('tbody td').forEach(td => {
+        td.style.padding = '7px 6px';
+        td.style.border = '1px solid #ddd';
+        td.style.textAlign = 'center';
+        td.style.wordBreak = 'break-word';
+    });
+
+    document.body.appendChild(wrapper);
+
+    const opt = {
+        margin: 8,
+        filename: 'ارشيف_العقود.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, windowWidth: 1400 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' },
+        pagebreak: { mode: ['css', 'legacy'], avoid: 'tr' }
+    };
+
+    html2pdf().from(wrapper).set(opt).save().then(() => {
+        hideLoading();
+        wrapper.remove();
+        showToast('تم تنزيل ملف PDF بنجاح.', 'success');
+    }).catch(err => {
+        hideLoading();
+        wrapper.remove();
+        console.error(err);
+        showToast('حدث خطأ أثناء إنشاء PDF.', 'error');
+    });
+};
 
 
 /* ---------- 8) تراجع عن الحذف (Undo) بدل رسالة تأكيد ---------- */
