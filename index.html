@@ -1235,9 +1235,9 @@ code{
 
     background:#fff;
 
-    width:210mm;
+    width:297mm;
 
-    min-height:297mm;
+    min-height:420mm;
 
     padding:12mm 14mm;
 
@@ -1406,7 +1406,7 @@ code{
 
 @media print{
     @page{
-        size:A4 portrait;
+        size:A3 portrait;
         margin:0;
     }
     .contract-paper,
@@ -2031,9 +2031,9 @@ code{
     }
 
     .contract-paper{
-        width:210mm;
+        width:297mm;
 
-        min-height:297mm;
+        min-height:420mm;
 
         padding:12mm 14mm;
 
@@ -6343,18 +6343,60 @@ window.sendContractWhatsApp = async function(){
     }
 
     const element = document.getElementById('contractPaper');
-    const safeName = name.replace(/[\\/:*?"<>|]/g, '_') || 'عقد_متطوع';
-    const fileName = `عقد_${safeName}.pdf`;
+
+    // اسم إنجليزي ثابت حتى لا يظهر اسم الملف مشوهاً داخل WhatsApp.
+    const fileName = 'Shams_Volunteer_Contract.pdf';
+
     const opt = {
         margin: 0,
         filename: fileName,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, letterRendering: true, scrollX: 0, scrollY: 0 },
-        jsPDF: { unit: 'mm', format: 'a3', orientation: 'portrait' }
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            allowTaint: false,
+            foreignObjectRendering: true,
+            letterRendering: false,
+            backgroundColor: '#ffffff',
+            scrollX: 0,
+            scrollY: 0,
+            windowWidth: element.scrollWidth,
+            windowHeight: element.scrollHeight,
+            onclone: function(clonedDoc){
+                const clonedPaper = clonedDoc.getElementById('contractPaper');
+                if(clonedPaper){
+                    clonedPaper.style.width = '297mm';
+                    clonedPaper.style.minHeight = '420mm';
+                    clonedPaper.style.direction = 'rtl';
+                    clonedPaper.style.textAlign = 'right';
+                    clonedPaper.style.fontFamily = 'Tajawal, Arial, sans-serif';
+                    clonedPaper.style.overflow = 'visible';
+                }
+
+                clonedDoc.documentElement.setAttribute('dir','rtl');
+                clonedDoc.documentElement.setAttribute('lang','ar');
+            }
+        },
+        jsPDF: {
+            unit: 'mm',
+            format: 'a3',
+            orientation: 'portrait',
+            compress: true
+        },
+        pagebreak: {
+            mode: ['css', 'legacy'],
+            avoid: ['.contract-row', '.contract-section', '.contract-dates-row']
+        }
     };
 
     try{
-        showLoading('جاري تجهيز العقد لإرساله إلى قروب واتساب...');
+        showLoading('جاري تجهيز العقد بصيغة A3...');
+
+        // مهم جداً حتى يتم تحميل خط Tajawal قبل تحويل الصفحة إلى PDF،
+        // وهذا يمنع ظهور الحروف العربية متقطعة أو منفصلة.
+        if(document.fonts && document.fonts.ready){
+            await document.fonts.ready;
+        }
 
         const pdfBlob = await html2pdf()
             .from(element)
@@ -6362,20 +6404,19 @@ window.sendContractWhatsApp = async function(){
             .outputPdf('blob');
 
         const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
-        const message = '';
 
-        // الأفضل على الجوال: مشاركة ملف PDF مباشرة ثم اختيار WhatsApp والقروب المطلوب
+        // بدون أي رسالة نصية؛ يتم إرسال ملف الـPDF فقط.
         if(navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))){
             await navigator.share({
                 files: [file]
             });
 
             hideLoading();
-            showToast('اختر WhatsApp ثم اختر القروب المطلوب لإرسال العقد.', 'success');
+            showToast('اختر WhatsApp ثم اختر القروب المطلوب لإرسال ملف PDF.', 'success');
             return;
         }
 
-        // على الكمبيوتر: تنزيل PDF وفتح WhatsApp Web، ثم اختيار القروب وإرفاق الملف
+        // الكمبيوتر: تنزيل الملف ثم فتح WhatsApp Web لاختيار القروب وإرفاقه.
         const url = URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');
         a.href = url;
@@ -6389,7 +6430,7 @@ window.sendContractWhatsApp = async function(){
         window.open('https://web.whatsapp.com/', '_blank');
 
         hideLoading();
-        showToast('تم تنزيل العقد وفتح WhatsApp Web. اختر القروب المطلوب وأرفق ملف PDF الذي تم تنزيله.', 'success');
+        showToast('تم تجهيز ملف A3. اختر القروب في WhatsApp وأرفق الملف.', 'success');
 
     }catch(err){
         hideLoading();
