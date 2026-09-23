@@ -6337,19 +6337,6 @@ window.sendContractWhatsApp = async function(){
         return;
     }
 
-    let phone = prompt('اكتب رقم واتساب المستلم مع مفتاح الدولة، مثال: 9665XXXXXXXX');
-    if(phone === null) return;
-
-    phone = phone.replace(/[^0-9]/g, '');
-
-    if(phone.startsWith('00')) phone = phone.slice(2);
-    if(phone.startsWith('05')) phone = '966' + phone.slice(1);
-
-    if(phone.length < 10){
-        showToast('رقم واتساب غير صحيح. اكتب الرقم مع مفتاح الدولة.', 'error');
-        return;
-    }
-
     if(typeof html2pdf === 'undefined'){
         showToast('أداة إنشاء PDF غير متاحة حالياً.', 'error');
         return;
@@ -6367,7 +6354,7 @@ window.sendContractWhatsApp = async function(){
     };
 
     try{
-        showLoading('جاري تجهيز العقد لإرساله عبر واتساب...');
+        showLoading('جاري تجهيز العقد لإرساله إلى قروب واتساب...');
 
         const pdfBlob = await html2pdf()
             .from(element)
@@ -6377,7 +6364,7 @@ window.sendContractWhatsApp = async function(){
         const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
         const message = `السلام عليكم، مرفق عقد الانضمام الخاص بـ ${name}`;
 
-        // على الجوال/المتصفحات الداعمة: يفتح قائمة المشاركة ويمكن اختيار WhatsApp
+        // الأفضل على الجوال: مشاركة ملف PDF مباشرة ثم اختيار WhatsApp والقروب المطلوب
         if(navigator.share && (!navigator.canShare || navigator.canShare({ files: [file] }))){
             await navigator.share({
                 title: `عقد ${name}`,
@@ -6386,11 +6373,11 @@ window.sendContractWhatsApp = async function(){
             });
 
             hideLoading();
-            showToast('تم فتح المشاركة. اختر WhatsApp لإرسال العقد.', 'success');
+            showToast('اختر WhatsApp ثم اختر القروب المطلوب لإرسال العقد.', 'success');
             return;
         }
 
-        // fallback: تنزيل PDF وفتح محادثة WhatsApp بالرقم المحدد
+        // على الكمبيوتر: تنزيل PDF وفتح WhatsApp Web، ثم اختيار القروب وإرفاق الملف
         const url = URL.createObjectURL(pdfBlob);
         const a = document.createElement('a');
         a.href = url;
@@ -6401,25 +6388,20 @@ window.sendContractWhatsApp = async function(){
 
         setTimeout(() => URL.revokeObjectURL(url), 5000);
 
-        window.open(
-            `https://wa.me/${phone}?text=${encodeURIComponent(message + '\n\nتم إرفاق العقد بصيغة PDF.')}`,
-            '_blank'
-        );
+        window.open('https://web.whatsapp.com/', '_blank');
 
         hideLoading();
-        showToast('تم تنزيل العقد وفتح محادثة WhatsApp. أرفق ملف PDF الذي تم تنزيله.', 'success');
+        showToast('تم تنزيل العقد وفتح WhatsApp Web. اختر القروب المطلوب وأرفق ملف PDF الذي تم تنزيله.', 'success');
 
     }catch(err){
         hideLoading();
 
-        // إلغاء المشاركة من المستخدم ليس خطأ يحتاج رسالة مزعجة
         if(err && err.name === 'AbortError') return;
 
-        console.error('WhatsApp PDF error:', err);
+        console.error('WhatsApp Group PDF error:', err);
         showToast('تعذر تجهيز العقد للواتساب.', 'error');
     }
 };
-
 
 window.printContract = function(){
     window.print();
