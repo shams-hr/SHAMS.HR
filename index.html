@@ -4169,6 +4169,7 @@ import {
     getStorage,
     ref as storageRef,
     uploadBytes,
+    uploadBytesResumable,
     getDownloadURL,
     deleteObject
 }
@@ -5884,6 +5885,24 @@ async function(e){
         return;
 
 
+    const MAX_FILE_MB = 8;
+    const selectedFile = fileInput.files[0];
+
+    if(
+        selectedFile.size >
+        MAX_FILE_MB * 1024 * 1024
+    ){
+
+        showToast(
+            `حجم الملف كبير جداً (${(selectedFile.size/1024/1024).toFixed(1)} ميجا). الحد الأقصى ${MAX_FILE_MB} ميجا. رجاءً صغّر الملف أو صوّره بدقة أقل.`,
+            'error'
+        );
+
+        return;
+
+    }
+
+
     if(!email){
 
         showToast(
@@ -5965,10 +5984,55 @@ async function(e){
         const fileRef =
             storageRef(storage, storagePath);
 
-        await uploadBytes(
-            fileRef,
-            fileInput.files[0]
-        );
+        const uploadTask =
+            uploadBytesResumable(
+                fileRef,
+                fileInput.files[0]
+            );
+
+        await new Promise((resolve, reject) => {
+
+            const STALL_TIMEOUT_MS = 40000;
+            let stallTimer = null;
+
+            const resetStallTimer = () => {
+                if(stallTimer)
+                    clearTimeout(stallTimer);
+                stallTimer = setTimeout(() => {
+                    uploadTask.cancel();
+                }, STALL_TIMEOUT_MS);
+            };
+
+            resetStallTimer();
+
+            uploadTask.on(
+                'state_changed',
+                (snapshot) => {
+
+                    resetStallTimer();
+
+                    const pct = Math.round(
+                        (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+
+                    showLoading(
+                        `جاري رفع الملف... ${pct}%`
+                    );
+
+                },
+                (err) => {
+                    if(stallTimer)
+                        clearTimeout(stallTimer);
+                    reject(err);
+                },
+                () => {
+                    if(stallTimer)
+                        clearTimeout(stallTimer);
+                    resolve();
+                }
+            );
+
+        });
 
         const fileURL =
             await getDownloadURL(fileRef);
@@ -6009,8 +6073,13 @@ async function(e){
 
         console.error(err);
 
+        const message =
+            (err && err.code === 'storage/canceled')
+                ? 'انقطع الرفع بسبب بطء أو ضعف الاتصال بالإنترنت. تأكد من الشبكة وحاول رفع الملف مرة ثانية.'
+                : 'فشل حفظ العقد الخارجي. تأكد من الاتصال بالإنترنت وحاول مرة أخرى.';
+
         showToast(
-            'فشل حفظ العقد الخارجي.',
+            message,
             'error'
         );
 
