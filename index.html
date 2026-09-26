@@ -3348,6 +3348,38 @@ body.custom-cursor-on *{
 
                 </div>
 
+                <div class="form-group">
+
+                    <label>حالة التوقيع</label>
+
+                    <input type="hidden" id="up_signedStatus" value="signed">
+
+                    <div style="display:flex;gap:8px;">
+
+                        <button
+                            type="button"
+                            class="quick-filter-chip active"
+                            id="signedStatusBtn_signed"
+                            onclick="setSignedStatus('signed')"
+                            style="flex:1;justify-content:center;text-align:center;"
+                        >
+                            <i class="fas fa-check"></i> تم التوقيع
+                        </button>
+
+                        <button
+                            type="button"
+                            class="quick-filter-chip"
+                            id="signedStatusBtn_unsigned"
+                            onclick="setSignedStatus('unsigned')"
+                            style="flex:1;justify-content:center;text-align:center;"
+                        >
+                            <i class="fas fa-xmark"></i> لم يتم التوقيع
+                        </button>
+
+                    </div>
+
+                </div>
+
             </div>
 
             <div class="action-row">
@@ -3557,6 +3589,49 @@ body.custom-cursor-on *{
                 <label>تاريخ انتهاء العقد</label>
                 <input type="date" id="edit_endDate" class="form-control">
             </div>
+
+        </div>
+
+        <div class="form-group" id="edit_signedStatusWrap" style="margin-top:14px;">
+
+            <label>حالة التوقيع</label>
+
+            <input type="hidden" id="edit_signedStatus" value="signed">
+
+            <div style="display:flex;gap:8px;">
+
+                <button
+                    type="button"
+                    class="quick-filter-chip active"
+                    id="editSignedBtn_signed"
+                    onclick="setEditSignedStatus('signed')"
+                    style="flex:1;justify-content:center;text-align:center;"
+                >
+                    <i class="fas fa-check"></i> تم التوقيع
+                </button>
+
+                <button
+                    type="button"
+                    class="quick-filter-chip"
+                    id="editSignedBtn_unsigned"
+                    onclick="setEditSignedStatus('unsigned')"
+                    style="flex:1;justify-content:center;text-align:center;"
+                >
+                    <i class="fas fa-xmark"></i> لم يتم التوقيع
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="form-group" id="edit_fileWrap" style="margin-top:14px;">
+
+            <label>الملف المرفق</label>
+
+            <div id="edit_currentFileLink" style="margin-bottom:8px;font-size:12px;"></div>
+
+            <input type="file" id="edit_newFile" class="form-control" accept=".pdf,image/*">
+            <small style="color:var(--muted);">اختر ملف جديد فقط إذا تبي تستبدل الملف الحالي.</small>
 
         </div>
 
@@ -4089,6 +4164,16 @@ import {
 from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
+import {
+    getStorage,
+    ref as storageRef,
+    uploadBytes,
+    getDownloadURL,
+    deleteObject
+}
+from "https://www.gstatic.com/firebasejs/12.18.0/firebase-storage.js";
+
+
 const firebaseConfig = {
 
     apiKey:
@@ -4120,6 +4205,9 @@ const app =
 
 const db =
     getFirestore(app);
+
+const storage =
+    getStorage(app);
 
 
 window.usersList = [];
@@ -5715,6 +5803,14 @@ async function(){
 };
 
 
+window.setSignedStatus = function(status){
+    document.getElementById('up_signedStatus').value = status;
+
+    document.getElementById('signedStatusBtn_signed').classList.toggle('active', status === 'signed');
+    document.getElementById('signedStatusBtn_unsigned').classList.toggle('active', status === 'unsigned');
+};
+
+
 window.handleFileUpload =
 async function(e){
 
@@ -5767,6 +5863,12 @@ async function(e){
         document
             .getElementById('up_endDate')
             .value;
+
+
+    const signedStatus =
+        document
+            .getElementById('up_signedStatus')
+            .value || 'signed';
 
 
     const fileInput =
@@ -5827,6 +5929,8 @@ async function(e){
 
         endDate,
 
+        signedStatus,
+
         type:
             'مرفق خارجي (' +
             fileName +
@@ -5850,8 +5954,27 @@ async function(e){
     try{
 
         showLoading(
-            'جاري حفظ العقد الخارجي...'
+            'جاري رفع الملف وحفظ العقد الخارجي...'
         );
+
+
+        const storagePath =
+            `external-contracts/${Date.now()}-${fileName}`;
+
+        const fileRef =
+            storageRef(storage, storagePath);
+
+        await uploadBytes(
+            fileRef,
+            fileInput.files[0]
+        );
+
+        const fileURL =
+            await getDownloadURL(fileRef);
+
+        newContract.fileURL = fileURL;
+        newContract.filePath = storagePath;
+        newContract.fileName = fileName;
 
 
         await addDoc(
@@ -6225,8 +6348,31 @@ function(docId){
     document.getElementById('edit_startDate').value = contract.startDate || '';
     document.getElementById('edit_endDate').value = contract.endDate || '';
 
+    setEditSignedStatus(contract.signedStatus === 'unsigned' ? 'unsigned' : 'signed');
+
+    document.getElementById('edit_newFile').value = '';
+
+    const fileLinkEl = document.getElementById('edit_currentFileLink');
+
+    if(contract.fileURL){
+        fileLinkEl.innerHTML =
+            `<a href="${contract.fileURL}" target="_blank" style="color:var(--orange);font-weight:800;">
+                <i class="fas fa-file-arrow-down"></i> عرض/تحميل الملف الحالي (${contract.fileName || 'ملف'})
+            </a>`;
+    } else {
+        fileLinkEl.innerHTML = '<span style="color:var(--muted);">لا يوجد ملف مرفق حاليًا</span>';
+    }
+
     document.getElementById('editContractOverlay').style.display = 'flex';
 
+};
+
+
+window.setEditSignedStatus = function(status){
+    document.getElementById('edit_signedStatus').value = status;
+
+    document.getElementById('editSignedBtn_signed').classList.toggle('active', status === 'signed');
+    document.getElementById('editSignedBtn_unsigned').classList.toggle('active', status === 'unsigned');
 };
 
 
@@ -6248,6 +6394,7 @@ async function(){
     const dept = document.getElementById('edit_dept').value.trim();
     const startDate = document.getElementById('edit_startDate').value;
     const endDate = document.getElementById('edit_endDate').value;
+    const signedStatus = document.getElementById('edit_signedStatus').value || 'signed';
 
     if(!name || !nationalId){
         showToast('الاسم ورقم الهوية مطلوبان.', 'error');
@@ -6258,17 +6405,58 @@ async function(){
 
         showLoading('جاري حفظ التعديلات...');
 
+        const updates = {
+            name,
+            nationalId,
+            phone,
+            email,
+            dept,
+            startDate,
+            endDate,
+            signedStatus
+        };
+
+        const newFileInput = document.getElementById('edit_newFile');
+
+        if(newFileInput && newFileInput.files.length){
+
+            const contract =
+                window.contractsArchive.find(c => c.id === docId);
+
+            const newFile = newFileInput.files[0];
+
+            const storagePath =
+                `external-contracts/${Date.now()}-${newFile.name}`;
+
+            const fileRef =
+                storageRef(storage, storagePath);
+
+            await uploadBytes(fileRef, newFile);
+
+            const fileURL =
+                await getDownloadURL(fileRef);
+
+            updates.fileURL = fileURL;
+            updates.filePath = storagePath;
+            updates.fileName = newFile.name;
+
+            if(contract && contract.type && contract.type.startsWith('مرفق خارجي')){
+                updates.type = `مرفق خارجي (${newFile.name})`;
+            }
+
+            if(contract && contract.filePath){
+                try{
+                    await deleteObject(storageRef(storage, contract.filePath));
+                } catch(delErr){
+                    console.warn('تعذر حذف الملف القديم:', delErr);
+                }
+            }
+
+        }
+
         await updateDoc(
             doc(db, 'contracts', docId),
-            {
-                name,
-                nationalId,
-                phone,
-                email,
-                dept,
-                startDate,
-                endDate
-            }
+            updates
         );
 
         await logAction(
