@@ -3505,6 +3505,7 @@ body.custom-cursor-on *{
                         <th>المتبقي</th>
                         <th>النوع</th>
                         <th>الحالة</th>
+                        <th>التوقيع</th>
                         <th>الإجراءات</th>
 
                     </tr>
@@ -6679,7 +6680,7 @@ function renderArchive(){
     tbody.innerHTML = '';
 
     if(filtered.length === 0){
-        tbody.innerHTML = `<tr><td colspan="10" class="empty-message">لا توجد عقود مسجلة مطابقة للبحث.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="11" class="empty-message">لا توجد عقود مسجلة مطابقة للبحث.</td></tr>`;
         return;
     }
 
@@ -6721,6 +6722,14 @@ function renderArchive(){
             }
         }
 
+        let signedBadge = '<span class="text-muted">—</span>';
+
+        if(c.signedStatus === 'unsigned'){
+            signedBadge = `<span class="badge badge-expired"><i class="fas fa-pen-nib"></i> لم يتم التوقيع</span>`;
+        } else if(c.signedStatus === 'signed'){
+            signedBadge = `<span class="badge badge-active"><i class="fas fa-signature"></i> تم التوقيع</span>`;
+        }
+
         let actionsHtml = `
             <button onclick="openEditContract('${c.id}')" class="btn-action btn-blue" style="padding:5px 10px;font-size:10px;" title="تعديل بيانات العقد">
                 <i class="fas fa-pen"></i> تعديل
@@ -6757,6 +6766,7 @@ function renderArchive(){
                 <td>${remainingBadge}</td>
                 <td><small>${escapeHtml(c.type || '')}</small></td>
                 <td>${statusBadge}</td>
+                <td>${signedBadge}</td>
                 <td><div style="display:flex;gap:5px;flex-wrap:wrap;">${actionsHtml}</div></td>
             </tr>
         `;
