@@ -6613,27 +6613,95 @@ async function(docId){
 };
 
 
-window.downloadContractPDF = function(){
+window.downloadContractPDF = async function(){
     const element = document.getElementById('contractPaper');
     const name = document.getElementById('in_name').value.trim() || 'عقد_متطوع';
-    
-    const opt = {
-        margin:       0,
-        filename:     `عقد_${name}.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-    };
 
-    showLoading('جاري تجهيز وتنزيل ملف PDF...');
-    html2pdf().from(element).set(opt).save().then(() => {
+    if(!element){
+        showToast('تعذر العثور على نموذج العقد.', 'error');
+        return;
+    }
+
+    if(typeof html2pdf === 'undefined'){
+        showToast('أداة إنشاء PDF غير متاحة حالياً.', 'error');
+        return;
+    }
+
+    // نفس الحد المعتمد في قسم العقود الخارجية: 700 كيلوبايت.
+    const MAX_PDF_BYTES = 700 * 1024;
+
+    // نبدأ بجودة جيدة، وإذا تجاوز الملف الحد يتم تخفيض الجودة والحجم
+    // تلقائياً حتى يصبح الملف مناسباً للإرفاق في العقود الخارجية.
+    const attempts = [
+        { scale: 1.60, quality: 0.82 },
+        { scale: 1.45, quality: 0.76 },
+        { scale: 1.30, quality: 0.70 },
+        { scale: 1.15, quality: 0.64 },
+        { scale: 1.00, quality: 0.58 },
+        { scale: 0.90, quality: 0.52 }
+    ];
+
+    showLoading('جاري تجهيز ملف PDF بالحجم المناسب للإرفاق...');
+
+    try{
+        let pdfBlob = null;
+
+        for(const settings of attempts){
+            const opt = {
+                margin: 0,
+                image: { type: 'jpeg', quality: settings.quality },
+                html2canvas: {
+                    scale: settings.scale,
+                    useCORS: true,
+                    allowTaint: false,
+                    backgroundColor: '#ffffff'
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait',
+                    compress: true
+                }
+            };
+
+            pdfBlob = await html2pdf()
+                .from(element)
+                .set(opt)
+                .outputPdf('blob');
+
+            if(pdfBlob && pdfBlob.size <= MAX_PDF_BYTES){
+                break;
+            }
+        }
+
+        if(!pdfBlob){
+            throw new Error('تعذر إنشاء ملف PDF.');
+        }
+
+        if(pdfBlob.size > MAX_PDF_BYTES){
+            throw new Error('تعذر ضغط ملف PDF إلى الحد المطلوب.');
+        }
+
+        const fileName = `عقد_${name}.pdf`;
+        const url = URL.createObjectURL(pdfBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+        const sizeKb = Math.ceil(pdfBlob.size / 1024);
         hideLoading();
-        showToast('تم تنزيل ملف PDF بنجاح.', 'success');
-    }).catch(err => {
+        showToast(`تم تنزيل العقد بنجاح (${sizeKb} كيلوبايت).`, 'success');
+
+    }catch(err){
         hideLoading();
         console.error(err);
-        showToast('حدث خطأ أثناء إنشاء PDF.', 'error');
-    });
+        showToast('حدث خطأ أثناء إنشاء PDF بالحجم المطلوب.', 'error');
+    }
 };
 
 
@@ -6751,8 +6819,68 @@ window.sendContractWhatsApp = async function(){
     }
 };
 
-window.printContract = function(){
-    window.print();
+window.printContract = async function(){
+    const element = document.getElementById('contractPaper');
+    const name = document.getElementById('in_name').value.trim() || 'عقد_متطوع';
+    const MAX_PDF_BYTES = 700 * 1024;
+
+    const attempts = [
+        { scale: 1.60, quality: 0.82 },
+        { scale: 1.45, quality: 0.76 },
+        { scale: 1.30, quality: 0.70 },
+        { scale: 1.15, quality: 0.64 },
+        { scale: 1.00, quality: 0.58 },
+        { scale: 0.90, quality: 0.52 }
+    ];
+
+    showLoading('جاري تجهيز ملف الطباعة وتنزيله...');
+
+    try {
+        let pdfBlob = null;
+
+        for (const attempt of attempts) {
+            const opt = {
+                margin: 0,
+                filename: `عقد_${name}.pdf`,
+                image: { type: 'jpeg', quality: attempt.quality },
+                html2canvas: {
+                    scale: attempt.scale,
+                    useCORS: true,
+                    backgroundColor: '#ffffff'
+                },
+                jsPDF: {
+                    unit: 'mm',
+                    format: 'a4',
+                    orientation: 'portrait',
+                    compress: true
+                }
+            };
+
+            pdfBlob = await html2pdf().from(element).set(opt).outputPdf('blob');
+
+            if (pdfBlob.size <= MAX_PDF_BYTES) break;
+        }
+
+        if (!pdfBlob || pdfBlob.size > MAX_PDF_BYTES) {
+            throw new Error('تعذر ضغط ملف الطباعة إلى 700 كيلوبايت.');
+        }
+
+        const url = URL.createObjectURL(pdfBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `عقد_${name}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+        hideLoading();
+        showToast(`تم تنزيل ملف العقد بحجم ${Math.round(pdfBlob.size / 1024)} كيلوبايت.`, 'success');
+    } catch (err) {
+        hideLoading();
+        console.error(err);
+        showToast('حدث خطأ أثناء إنشاء ملف العقد. حاول مرة أخرى.', 'error');
+    }
 };
 
 
