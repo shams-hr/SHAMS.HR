@@ -4231,10 +4231,12 @@ window.currentUserId = '';
 
 
 /*
- * تخزين ملفات العقود الخارجية داخل Firebase Storage.
- * Firestore يحتفظ فقط برابط الملف وبياناته الأساسية.
+ * تخزين ملفات العقود الخارجية كنص Base64 داخل نفس مستند Firestore
+ * (بدون استخدام Firebase Storage، لتفادي الحاجة لترقية خطة المشروع إلى Blaze).
+ * لذلك حجم الملف المسموح محدود بسبب حد حجم مستند Firestore (1 ميجابايت للمستند الواحد،
+ * وBase64 يكبّر حجم الملف الأصلي بنحو 33%).
  */
-const MAX_CONTRACT_FILE_BYTES = 1500 * 1024;
+const MAX_CONTRACT_FILE_BYTES = 700 * 1024;
 
 function getContractFileUrl(contract){
     if(!contract){
@@ -4263,27 +4265,21 @@ async function uploadContractFile(file, contractId){
         throw new Error('حجم الملف يتجاوز الحد المسموح.');
     }
 
-    const safeName = String(file.name || 'contract')
-        .replace(/[^a-zA-Z0-9._-]/g, '_');
+    // تحويل الملف إلى Base64 وحفظه داخل مستند Firestore مباشرة
+    // (بدون Firebase Storage).
+    const fileDataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
 
-    const uniqueName =
-        `${Date.now()}_${Math.random().toString(36).slice(2,10)}_${safeName}`;
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = () =>
+            reject(reader.error || new Error('تعذرت قراءة الملف.'));
 
-    const filePath =
-        `contracts/${contractId}/${uniqueName}`;
-
-    const storageRef = ref(storage, filePath);
-
-    await uploadBytes(storageRef, file, {
-        contentType: file.type || 'application/pdf'
+        reader.readAsDataURL(file);
     });
 
-    const fileURL =
-        await getDownloadURL(storageRef);
-
     return {
-        fileURL,
-        filePath
+        fileDataUrl,
+        filePath: null
     };
 }
 
@@ -6069,10 +6065,10 @@ async function(e){
             selectedFile.type || 'application/pdf';
         newContract.fileSize =
             selectedFile.size;
-        newContract.fileURL =
-            uploadedFile.fileURL;
-        newContract.filePath =
-            uploadedFile.filePath;
+        newContract.fileDataUrl =
+            uploadedFile.fileDataUrl;
+        newContract.fileURL = null;
+        newContract.filePath = null;
 
         await setDoc(
             contractRef,
@@ -6536,14 +6532,13 @@ async function(){
                 newFile.type || 'application/pdf';
             updates.fileSize =
                 newFile.size;
-            updates.fileURL =
-                uploadedFile.fileURL;
-            updates.filePath =
-                uploadedFile.filePath;
+            updates.fileDataUrl =
+                uploadedFile.fileDataUrl;
 
-            // إزالة بيانات Base64 القديمة إن كان العقد القديم يستخدمها.
-            updates.fileDataUrl = null;
-            updates.fileBase64 = null;
+            // إزالة أي رابط Firebase Storage قديم حتى يُعتمد الملف الجديد
+            // المخزّن كـ Base64.
+            updates.fileURL = null;
+            updates.filePath = null;
 
             if(contract && contract.type && contract.type.startsWith('مرفق خارجي')){
                 updates.type = `مرفق خارجي (${newFile.name})`;
