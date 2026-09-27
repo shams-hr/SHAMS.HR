@@ -4156,6 +4156,7 @@ import {
     collection,
     getDocs,
     addDoc,
+    setDoc,
     updateDoc,
     query,
     orderBy,
@@ -6073,7 +6074,7 @@ async function(e){
         newContract.filePath =
             uploadedFile.filePath;
 
-        await updateDoc(
+        await setDoc(
             contractRef,
             newContract
         );
