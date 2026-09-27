@@ -4221,9 +4221,9 @@ window.currentUserId = '';
  * تخزين ملفات العقود بدون Firebase Storage:
  * Firestore يفرض حدًا أقصى يقارب 1 MiB لكل مستند،
  * وBase64 يزيد حجم الملف بحوالي 33%.
- * لذلك نستخدم حدًا محافظًا 700 KiB للملف الأصلي.
+ * لذلك نستخدم حدًا أقصى 1500 KiB للملف الأصلي.
  */
-const MAX_CONTRACT_FILE_BYTES = 700 * 1024;
+const MAX_CONTRACT_FILE_BYTES = 1500 * 1024;
 
 function fileToBase64(file){
     return new Promise((resolve, reject) => {
