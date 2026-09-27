@@ -2060,7 +2060,7 @@ code{
 ========================================================= */
 
 @page{
-    size:A3;
+    size:A4;
 
     margin:0;
 }
@@ -2427,6 +2427,39 @@ body.custom-cursor-on *{
         padding:10px 16px;
         font-size:12px;
     }
+}
+
+/* Contract-only layout: A4 preview and independent export surface. */
+.contract-paper{
+    box-sizing:border-box; width:210mm; min-height:297mm;
+    padding:8mm 10mm; isolation:isolate;
+    font-family:Arial, sans-serif;
+}
+.contract-paper .contract-logo{width:80px; height:76px; object-fit:contain;margin-bottom:0;}
+.contract-paper .contract-title{font-size:21px; line-height:1.5; margin:4px 0 13px;}
+.contract-paper .contract-row{min-height:29px;font-size:14px;line-height:1.6;margin-bottom:4px;unicode-bidi:normal;flex-wrap:nowrap;align-items:baseline;gap:10px;}
+.contract-paper .contract-label{flex:0 0 166px;white-space:normal;font-weight:600;color:#263445;}
+.contract-paper .contract-label + .contract-label{flex:1;font-weight:700;}
+.contract-paper .contract-value-wrap{display:flex;flex:1 1 0;min-width:0;direction:rtl;unicode-bidi:isolate;}
+.contract-paper .contract-value-wrap .paren{display:none;}
+.contract-paper .fill-val{flex:1 0 auto;width:auto;min-width:0;white-space:nowrap;overflow-wrap:normal;word-break:normal;font-size:15.5px;line-height:1.6;padding:0;text-align:right;font-weight:700;border:0;}
+.contract-paper .fill-val.text-value{flex:1 1 auto;white-space:normal;overflow-wrap:break-word;}
+.contract-paper .contract-dates-row .contract-label{flex:0 0 auto;margin-right:0;}
+.contract-paper .contract-dates-row .contract-value-wrap{flex:1 0 auto;}
+.contract-paper .section-h{font-size:16px;font-weight:800;margin:11px 0 5px;line-height:1.5;border-right:3px solid #f37021;padding-right:8px;}
+.contract-paper .contract-ul li{display:flex;gap:7px;font-size:14px;line-height:1.6;margin-bottom:3px;}
+.contract-paper .contract-item-number{direction:ltr;unicode-bidi:isolate;flex:0 0 20px;text-align:right;font-weight:700;}
+.contract-paper .contract-item-text{direction:rtl;unicode-bidi:plaintext;flex:1;min-width:0;}
+.contract-paper p{font-size:14px;line-height:1.6;margin:4px 0 8px;color:#111;}
+.contract-paper .sig-grid{margin-top:16px;padding-top:8px;border-top:1px solid #e5e7eb;}
+.contract-paper .sig-box .title{font-size:13px;line-height:1.5;}
+.contract-paper .sig-line{width:72%;border-bottom:1px solid #777;}
+.contract-paper .contract-watermark{z-index:-1;}
+.contract-paper.contract-export{
+    width:794px!important; min-height:0!important; height:auto!important;
+    padding:34px 38px!important; margin:0!important; position:relative!important;
+    transform:none!important; overflow:visible!important; box-shadow:none!important;
+    border:0!important; border-radius:0!important; background:#fff!important;
 }
 
 </style>
@@ -3038,29 +3071,17 @@ body.custom-cursor-on *{
 
                 <ul class="contract-ul">
 
-                    <li>
-                        1. تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">1.</span><span class="contract-item-text" dir="rtl">تنفيذ المهام الموكلة بجودة والتعاون مع الفريق.</span></li>
 
-                    <li>
-                        2. الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">2.</span><span class="contract-item-text" dir="rtl">الالتزام بالرد على توجيهات الإدارة خلال 24 ساعة.</span></li>
 
-                    <li>
-                        3. الالتزام بالسلوك المهني واحترام جميع الأعضاء.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">3.</span><span class="contract-item-text" dir="rtl">الالتزام بالسلوك المهني واحترام جميع الأعضاء.</span></li>
 
-                    <li>
-                        4. الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">4.</span><span class="contract-item-text" dir="rtl">الالتزام بتعليمات الإدارة وقبول التنقل بين الأقسام عند الحاجة.</span></li>
 
-                    <li>
-                        5. عدم طلب الإعفاء خلال الشهر الأول.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">5.</span><span class="contract-item-text" dir="rtl">عدم طلب الإعفاء خلال الشهر الأول.</span></li>
 
-                    <li>
-                        6. عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">6.</span><span class="contract-item-text" dir="rtl">عند الرغبة بالانسحاب يجب الإبلاغ رسميًا.</span></li>
 
                 </ul>
 
@@ -3070,25 +3091,15 @@ body.custom-cursor-on *{
 
                 <ul class="contract-ul">
 
-                    <li>
-                        1. التعامل مع المتطوع باحترام وتقدير.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">1.</span><span class="contract-item-text" dir="rtl">التعامل مع المتطوع باحترام وتقدير.</span></li>
 
-                    <li>
-                        2. منح شهادة تطوع بعد إتمام مدة العقد بنجاح.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">2.</span><span class="contract-item-text" dir="rtl">منح شهادة تطوع بعد إتمام مدة العقد بنجاح.</span></li>
 
-                    <li>
-                        3. عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">3.</span><span class="contract-item-text" dir="rtl">عدم تكليف المتطوع بمهام خارج نطاقه دون موافقته.</span></li>
 
-                    <li>
-                        4. توضيح أسباب إنهاء العقد عند حدوثه.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">4.</span><span class="contract-item-text" dir="rtl">توضيح أسباب إنهاء العقد عند حدوثه.</span></li>
 
-                    <li>
-                        5. حفظ بيانات وسجلات المتطوع.
-                    </li>
+                    <li><span class="contract-item-number" dir="ltr">5.</span><span class="contract-item-text" dir="rtl">حفظ بيانات وسجلات المتطوع.</span></li>
 
                 </ul>
 
@@ -6613,94 +6624,117 @@ async function(docId){
 };
 
 
-window.downloadContractPDF = async function(){
-    const element = document.getElementById('contractPaper');
-    const name = document.getElementById('in_name').value.trim() || 'عقد_متطوع';
-
-    if(!element){
-        showToast('تعذر العثور على نموذج العقد.', 'error');
-        return;
-    }
-
-    if(typeof html2pdf === 'undefined'){
-        showToast('أداة إنشاء PDF غير متاحة حالياً.', 'error');
-        return;
-    }
-
-    // نفس الحد المعتمد في قسم العقود الخارجية: 700 كيلوبايت.
-    const MAX_PDF_BYTES = 700 * 1024;
-
-    // نبدأ بجودة جيدة، وإذا تجاوز الملف الحد يتم تخفيض الجودة والحجم
-    // تلقائياً حتى يصبح الملف مناسباً للإرفاق في العقود الخارجية.
-    const attempts = [
-        { scale: 1.60, quality: 0.82 },
-        { scale: 1.45, quality: 0.76 },
-        { scale: 1.30, quality: 0.70 },
-        { scale: 1.15, quality: 0.64 },
-        { scale: 1.00, quality: 0.58 },
-        { scale: 0.90, quality: 0.52 }
-    ];
-
-    showLoading('جاري تجهيز ملف PDF بالحجم المناسب للإرفاق...');
-
-    try{
-        let pdfBlob = null;
-
-        for(const settings of attempts){
-            const opt = {
-                margin: 0,
-                image: { type: 'jpeg', quality: settings.quality },
-                html2canvas: {
-                    scale: settings.scale,
-                    useCORS: true,
-                    allowTaint: false,
-                    backgroundColor: '#ffffff'
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait',
-                    compress: true
-                }
-            };
-
-            pdfBlob = await html2pdf()
-                .from(element)
-                .set(opt)
-                .outputPdf('blob');
-
-            if(pdfBlob && pdfBlob.size <= MAX_PDF_BYTES){
-                break;
+// One capture, one A4 page. The browser shapes Arabic inside SVG foreignObject.
+// html2pdf.bundle supplies jsPDF; no standalone html2canvas/jsPDF globals are needed.
+let contractPdfBusy = false;
+async function createContractPdfBlob(){
+    const source = document.getElementById('contractPaper');
+    if(!source) throw new Error('تعذر العثور على نموذج العقد.');
+    if(typeof html2pdf !== 'function') throw new Error('أداة إنشاء PDF غير متاحة حالياً.');
+    await document.fonts.ready;
+    const stage = document.createElement('div');
+    stage.style.cssText = 'position:fixed;left:0;top:0;width:794px;background:white;z-index:2147483647;pointer-events:none;direction:rtl;';
+    const paper = source.cloneNode(true);
+    paper.removeAttribute('id');
+    paper.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+    paper.classList.add('contract-export');
+    stage.appendChild(paper);
+    document.body.appendChild(stage);
+    try {
+        await Promise.all(Array.from(paper.querySelectorAll('img')).map(async img => {
+            await img.decode();
+            if(!img.naturalWidth) throw new Error('تعذر تحميل إحدى صور العقد.');
+            const canvas = document.createElement('canvas');
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            canvas.getContext('2d').drawImage(img, 0, 0);
+            img.src = canvas.toDataURL('image/png');
+            img.removeAttribute('crossorigin');
+            img.removeAttribute('onerror');
+        }));
+        await new Promise(resolve => requestAnimationFrame(resolve));
+        const width = 794;
+        const height = Math.ceil(paper.getBoundingClientRect().height);
+        if(height < 100) throw new Error('أبعاد العقد غير صالحة.');
+        // Snapshot styles into the SVG so it has no dependency on the app layout.
+        const copy = paper.cloneNode(true);
+        const originals = [paper, ...paper.querySelectorAll('*')];
+        const copies = [copy, ...copy.querySelectorAll('*')];
+        const props = ['display','position','top','left','right','bottom','width','height','min-width','min-height','max-width','max-height','box-sizing','margin','padding','border','border-top','border-right','border-bottom','border-left','border-radius','background-color','color','font-family','font-size','font-weight','font-style','line-height','letter-spacing','text-align','text-decoration','white-space','overflow-wrap','word-break','direction','unicode-bidi','vertical-align','flex','flex-direction','flex-wrap','align-items','justify-content','gap','row-gap','column-gap','object-fit','opacity','transform','transform-origin','z-index','list-style','overflow'];
+        originals.forEach((el, i) => {
+            const computed = getComputedStyle(el);
+            copies[i].removeAttribute('style');
+            props.forEach(prop => copies[i].style.setProperty(prop, computed.getPropertyValue(prop)));
+            // Computed flex-item widths must not become a second sizing constraint
+            // when the SVG lays out the same row. Keep numeric runs indivisible.
+            if(el.matches('.fill-val, .contract-value-wrap, .contract-item-text')){
+                copies[i].style.width = 'auto';
+                copies[i].style.height = 'auto';
             }
+        });
+        copy.style.margin = '0';
+        copy.setAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
+        const markup = new XMLSerializer().serializeToString(copy);
+        const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"><foreignObject width="100%" height="100%">${markup}</foreignObject></svg>`;
+        const image = new Image();
+        image.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+        await image.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = width * 3;
+        canvas.height = height * 3;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        // Fail explicitly rather than downloading a blank file.
+        const pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+        let ink = 0;
+        for(let i = 0; i < pixels.length; i += 16){
+            if(pixels[i] < 220 || pixels[i+1] < 220 || pixels[i+2] < 220) ink++;
         }
-
-        if(!pdfBlob){
-            throw new Error('تعذر إنشاء ملف PDF.');
+        if(ink < 1000) throw new Error('الصورة الناتجة فارغة. يرجى إعادة المحاولة.');
+        const fit = Math.min(200 / width, 287 / height);
+        const drawWidth = width * fit, drawHeight = height * fit;
+        const blank = document.createElement('canvas');
+        blank.width = blank.height = 1;
+        blank.getContext('2d').fillStyle = '#fff';
+        blank.getContext('2d').fillRect(0, 0, 1, 1);
+        for(const quality of [0.92, 0.84, 0.76, 0.66]){
+            const worker = html2pdf().set({margin:0, jsPDF:{unit:'mm',format:'a4',orientation:'portrait',compress:true},pagebreak:{mode:[]}}).from(blank, 'canvas').toPdf();
+            const pdf = await worker.get('pdf');
+            pdf.addImage(canvas.toDataURL('image/jpeg', quality), 'JPEG', (210-drawWidth)/2, (297-drawHeight)/2, drawWidth, drawHeight);
+            if(pdf.getNumberOfPages() !== 1) throw new Error('عدد صفحات العقد غير صحيح.');
+            const blob = pdf.output('blob');
+            if(blob.size <= 700 * 1024) return blob;
         }
+        throw new Error('حجم العقد يتجاوز حد الإرفاق 700 كيلوبايت.');
+    } finally {
+        stage.remove();
+    }
+}
 
-        if(pdfBlob.size > MAX_PDF_BYTES){
-            throw new Error('تعذر ضغط ملف PDF إلى الحد المطلوب.');
-        }
-
-        const fileName = `عقد_${name}.pdf`;
-        const url = URL.createObjectURL(pdfBlob);
+window.downloadContractPDF = async function(){
+    if(contractPdfBusy) return;
+    contractPdfBusy = true;
+    showLoading('جاري تجهيز عقد A4...');
+    try {
+        const blob = await createContractPdfBlob();
+        const name = document.getElementById('in_name').value.trim() || 'متطوع';
+        const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
-        link.download = fileName;
+        link.download = `عقد_${name}.pdf`;
         document.body.appendChild(link);
         link.click();
         link.remove();
-
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-
-        const sizeKb = Math.ceil(pdfBlob.size / 1024);
+        setTimeout(() => URL.revokeObjectURL(url), 30000);
+        showToast(`تم تنزيل العقد بنجاح (${Math.ceil(blob.size/1024)} كيلوبايت).`, 'success');
+    } catch(error) {
+        console.error(error);
+        showToast('حدث خطأ أثناء إنشاء PDF: ' + error.message, 'error');
+    } finally {
         hideLoading();
-        showToast(`تم تنزيل العقد بنجاح (${sizeKb} كيلوبايت).`, 'success');
-
-    }catch(err){
-        hideLoading();
-        console.error(err);
-        showToast('حدث خطأ أثناء إنشاء PDF بالحجم المطلوب.', 'error');
+        contractPdfBusy = false;
     }
 };
 
@@ -6724,50 +6758,8 @@ window.sendContractWhatsApp = async function(){
     // اسم إنجليزي ثابت حتى لا يظهر اسم الملف مشوهاً داخل WhatsApp.
     const fileName = 'Shams_Volunteer_Contract.pdf';
 
-    const opt = {
-        margin: 0,
-        filename: fileName,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: {
-            scale: 2,
-            useCORS: true,
-            allowTaint: false,
-            foreignObjectRendering: true,
-            letterRendering: false,
-            backgroundColor: '#ffffff',
-            scrollX: 0,
-            scrollY: 0,
-            windowWidth: element.scrollWidth,
-            windowHeight: element.scrollHeight,
-            onclone: function(clonedDoc){
-                const clonedPaper = clonedDoc.getElementById('contractPaper');
-                if(clonedPaper){
-                    clonedPaper.style.width = '297mm';
-                    clonedPaper.style.minHeight = '420mm';
-                    clonedPaper.style.direction = 'rtl';
-                    clonedPaper.style.textAlign = 'right';
-                    clonedPaper.style.fontFamily = 'Tajawal, Arial, sans-serif';
-                    clonedPaper.style.overflow = 'visible';
-                }
-
-                clonedDoc.documentElement.setAttribute('dir','rtl');
-                clonedDoc.documentElement.setAttribute('lang','ar');
-            }
-        },
-        jsPDF: {
-            unit: 'mm',
-            format: 'a3',
-            orientation: 'portrait',
-            compress: true
-        },
-        pagebreak: {
-            mode: ['css', 'legacy'],
-            avoid: ['.contract-row', '.contract-section', '.contract-dates-row']
-        }
-    };
-
     try{
-        showLoading('جاري تجهيز العقد بصيغة A3...');
+        showLoading('جاري تجهيز العقد بصيغة A4...');
 
         // مهم جداً حتى يتم تحميل خط Tajawal قبل تحويل الصفحة إلى PDF،
         // وهذا يمنع ظهور الحروف العربية متقطعة أو منفصلة.
@@ -6775,10 +6767,7 @@ window.sendContractWhatsApp = async function(){
             await document.fonts.ready;
         }
 
-        const pdfBlob = await html2pdf()
-            .from(element)
-            .set(opt)
-            .outputPdf('blob');
+        const pdfBlob = await createContractPdfBlob();
 
         const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
 
@@ -6807,7 +6796,7 @@ window.sendContractWhatsApp = async function(){
         window.open('https://web.whatsapp.com/', '_blank');
 
         hideLoading();
-        showToast('تم تجهيز ملف A3. اختر القروب في WhatsApp وأرفق الملف.', 'success');
+        showToast('تم تجهيز ملف A4. اختر القروب في WhatsApp وأرفق الملف.', 'success');
 
     }catch(err){
         hideLoading();
